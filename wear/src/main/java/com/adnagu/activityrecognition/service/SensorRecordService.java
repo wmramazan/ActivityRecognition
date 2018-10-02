@@ -9,14 +9,14 @@ import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.util.Log;
 
-public class SensorData extends Service implements SensorEventListener {
+public class SensorRecordService extends Service implements SensorEventListener {
 
     private final String DEBUG_TAG = getClass().getName();
 
-    private SensorManager sensorManager;
-    private Sensor sensor;
+    SensorManager sensorManager;
+    Sensor sensor;
 
-    public SensorData() {
+    public SensorRecordService() {
     }
 
     @Override
