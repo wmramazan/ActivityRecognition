@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="wear_primary">#6200ee</color>
+    <color name="wear_primary_variant">#3700b3</color>
+    <color name="wear_accent">#03dac6</color>
+    <color name="wear_accent_variant">#018786</color>
+
+    <color name="wear_error">#c51162</color>
+
+</resources>
