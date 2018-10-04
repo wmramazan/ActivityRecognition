@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/menu_reset"
-        android:icon="@drawable/ic_try_again_black_24dp"
+        android:icon="@drawable/ic_try_again"
         android:title="@string/try_again"/>
 </menu>
