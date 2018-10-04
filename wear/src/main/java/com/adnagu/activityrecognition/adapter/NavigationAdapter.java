@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.wear.widget.drawer.WearableNavigationDrawerView;
 
+import com.adnagu.activityrecognition.model.Section;
+
 /**
  * NavigationAdapter
  *
@@ -13,23 +15,25 @@ import android.support.wear.widget.drawer.WearableNavigationDrawerView;
 public class NavigationAdapter extends WearableNavigationDrawerView.WearableNavigationDrawerAdapter {
 
     private Context context;
+    private Section[] sections;
 
-    public NavigationAdapter(Context context) {
+    public NavigationAdapter(Context context, Section[] sections) {
         this.context = context;
+        this.sections = sections;
     }
 
     @Override
     public CharSequence getItemText(int i) {
-        return null;
+        return context.getString(sections[i].titleRes);
     }
 
     @Override
     public Drawable getItemDrawable(int i) {
-        return null;
+        return context.getDrawable(sections[i].drawableRes);
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return sections.length;
     }
 }

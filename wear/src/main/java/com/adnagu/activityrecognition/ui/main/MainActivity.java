@@ -12,28 +12,17 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.adnagu.activityrecognition.R;
+import com.adnagu.activityrecognition.adapter.NavigationAdapter;
+import com.adnagu.activityrecognition.model.Section;
 
 public class MainActivity extends WearableActivity implements
         AmbientModeSupport.AmbientCallbackProvider,
         MenuItem.OnMenuItemClickListener,
         WearableNavigationDrawerView.OnItemSelectedListener {
 
-    public enum Section {
-        ActivityRecognition(R.string.section_activity_recognition, R.drawable.ic_activity_recognition_black_24dp),
-        SensorRecord(R.string.section_sensor_record, R.drawable.ic_record_black_24dp),
-        Statistic(R.string.section_statistic, R.drawable.ic_statistic_black_24dp);
-
-        final int titleRes;
-        final int drawableRes;
-
-        Section(final int titleRes, final int drawableRes) {
-            this.titleRes = titleRes;
-            this.drawableRes = drawableRes;
-        }
-    }
-
     private static final Section DEFAULT_SECTION = Section.ActivityRecognition;
 
+    private NavigationAdapter navigationAdapter;
     private WearableNavigationDrawerView navigationDrawerView;
     private WearableActionDrawerView actionDrawerView;
 
@@ -48,9 +37,10 @@ public class MainActivity extends WearableActivity implements
         setAmbientEnabled();
 
         fragmentManager = getFragmentManager();
+        navigationAdapter = new NavigationAdapter(this, Section.values());
 
         navigationDrawerView = findViewById(R.id.top_navigation_drawer);
-        //navigationDrawerView.setAdapter(new NavigationAdap);
+        navigationDrawerView.setAdapter(navigationAdapter);
     }
 
     protected void replaceFragment(Fragment fragment) {
