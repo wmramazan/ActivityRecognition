@@ -1,4 +1,4 @@
-package com.adnagu.activityrecognition.ui.main;
+package com.adnagu.activityrecognition.ui;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -7,10 +7,8 @@ import android.support.wear.ambient.AmbientModeSupport;
 import android.support.wear.widget.drawer.WearableActionDrawerView;
 import android.support.wear.widget.drawer.WearableNavigationDrawerView;
 import android.support.wearable.activity.WearableActivity;
-import android.support.wearable.view.drawer.WearableNavigationDrawer;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.adnagu.activityrecognition.R;
 import com.adnagu.activityrecognition.adapter.NavigationAdapter;
@@ -54,8 +52,10 @@ public class MainActivity extends WearableActivity implements
         navigationDrawerView.addOnItemSelectedListener(this);
         navigationDrawerView.getController().peekDrawer();
 
-        activityRecognitionFragment = new ActivityRecognitionFragment();
-        replaceFragment(activityRecognitionFragment);
+        //activityRecognitionFragment = new ActivityRecognitionFragment();
+        //replaceFragment(activityRecognitionFragment);
+        SensorRecordFragment sensorRecordFragment = new SensorRecordFragment();
+        replaceFragment(sensorRecordFragment);
     }
 
     protected void replaceFragment(Fragment fragment) {
@@ -74,16 +74,16 @@ public class MainActivity extends WearableActivity implements
 
     @Override
     public void onItemSelected(int i) {
-        switch (i) {
-            case 0:
+        switch (Section.values()[i]) {
+            case ActivityRecognition:
                 replaceFragment(activityRecognitionFragment);
                 break;
-            case 1:
+            case SensorRecord:
                 if (null == sensorRecordFragment)
                     sensorRecordFragment = new SensorRecordFragment();
                 replaceFragment(sensorRecordFragment);
                 break;
-            case 2:
+            case Statistic:
                 if (null == statisticFragment)
                     statisticFragment = new StatisticFragment();
                 replaceFragment(statisticFragment);

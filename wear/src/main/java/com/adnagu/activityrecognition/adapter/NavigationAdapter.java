@@ -24,12 +24,12 @@ public class NavigationAdapter extends WearableNavigationDrawerView.WearableNavi
 
     @Override
     public CharSequence getItemText(int i) {
-        return context.getString(sections[i].titleRes);
+        return context.getString(sections[i].title_res);
     }
 
     @Override
     public Drawable getItemDrawable(int i) {
-        return context.getDrawable(sections[i].drawableRes);
+        return context.getDrawable(sections[i].drawable_res);
     }
 
     @Override

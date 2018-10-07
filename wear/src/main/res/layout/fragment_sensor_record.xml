@@ -7,20 +7,35 @@
     android:layout_height="match_parent"
     android:padding="@dimen/box_inset_layout_padding"
     tools:ignore="missingPrefix"
-    tools:context=".ui.main.MainActivity"
+    tools:context=".ui.MainActivity"
     tools:deviceIds="wear">
 
-    <FrameLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/inner_frame_layout_padding"
         app:boxedEdges="all">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/section_sensor_record"/>
+            android:layout_marginBottom="@dimen/page_margin_bottom"
+            android:orientation="vertical">
 
-    </FrameLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/select_activity"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/activityList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </android.support.wear.widget.BoxInsetLayout>

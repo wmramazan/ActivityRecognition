@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:padding="@dimen/box_inset_layout_padding"
     tools:ignore="missingPrefix"
-    tools:context=".ui.main.MainActivity"
+    tools:context=".ui.MainActivity"
     tools:deviceIds="wear">
 
     <FrameLayout

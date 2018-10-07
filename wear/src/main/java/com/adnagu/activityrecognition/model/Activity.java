@@ -3,20 +3,20 @@ package com.adnagu.activityrecognition.model;
 import com.adnagu.activityrecognition.R;
 
 public enum Activity {
-    UsingComputer("Using Computer", R.drawable.ic_activity),
-    WashingDishes("Washing Dishes", R.drawable.ic_activity),
-    DrivingCar("Driving Car", R.drawable.ic_activity),
-    EatingMeal("Eating Meal", R.drawable.ic_activity),
-    PlayingVideoGame("Playing VideoGame", R.drawable.ic_activity),
-    HavingShower("Having Shower", R.drawable.ic_activity),
-    PlayingGuitar("Playing Guitar", R.drawable.ic_activity),
-    BrushingTeeth("Brushing Teeth", R.drawable.ic_activity);
+    UsingComputer(R.string.activity_using_computer, R.drawable.ic_activity),
+    WashingDishes(R.string.activity_washing_dishes, R.drawable.ic_activity),
+    DrivingCar(R.string.activity_driving_car, R.drawable.ic_activity),
+    EatingMeal(R.string.activity_eating_meal, R.drawable.ic_activity),
+    PlayingVideoGame(R.string.activity_playing_video_game, R.drawable.ic_activity),
+    HavingShower(R.string.activity_having_shower, R.drawable.ic_activity),
+    PlayingGuitar(R.string.activity_playing_guitar, R.drawable.ic_activity),
+    BrushingTeeth(R.string.activity_brushing_teeth, R.drawable.ic_activity);
 
-    public final String name;
+    public final int title_res;
     public final int drawable_res;
 
-    Activity(final String name, final int drawable_res) {
-        this.name = name;
+    Activity(final int title_res, final int drawable_res) {
+        this.title_res = title_res;
         this.drawable_res = drawable_res;
     }
 }
