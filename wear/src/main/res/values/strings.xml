@@ -6,6 +6,7 @@
     <string name="section_sensor_record">Sensor Record</string>
     <string name="section_statistic">Statistic</string>
 
+    <string name="activity_icon">Activity Icon</string>
     <string name="activity_using_computer">Using Computer</string>
     <string name="activity_washing_dishes">Washing Dishes</string>
     <string name="activity_driving_car">Driving Car</string>

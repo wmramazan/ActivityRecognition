@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="?android:attr/selectableItemBackground"
-    android:padding="@dimen/default_padding"
+    android:padding="@dimen/item_activity_padding"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
@@ -10,13 +10,16 @@
     <ImageView
         android:id="@+id/item_activity_icon"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/activity_icon"/>
 
     <TextView
         android:id="@+id/item_activity_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin"
+        android:textSize="@dimen/item_activity_title_size"
+        android:textColor="@color/white"
         android:ellipsize="end"/>
 
 </LinearLayout>
