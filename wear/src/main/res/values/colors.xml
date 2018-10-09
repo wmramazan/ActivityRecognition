@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="wear_primary">#6200ee</color>
-    <color name="wear_primary_variant">#3700b3</color>
-    <color name="wear_accent">#03dac6</color>
-    <color name="wear_accent_variant">#018786</color>
+    <color name="wear_primary">@color/tic_basic_indigo</color>
+    <color name="wear_primary_variant">@color/tic_basic_indigo_darken</color>
+    <color name="wear_accent">@color/tic_basic_cyan</color>
+    <color name="wear_accent_variant">@color/tic_basic_cyan_darken</color>
 
-    <color name="wear_error">#c51162</color>
+    <color name="wear_error">@color/tic_basic_red_darken</color>
 
 </resources>
