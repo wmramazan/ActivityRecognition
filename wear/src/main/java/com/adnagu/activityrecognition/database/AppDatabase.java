@@ -12,7 +12,7 @@ import com.adnagu.activityrecognition.database.entity.SensorRecord;
  * @author ramazan.vapurcu
  * Created on 10/2/2018
  */
-@Database(entities = {SensorRecord.class}, version = 1)
+@Database(entities = {SensorRecord.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract SensorRecordDao sensorRecordDao();
