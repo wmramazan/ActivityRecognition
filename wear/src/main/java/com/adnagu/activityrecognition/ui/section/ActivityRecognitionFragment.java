@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.adnagu.activityrecognition.R;
+import com.adnagu.activityrecognition.ui.common.BaseFragment;
 
 /**
  * ActivityRecognitionFragment
@@ -14,7 +15,7 @@ import com.adnagu.activityrecognition.R;
  * @author ramazan.vapurcu
  * Created on 10/3/2018
  */
-public class ActivityRecognitionFragment extends Fragment implements AmbientMode {
+public class ActivityRecognitionFragment extends BaseFragment implements AmbientMode {
 
     private final String DEBUG_TAG = getClass().getName();
 

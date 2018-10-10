@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.adnagu.activityrecognition.R;
 import com.adnagu.activityrecognition.adapter.ActivityAdapter;
 import com.adnagu.activityrecognition.model.Activity;
+import com.adnagu.activityrecognition.ui.common.BaseFragment;
 
 /**
  * SensorRecordFragment
@@ -20,7 +21,7 @@ import com.adnagu.activityrecognition.model.Activity;
  * @author ramazan.vapurcu
  * Created on 10/3/2018
  */
-public class SensorRecordFragment extends Fragment implements AmbientMode {
+public class SensorRecordFragment extends BaseFragment implements AmbientMode {
 
     private final String DEBUG_TAG = getClass().getName();
 

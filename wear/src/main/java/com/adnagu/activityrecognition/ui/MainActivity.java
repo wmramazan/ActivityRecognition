@@ -13,11 +13,12 @@ import android.view.MenuItem;
 import com.adnagu.activityrecognition.R;
 import com.adnagu.activityrecognition.adapter.NavigationAdapter;
 import com.adnagu.activityrecognition.model.Section;
+import com.adnagu.activityrecognition.ui.common.BaseActivity;
 import com.adnagu.activityrecognition.ui.section.ActivityRecognitionFragment;
 import com.adnagu.activityrecognition.ui.section.SensorRecordFragment;
 import com.adnagu.activityrecognition.ui.section.StatisticFragment;
 
-public class MainActivity extends WearableActivity implements
+public class MainActivity extends BaseActivity implements
         AmbientModeSupport.AmbientCallbackProvider,
         MenuItem.OnMenuItemClickListener,
         WearableNavigationDrawerView.OnItemSelectedListener {
