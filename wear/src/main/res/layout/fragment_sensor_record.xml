@@ -10,33 +10,55 @@
     tools:context=".ui.MainActivity"
     tools:deviceIds="wear">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:padding="@dimen/inner_frame_layout_padding"
         app:boxedEdges="all">
+
+        <ImageView
+            style="@style/WindowIcon.Ticwear"
+            android:src="@drawable/ic_record"/>
+
+        <ticwear.design.widget.ScalableTextView
+            style="@style/TextAppearance.Ticwear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/section_sensor_record"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:background="@color/tic_basic_warm_grey_lighten" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/page_margin_bottom"
-            android:orientation="vertical">
+            android:background="@drawable/view_activity"
+            android:layout_marginTop="@dimen/default_margin"
+            android:padding="6dp"
+            android:orientation="horizontal">
 
-            <TextView
+            <ImageView
+                style="@style/WindowIcon.Ticwear"
+                android:src="@drawable/ic_activity_recognition"/>
+
+            <ticwear.design.widget.ScalableTextView
+                style="@style/TextAppearance.Ticwear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/select_activity"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/activityList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/default_margin"
-                android:scrollbars="vertical"/>
+                android:layout_gravity="center_vertical"
+                android:text="@string/activity_driving_car"/>
 
         </LinearLayout>
 
-    </ScrollView>
+    </LinearLayout>
 
 </android.support.wear.widget.BoxInsetLayout>

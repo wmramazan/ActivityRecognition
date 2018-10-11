@@ -2,10 +2,12 @@
 <resources>
 
     <color name="wear_primary">@color/tic_basic_indigo</color>
-    <color name="wear_primary_variant">@color/tic_basic_indigo_darken</color>
+    <color name="wear_primary_darken">@color/tic_basic_indigo_darken</color>
     <color name="wear_accent">@color/tic_basic_cyan</color>
-    <color name="wear_accent_variant">@color/tic_basic_cyan_darken</color>
+    <color name="wear_accent_darken">@color/tic_basic_cyan_darken</color>
 
     <color name="wear_error">@color/tic_basic_red_darken</color>
+    <color name="wear_warning">@color/tic_basic_orange_darken</color>
+    <color name="wear_success">@color/tic_basic_green_darken</color>
 
 </resources>

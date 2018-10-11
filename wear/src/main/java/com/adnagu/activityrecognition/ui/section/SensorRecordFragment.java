@@ -36,13 +36,13 @@ public class SensorRecordFragment extends BaseFragment implements AmbientMode {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sensor_record, container, false);
 
-        activityList = view.findViewById(R.id.activityList);
-        activityAdapter = new ActivityAdapter(getContext(), Activity.values());
+        //activityList = view.findViewById(R.id.activityList);
+        //activityAdapter = new ActivityAdapter(getContext(), Activity.values());
 
         //activityList.setEdgeItemsCenteringEnabled(true);
 
-        activityList.setLayoutManager(new LinearLayoutManager(getContext()));
-        activityList.setAdapter(activityAdapter);
+        //activityList.setLayoutManager(new LinearLayoutManager(getContext()));
+        //activityList.setAdapter(activityAdapter);
 
         return view;
     }
