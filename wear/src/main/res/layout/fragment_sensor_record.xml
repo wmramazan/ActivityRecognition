@@ -44,17 +44,20 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/default_margin"
             android:background="@drawable/view_activity"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:clipToPadding="false"
+            android:clipChildren="false">
 
             <ticwear.design.widget.FloatingActionButton
-                style="?tic_iconButtonBarPositiveButtonStyle"
-                android:background="?android:selectableItemBackground"
                 android:id="@+id/button_record"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:elevation="0dp"
-                android:src="@drawable/ic_record"
+                android:src="@drawable/ic_activity_recognition"
+                android:clickable="true"
+                android:focusable="true"
+                app:tic_borderWidth="0dp"
                 app:tic_circularDrawableStyle="@style/Widget.Ticwear.CircularProgressDrawable"
                 app:tic_fabSize="mini"/>
 
