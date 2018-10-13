@@ -6,16 +6,17 @@ import android.widget.TextView;
 
 import com.adnagu.activityrecognition.R;
 
-public class ListActivity extends WearableActivity {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-    private TextView mTextView;
+public class ListActivity extends WearableActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        mTextView = (TextView) findViewById(R.id.text);
+        ButterKnife.bind(this);
 
         // Enables Always-on
         setAmbientEnabled();

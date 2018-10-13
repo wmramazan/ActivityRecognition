@@ -8,8 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.adnagu.activityrecognition.R;
+import com.adnagu.activityrecognition.common.AmbientMode;
 import com.adnagu.activityrecognition.common.BaseFragment;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ticwear.design.drawable.CircularProgressDrawable;
 import ticwear.design.widget.FloatingActionButton;
 
@@ -23,6 +26,7 @@ public class SensorRecordFragment extends BaseFragment implements AmbientMode {
 
     private final String DEBUG_TAG = getClass().getName();
 
+    @BindView(R.id.button_record)
     FloatingActionButton recordButton;
 
     public SensorRecordFragment() {
@@ -32,8 +36,8 @@ public class SensorRecordFragment extends BaseFragment implements AmbientMode {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sensor_record, container, false);
+        ButterKnife.bind(this, view);
 
-        recordButton = view.findViewById(R.id.button_record);
         recordButton.setProgressMode(CircularProgressDrawable.MODE_INDETERMINATE);
         forceRippleAnimation(recordButton);
         //recordButton.setShowProgress(true);

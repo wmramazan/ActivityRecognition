@@ -17,6 +17,9 @@ import com.adnagu.activityrecognition.ui.section.ActivityRecognitionFragment;
 import com.adnagu.activityrecognition.ui.section.SensorRecordFragment;
 import com.adnagu.activityrecognition.ui.section.StatisticFragment;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends BaseActivity implements
         AmbientModeSupport.AmbientCallbackProvider,
         MenuItem.OnMenuItemClickListener,
@@ -27,19 +30,24 @@ public class MainActivity extends BaseActivity implements
     private static final Section DEFAULT_SECTION = Section.ActivityRecognition;
 
     private NavigationAdapter navigationAdapter;
-    private WearableNavigationDrawerView navigationDrawerView;
-    private WearableActionDrawerView actionDrawerView;
-
     private FragmentManager fragmentManager;
 
     private ActivityRecognitionFragment activityRecognitionFragment;
     private SensorRecordFragment sensorRecordFragment;
     private StatisticFragment statisticFragment;
 
+    @BindView(R.id.top_navigation_drawer)
+    WearableNavigationDrawerView navigationDrawerView;
+
+    @BindView(R.id.bottom_action_drawer)
+    WearableActionDrawerView actionDrawerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ButterKnife.bind(this);
 
         // Enables Always-on
         setAmbientEnabled();

@@ -47,4 +47,7 @@ dependencies {
     testImplementation "android.arch.persistence.room:testing:$room_version"
 
     implementation 'com.ticwear:ticdesign:1.1.0'
+
+    implementation 'com.jakewharton:butterknife:9.0.0-rc1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc1'
 }

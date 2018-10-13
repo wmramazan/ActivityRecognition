@@ -1,4 +1,4 @@
-package com.adnagu.activityrecognition.ui.section;
+package com.adnagu.activityrecognition.common;
 
 public interface AmbientMode {
     void onEnterAmbient();
