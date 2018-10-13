@@ -1,13 +1,12 @@
 package com.adnagu.activityrecognition.ui.section;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.adnagu.activityrecognition.R;
-import com.adnagu.activityrecognition.ui.common.BaseFragment;
+import com.adnagu.activityrecognition.common.BaseFragment;
 
 /**
  * StatisticFragment

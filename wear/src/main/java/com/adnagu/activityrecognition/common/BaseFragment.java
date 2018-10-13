@@ -1,4 +1,4 @@
-package com.adnagu.activityrecognition.ui.common;
+package com.adnagu.activityrecognition.common;
 
 import android.app.Fragment;
 

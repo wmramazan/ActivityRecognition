@@ -6,14 +6,12 @@ import android.os.Bundle;
 import android.support.wear.ambient.AmbientModeSupport;
 import android.support.wear.widget.drawer.WearableActionDrawerView;
 import android.support.wear.widget.drawer.WearableNavigationDrawerView;
-import android.support.wearable.activity.WearableActivity;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.adnagu.activityrecognition.R;
 import com.adnagu.activityrecognition.adapter.NavigationAdapter;
 import com.adnagu.activityrecognition.model.Section;
-import com.adnagu.activityrecognition.ui.common.BaseActivity;
+import com.adnagu.activityrecognition.common.BaseActivity;
 import com.adnagu.activityrecognition.ui.section.ActivityRecognitionFragment;
 import com.adnagu.activityrecognition.ui.section.SensorRecordFragment;
 import com.adnagu.activityrecognition.ui.section.StatisticFragment;

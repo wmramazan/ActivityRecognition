@@ -1,24 +1,14 @@
 package com.adnagu.activityrecognition.ui.section;
 
-import android.app.Fragment;
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.wear.widget.WearableLinearLayoutManager;
-import android.support.wear.widget.WearableRecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.adnagu.activityrecognition.R;
-import com.adnagu.activityrecognition.adapter.ActivityAdapter;
-import com.adnagu.activityrecognition.model.Activity;
-import com.adnagu.activityrecognition.ui.common.BaseFragment;
+import com.adnagu.activityrecognition.common.BaseFragment;
 
 import ticwear.design.drawable.CircularProgressDrawable;
 import ticwear.design.widget.FloatingActionButton;

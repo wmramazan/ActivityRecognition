@@ -1,4 +1,4 @@
-package com.adnagu.activityrecognition.ui.common;
+package com.adnagu.activityrecognition.common;
 
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
