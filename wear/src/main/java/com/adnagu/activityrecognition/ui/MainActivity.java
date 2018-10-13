@@ -2,6 +2,7 @@ package com.adnagu.activityrecognition.ui;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.wear.ambient.AmbientModeSupport;
 import android.support.wear.widget.drawer.WearableActionDrawerView;
@@ -55,6 +56,8 @@ public class MainActivity extends BaseActivity implements
         //replaceFragment(activityRecognitionFragment);
         SensorRecordFragment sensorRecordFragment = new SensorRecordFragment();
         replaceFragment(sensorRecordFragment);
+
+        startActivity(new Intent(this, ListActivity.class));
     }
 
     protected void replaceFragment(Fragment fragment) {
