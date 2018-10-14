@@ -18,6 +18,7 @@
 
     <string name="try_again">Try Again</string>
     <string name="click_to_record">Click button to record.</string>
+    <string name="recording">Recording..</string>
     <string name="choose_activity">Choose an activity.</string>
     <string name="title_activity_test">TestActivity</string>
 

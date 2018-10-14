@@ -14,6 +14,7 @@ import com.adnagu.activityrecognition.R;
 import com.adnagu.activityrecognition.common.AmbientMode;
 import com.adnagu.activityrecognition.common.BaseFragment;
 import com.adnagu.activityrecognition.model.Activity;
+import com.adnagu.activityrecognition.service.SensorRecordService;
 import com.adnagu.activityrecognition.ui.ListActivity;
 import com.adnagu.activityrecognition.utils.Utils;
 
@@ -34,13 +35,19 @@ public class SensorRecordFragment extends BaseFragment implements AmbientMode {
     private final String DEBUG_TAG = getClass().getName();
     private final Activity DEFAULT_ACTIVITY = Activity.UsingComputer;
 
+    Intent serviceIntent;
+
     int selected_activity_index;
+    boolean isRecording;
 
     @BindView(R.id.button_record)
     FloatingActionButton recordButton;
 
     @BindView(R.id.activity_name)
     TextView activityName;
+
+    @BindView(R.id.record_text)
+    TextView recordText;
 
     @OnClick(R.id.activity_name) void chooseActivity() {
         Intent intent = new Intent(getActivity(), ListActivity.class);
@@ -57,20 +64,38 @@ public class SensorRecordFragment extends BaseFragment implements AmbientMode {
         ButterKnife.bind(this, view);
 
         recordButton.setProgressMode(CircularProgressDrawable.MODE_INDETERMINATE);
+        recordButton.setOnClickListener(v -> toggleRecording());
         forceRippleAnimation(recordButton);
-        //recordButton.setShowProgress(true);
 
         selected_activity_index = DEFAULT_ACTIVITY.ordinal();
         activityName.setText(getString(DEFAULT_ACTIVITY.title_res));
 
+        serviceIntent = new Intent(getActivity(), SensorRecordService.class);
+
         return view;
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void toggleRecording() {
+        if (isRecording)
+            stopRecording();
+        else
+            startRecording();
+    }
 
-        recordButton.callOnClick();
+    public void startRecording() {
+        isRecording = true;
+
+        getActivity().startService(serviceIntent);
+        recordButton.setShowProgress(true);
+        recordText.setText(R.string.recording);
+    }
+
+    public void stopRecording() {
+        isRecording = false;
+
+        getActivity().stopService(serviceIntent);
+        recordButton.setShowProgress(false);
+        recordText.setText(R.string.click_to_record);
     }
 
     @Override
