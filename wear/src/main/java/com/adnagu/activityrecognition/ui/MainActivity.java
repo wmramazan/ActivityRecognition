@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.wear.ambient.AmbientModeSupport;
 import android.support.wear.widget.drawer.WearableActionDrawerView;
 import android.support.wear.widget.drawer.WearableNavigationDrawerView;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.adnagu.activityrecognition.R;
@@ -16,6 +17,7 @@ import com.adnagu.activityrecognition.common.BaseActivity;
 import com.adnagu.activityrecognition.ui.section.ActivityRecognitionFragment;
 import com.adnagu.activityrecognition.ui.section.SensorRecordFragment;
 import com.adnagu.activityrecognition.ui.section.StatisticFragment;
+import com.adnagu.activityrecognition.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,7 +67,7 @@ public class MainActivity extends BaseActivity implements
         SensorRecordFragment sensorRecordFragment = new SensorRecordFragment();
         replaceFragment(sensorRecordFragment);
 
-        startActivity(new Intent(this, ListActivity.class));
+        //startActivity(new Intent(this, ListActivity.class));
     }
 
     protected void replaceFragment(Fragment fragment) {

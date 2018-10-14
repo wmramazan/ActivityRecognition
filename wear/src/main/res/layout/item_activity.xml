@@ -12,12 +12,14 @@
         android:id="@+id/item_activity_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/list_item_icon_margin_left"
         android:contentDescription="@string/activity_icon"/>
 
     <TextView
         android:id="@+id/item_activity_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_marginStart="@dimen/default_margin"
         android:textSize="@dimen/item_activity_title_size"
         android:textColor="@color/white"
