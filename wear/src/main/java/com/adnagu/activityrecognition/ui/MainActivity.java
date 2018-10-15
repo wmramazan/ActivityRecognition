@@ -3,7 +3,6 @@ package com.adnagu.activityrecognition.ui;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -74,12 +73,29 @@ public class MainActivity extends BaseActivity implements
 
         //startActivity(new Intent(this, ListActivity.class));
 
-        /*SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        List<Sensor> deviceSensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
+        saveSensors();
+    }
 
+    @Override
+    protected void onDestroy() {
+        if (null != sensorRecordFragment)
+            sensorRecordFragment.stopRecording();
+        super.onDestroy();
+    }
+
+    protected void replaceFragment(Fragment fragment) {
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+    }
+
+    protected void saveSensors() {
+        // TODO: Add async task.
         SensorDao sensorDao = AppDatabase.getInstance(this).sensorDao();
+        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        Log.d(DEBUG_TAG, "Number of sensors: " + sensorDao.getCount());
 
-        if (!sensorDao.hasAnyRecords()) {
+        if (null != sensorManager && !sensorDao.hasAny()) {
+            List<Sensor> deviceSensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
+
             for (Sensor deviceSensor : deviceSensors) {
                 Log.d(DEBUG_TAG, deviceSensor.getName());
 
@@ -95,18 +111,7 @@ public class MainActivity extends BaseActivity implements
 
                 sensorDao.insert(sensor);
             }
-        }*/
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (null != sensorRecordFragment)
-            sensorRecordFragment.stopRecording();
-        super.onDestroy();
-    }
-
-    protected void replaceFragment(Fragment fragment) {
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        }
     }
 
     @Override

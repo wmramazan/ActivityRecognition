@@ -9,10 +9,15 @@ import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.adnagu.activityrecognition.database.AppDatabase;
+import com.adnagu.activityrecognition.database.dao.SensorRecordDao;
+import com.adnagu.activityrecognition.database.entity.SensorRecordEntity;
+
 public class SensorRecordService extends Service implements SensorEventListener {
 
     private final String DEBUG_TAG = getClass().getName();
 
+    SensorRecordDao sensorRecordDao;
     SensorManager sensorManager;
     Sensor sensor;
 
@@ -61,6 +66,12 @@ public class SensorRecordService extends Service implements SensorEventListener 
             return;
         */
 
+        SensorRecordEntity sensorRecord = new SensorRecordEntity();
+        sensorRecord.setSensorId(sensorEvent.sensor.getType());
+        sensorRecord.setTimestamp(sensorEvent.timestamp);
+        sensorRecord.setValue(String.valueOf(sensorEvent.values[0]));
+        sensorRecordDao.insert(sensorRecord);
+
         Log.d(DEBUG_TAG, sensorEvent.sensor.getName() + ": " + sensorEvent.values[0]);
     }
 
@@ -70,9 +81,14 @@ public class SensorRecordService extends Service implements SensorEventListener 
     }
 
     protected void init() {
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ALL);
+        sensorRecordDao = AppDatabase.getInstance(this).sensorRecordDao();
+        Log.d(DEBUG_TAG, "Number of sensor records: " + sensorRecordDao.getCount());
 
-        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
+        if (null != sensorManager) {
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ALL);
+            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
+        }
     }
 }

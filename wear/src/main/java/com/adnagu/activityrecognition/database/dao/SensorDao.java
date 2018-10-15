@@ -3,6 +3,7 @@ package com.adnagu.activityrecognition.database.dao;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
 import com.adnagu.activityrecognition.database.entity.SensorEntity;
@@ -19,7 +20,7 @@ import java.util.List;
 public interface SensorDao {
 
     @Query("SELECT id FROM sensor")
-    boolean hasAnyRecords();
+    boolean hasAny();
 
     @Query("SELECT COUNT(*) FROM sensor")
     int getCount();
@@ -30,7 +31,7 @@ public interface SensorDao {
     @Query("SELECT * FROM sensor")
     List<SensorEntity> getAll();
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(SensorEntity... sensors);
 
     @Delete

@@ -18,6 +18,12 @@ import java.util.List;
 @Dao
 public interface SensorRecordDao {
 
+    @Query("SELECT id FROM sensor_record")
+    boolean hasAny();
+
+    @Query("SELECT COUNT(*) FROM sensor_record")
+    int getCount();
+
     @Query("SELECT * FROM sensor_record WHERE id == :id")
     SensorRecordEntity get(int id);
 
