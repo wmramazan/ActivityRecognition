@@ -5,13 +5,13 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
 /**
- * SensorRecord
+ * SensorRecordEntity
  *
  * @author ramazan.vapurcu
  * Created on 10/2/2018
  */
 @Entity(tableName = "sensor_record")
-public class SensorRecord {
+public class SensorRecordEntity {
     @PrimaryKey(autoGenerate = true)
     private int id;
 

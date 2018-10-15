@@ -28,10 +28,19 @@ public class SensorRecordService extends Service implements SensorEventListener 
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        Log.d(DEBUG_TAG, "onDestroy");
+        sensorManager.unregisterListener(this);
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        //intent.getAction
-        //init();
         Log.d(DEBUG_TAG, "onStartCommand");
+
+        //intent.getAction
+        init();
 
         return START_STICKY;
     }
@@ -44,7 +53,15 @@ public class SensorRecordService extends Service implements SensorEventListener 
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
+        Log.d(DEBUG_TAG, "onSensorChanged");
+        Log.d(DEBUG_TAG, "SensorEntity Accuracy: " + sensorEvent.accuracy);
 
+        /*
+        if (sensorEvent.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE)
+            return;
+        */
+
+        Log.d(DEBUG_TAG, sensorEvent.sensor.getName() + ": " + sensorEvent.values[0]);
     }
 
     @Override
@@ -54,8 +71,8 @@ public class SensorRecordService extends Service implements SensorEventListener 
 
     protected void init() {
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
-
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ALL);
+
+        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
     }
 }

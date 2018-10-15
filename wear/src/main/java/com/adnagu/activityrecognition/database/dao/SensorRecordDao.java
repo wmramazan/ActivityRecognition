@@ -5,7 +5,7 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
-import com.adnagu.activityrecognition.database.entity.SensorRecord;
+import com.adnagu.activityrecognition.database.entity.SensorRecordEntity;
 
 import java.util.List;
 
@@ -18,16 +18,16 @@ import java.util.List;
 @Dao
 public interface SensorRecordDao {
 
-    @Query("SELECT * FROM sensor_record")
-    List<SensorRecord> getAll();
-
     @Query("SELECT * FROM sensor_record WHERE id == :id")
-    SensorRecord findById(int id);
+    SensorRecordEntity get(int id);
+
+    @Query("SELECT * FROM sensor_record")
+    List<SensorRecordEntity> getAll();
 
     @Insert
-    void insertAll(SensorRecord... sensorRecords);
+    void insert(SensorRecordEntity... sensorRecords);
 
     @Delete
-    void delete(SensorRecord sensorRecord);
+    void delete(SensorRecordEntity sensorRecord);
 
 }

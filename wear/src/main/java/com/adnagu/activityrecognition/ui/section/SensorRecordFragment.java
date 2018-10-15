@@ -37,7 +37,7 @@ public class SensorRecordFragment extends BaseFragment implements AmbientMode {
 
     Intent serviceIntent;
 
-    int selected_activity_index;
+    int selectedActivityIndex;
     boolean isRecording;
 
     @BindView(R.id.button_record)
@@ -67,7 +67,7 @@ public class SensorRecordFragment extends BaseFragment implements AmbientMode {
         recordButton.setOnClickListener(v -> toggleRecording());
         forceRippleAnimation(recordButton);
 
-        selected_activity_index = DEFAULT_ACTIVITY.ordinal();
+        selectedActivityIndex = DEFAULT_ACTIVITY.ordinal();
         activityName.setText(getString(DEFAULT_ACTIVITY.title_res));
 
         serviceIntent = new Intent(getActivity(), SensorRecordService.class);
@@ -119,7 +119,7 @@ public class SensorRecordFragment extends BaseFragment implements AmbientMode {
 
     public void setActivity(int index) {
         Log.d(DEBUG_TAG, "Selected Activity: " + index);
-        selected_activity_index = index;
+        selectedActivityIndex = index;
         activityName.setText(getString(Activity.values()[index].title_res));
     }
 

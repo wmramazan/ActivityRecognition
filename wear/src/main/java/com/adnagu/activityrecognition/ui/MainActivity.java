@@ -2,7 +2,10 @@ package com.adnagu.activityrecognition.ui;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.wear.ambient.AmbientModeSupport;
 import android.support.wear.widget.drawer.WearableActionDrawerView;
@@ -12,12 +15,16 @@ import android.view.MenuItem;
 
 import com.adnagu.activityrecognition.R;
 import com.adnagu.activityrecognition.adapter.NavigationAdapter;
+import com.adnagu.activityrecognition.database.AppDatabase;
+import com.adnagu.activityrecognition.database.dao.SensorDao;
+import com.adnagu.activityrecognition.database.entity.SensorEntity;
 import com.adnagu.activityrecognition.model.Section;
 import com.adnagu.activityrecognition.common.BaseActivity;
 import com.adnagu.activityrecognition.ui.section.ActivityRecognitionFragment;
 import com.adnagu.activityrecognition.ui.section.SensorRecordFragment;
 import com.adnagu.activityrecognition.ui.section.StatisticFragment;
-import com.adnagu.activityrecognition.utils.Utils;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,8 +35,6 @@ public class MainActivity extends BaseActivity implements
         WearableNavigationDrawerView.OnItemSelectedListener {
 
     private final String DEBUG_TAG = getClass().getName();
-
-    private static final Section DEFAULT_SECTION = Section.ActivityRecognition;
 
     private NavigationAdapter navigationAdapter;
     private FragmentManager fragmentManager;
@@ -68,6 +73,36 @@ public class MainActivity extends BaseActivity implements
         replaceFragment(sensorRecordFragment);
 
         //startActivity(new Intent(this, ListActivity.class));
+
+        /*SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        List<Sensor> deviceSensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
+
+        SensorDao sensorDao = AppDatabase.getInstance(this).sensorDao();
+
+        if (!sensorDao.hasAnyRecords()) {
+            for (Sensor deviceSensor : deviceSensors) {
+                Log.d(DEBUG_TAG, deviceSensor.getName());
+
+                SensorEntity sensor = new SensorEntity();
+                sensor.setId(deviceSensor.getType());
+                sensor.setName(deviceSensor.getName());
+                sensor.setVendor(deviceSensor.getVendor());
+                sensor.setMinDelay(deviceSensor.getMinDelay());
+                sensor.setMaxDelay(deviceSensor.getMaxDelay());
+                sensor.setMaxRange(deviceSensor.getMaximumRange());
+                sensor.setPower(deviceSensor.getPower());
+                sensor.setResolution(deviceSensor.getResolution());
+
+                sensorDao.insert(sensor);
+            }
+        }*/
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (null != sensorRecordFragment)
+            sensorRecordFragment.stopRecording();
+        super.onDestroy();
     }
 
     protected void replaceFragment(Fragment fragment) {
