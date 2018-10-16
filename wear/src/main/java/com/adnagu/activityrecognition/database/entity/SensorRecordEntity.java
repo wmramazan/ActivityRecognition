@@ -3,6 +3,7 @@ package com.adnagu.activityrecognition.database.entity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
@@ -13,13 +14,10 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
  * @author ramazan.vapurcu
  * Created on 10/2/2018
  */
-@Entity(tableName = "sensor_record", foreignKeys = @ForeignKey(entity = SensorEntity.class, parentColumns = "id", childColumns = "sensor_id", onDelete = CASCADE))
+@Entity(tableName = "sensor_record", foreignKeys = @ForeignKey(entity = SensorEntity.class, parentColumns = "id", childColumns = "sensor_id", onDelete = CASCADE), indices = @Index(value = {"sensor_id"}))
 public class SensorRecordEntity {
     @PrimaryKey(autoGenerate = true)
     private int id;
-
-    @ColumnInfo(name = "value")
-    private String value;
 
     @ColumnInfo(name = "timestamp")
     private long timestamp;
@@ -27,20 +25,21 @@ public class SensorRecordEntity {
     @ColumnInfo(name = "sensor_id")
     private int sensorId;
 
+    @ColumnInfo(name = "activity_id")
+    private int activityId;
+
+    public SensorRecordEntity(long timestamp, int sensorId, int activityId) {
+        this.timestamp = timestamp;
+        this.sensorId = sensorId;
+        this.activityId = activityId;
+    }
+
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
     }
 
     public long getTimestamp() {
@@ -57,5 +56,13 @@ public class SensorRecordEntity {
 
     public void setSensorId(int sensorId) {
         this.sensorId = sensorId;
+    }
+
+    public int getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(int activityId) {
+        this.activityId = activityId;
     }
 }

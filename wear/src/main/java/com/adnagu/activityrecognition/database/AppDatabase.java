@@ -9,8 +9,10 @@ import android.content.Context;
 import com.adnagu.activityrecognition.database.converter.DateConverter;
 import com.adnagu.activityrecognition.database.dao.SensorDao;
 import com.adnagu.activityrecognition.database.dao.SensorRecordDao;
+import com.adnagu.activityrecognition.database.dao.SensorValueDao;
 import com.adnagu.activityrecognition.database.entity.SensorEntity;
 import com.adnagu.activityrecognition.database.entity.SensorRecordEntity;
+import com.adnagu.activityrecognition.database.entity.SensorValueEntity;
 import com.adnagu.activityrecognition.utils.Utils;
 
 /**
@@ -19,7 +21,7 @@ import com.adnagu.activityrecognition.utils.Utils;
  * @author ramazan.vapurcu
  * Created on 10/2/2018
  */
-@Database(entities = {SensorEntity.class, SensorRecordEntity.class}, version = 1, exportSchema = false)
+@Database(entities = {SensorEntity.class, SensorRecordEntity.class, SensorValueEntity.class}, version = 1, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -29,6 +31,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract SensorDao sensorDao();
     public abstract SensorRecordDao sensorRecordDao();
+    public abstract SensorValueDao sensorValueDao();
 
     public static AppDatabase getInstance(Context context) {
         if (null == INSTANCE)

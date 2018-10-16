@@ -36,6 +36,17 @@ public class SensorEntity {
     @ColumnInfo(name = "power")
     private float power;
 
+    public SensorEntity(int id, String name, String vendor, int minDelay, int maxDelay, float maxRange, float resolution, float power) {
+        this.id = id;
+        this.name = name;
+        this.vendor = vendor;
+        this.minDelay = minDelay;
+        this.maxDelay = maxDelay;
+        this.maxRange = maxRange;
+        this.resolution = resolution;
+        this.power = power;
+    }
+
     public int getId() {
         return id;
     }

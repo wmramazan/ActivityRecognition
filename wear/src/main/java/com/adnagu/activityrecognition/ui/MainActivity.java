@@ -99,15 +99,16 @@ public class MainActivity extends BaseActivity implements
             for (Sensor deviceSensor : deviceSensors) {
                 Log.d(DEBUG_TAG, deviceSensor.getName());
 
-                SensorEntity sensor = new SensorEntity();
-                sensor.setId(deviceSensor.getType());
-                sensor.setName(deviceSensor.getName());
-                sensor.setVendor(deviceSensor.getVendor());
-                sensor.setMinDelay(deviceSensor.getMinDelay());
-                sensor.setMaxDelay(deviceSensor.getMaxDelay());
-                sensor.setMaxRange(deviceSensor.getMaximumRange());
-                sensor.setPower(deviceSensor.getPower());
-                sensor.setResolution(deviceSensor.getResolution());
+                SensorEntity sensor = new SensorEntity(
+                        deviceSensor.getType(),
+                        deviceSensor.getName(),
+                        deviceSensor.getVendor(),
+                        deviceSensor.getMinDelay(),
+                        deviceSensor.getMaxDelay(),
+                        deviceSensor.getMaximumRange(),
+                        deviceSensor.getResolution(),
+                        deviceSensor.getPower()
+                );
 
                 sensorDao.insert(sensor);
             }

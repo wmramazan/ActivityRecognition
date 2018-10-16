@@ -85,6 +85,7 @@ public class SensorRecordFragment extends BaseFragment implements AmbientMode {
     public void startRecording() {
         isRecording = true;
 
+        serviceIntent.putExtra(Utils.ACTIVITY_INDEX, selectedActivityIndex);
         getActivity().startService(serviceIntent);
         recordButton.setShowProgress(true);
         recordText.setText(R.string.recording);

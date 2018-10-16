@@ -31,7 +31,7 @@ public interface SensorRecordDao {
     List<SensorRecordEntity> getAll();
 
     @Insert
-    void insert(SensorRecordEntity... sensorRecords);
+    long[] insert(SensorRecordEntity... sensorRecords);
 
     @Delete
     void delete(SensorRecordEntity sensorRecord);
