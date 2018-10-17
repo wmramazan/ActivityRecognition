@@ -113,6 +113,14 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/btnReset"
+            style="@style/Widget.Ticwear.PrimaryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:text="@string/reset_database"/>
+
     </LinearLayout>
 
 </android.support.wear.widget.BoxInsetLayout>

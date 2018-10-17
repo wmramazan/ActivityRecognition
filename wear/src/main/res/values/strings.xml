@@ -25,6 +25,7 @@
     <string name="sensor_records">Sensor Records</string>
     <string name="sensor_values">Sensor Values</string>
     <string name="database_size">Database Size</string>
+    <string name="reset_database">Reset Database</string>
 
     <string name="database_size_value">%1$s KB</string>
 

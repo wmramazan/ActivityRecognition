@@ -18,6 +18,7 @@ import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * StatisticFragment
@@ -42,6 +43,11 @@ public class StatisticFragment extends BaseFragment implements AmbientMode {
     @BindView(R.id.tvDatabaseSize)
     TextView tvDatabaseSize;
 
+    @OnClick(R.id.btnReset) void resetDatabase() {
+        getContext().deleteDatabase(Utils.DATABASE_NAME);
+        setDatabaseInformation();
+    }
+
     public StatisticFragment() {
 
     }
@@ -55,18 +61,16 @@ public class StatisticFragment extends BaseFragment implements AmbientMode {
         sensorRecordDao = appDatabase.sensorRecordDao();
         sensorValueDao = appDatabase.sensorValueDao();
 
-        tvSensorRecords.setText(String.valueOf(sensorRecordDao.getCount()));
-        tvSensorValues.setText(String.valueOf(sensorValueDao.getCount()));
-
-        File file = getContext().getDatabasePath(Utils.DATABASE_NAME);
-        tvDatabaseSize.setText(
-                String.format(
-                        getString(R.string.database_size_value),
-                        String.valueOf((int) Math.floor(file.length() / 1024))
-                )
-        );
+        setDatabaseInformation();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        setDatabaseInformation();
     }
 
     @Override
@@ -77,5 +81,18 @@ public class StatisticFragment extends BaseFragment implements AmbientMode {
     @Override
     public void onExitAmbient() {
 
+    }
+
+    protected void setDatabaseInformation() {
+        tvSensorRecords.setText(String.valueOf(sensorRecordDao.getCount()));
+        tvSensorValues.setText(String.valueOf(sensorValueDao.getCount()));
+
+        File file = getContext().getDatabasePath(Utils.DATABASE_NAME);
+        tvDatabaseSize.setText(
+                String.format(
+                        getString(R.string.database_size_value),
+                        String.valueOf((int) Math.floor(file.length() / 1024))
+                )
+        );
     }
 }
