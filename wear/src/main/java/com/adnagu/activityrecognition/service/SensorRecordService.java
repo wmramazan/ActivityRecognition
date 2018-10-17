@@ -17,6 +17,8 @@ import com.adnagu.activityrecognition.database.entity.SensorRecordEntity;
 import com.adnagu.activityrecognition.database.entity.SensorValueEntity;
 import com.adnagu.activityrecognition.utils.Utils;
 
+import java.lang.ref.WeakReference;
+
 public class SensorRecordService extends Service implements SensorEventListener {
 
     private final String DEBUG_TAG = getClass().getName();
@@ -72,7 +74,7 @@ public class SensorRecordService extends Service implements SensorEventListener 
             return;
         */
 
-        new SensorRecordTask().execute(sensorEvent);
+        new SensorRecordTask(this).execute(sensorEvent);
 
         Log.d(DEBUG_TAG, sensorEvent.sensor.getName() + ": " + sensorEvent.values[0]);
     }
@@ -91,11 +93,20 @@ public class SensorRecordService extends Service implements SensorEventListener 
         }
     }
 
-    private class SensorRecordTask extends AsyncTask<SensorEvent, Void, Void> {
+    static class SensorRecordTask extends AsyncTask<SensorEvent, Void, Void> {
 
-        AppDatabase appDatabase = AppDatabase.getInstance(getApplicationContext());
-        SensorRecordDao sensorRecordDao = appDatabase.sensorRecordDao();
-        SensorValueDao sensorValueDao = appDatabase.sensorValueDao();
+        private WeakReference<SensorRecordService> serviceReference;
+        private AppDatabase appDatabase;
+        private SensorRecordDao sensorRecordDao;
+        private SensorValueDao sensorValueDao;
+
+        SensorRecordTask(SensorRecordService service) {
+            serviceReference = new WeakReference<>(service);
+
+            appDatabase = AppDatabase.getInstance(serviceReference.get());
+            sensorRecordDao = appDatabase.sensorRecordDao();
+            sensorValueDao = appDatabase.sensorValueDao();
+        }
 
         @Override
         protected Void doInBackground(SensorEvent... sensorEvents) {
@@ -103,7 +114,7 @@ public class SensorRecordService extends Service implements SensorEventListener 
             SensorRecordEntity sensorRecord = new SensorRecordEntity(
                     sensorEvent.timestamp,
                     sensorEvent.sensor.getType(),
-                    activityTypeId
+                    serviceReference.get().activityTypeId
             );
 
             long recordId = sensorRecordDao.insert(sensorRecord)[0];
