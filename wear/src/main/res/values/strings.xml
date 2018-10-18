@@ -18,7 +18,6 @@
     <string name="activity_playing_guitar">Playing Guitar</string>
     <string name="activity_brushing_teeth">Brushing Teeth</string>
 
-    <string name="try_again">Try Again</string>
     <string name="click_to_record">Click button to record.</string>
     <string name="recording">Recording..</string>
     <string name="choose_activity">Choose an activity.</string>
@@ -27,7 +26,10 @@
     <string name="sensor_records">Sensor Records</string>
     <string name="sensor_values">Sensor Values</string>
     <string name="database_size">Database Size</string>
+
     <string name="reset_database">Reset Database</string>
+    <string name="reset_database_warning">All sensor records will be deleted. Are you sure to reset database?</string>
+    <string name="reset_database_success">All records have been deleted.</string>
 
     <string name="database_size_value">%1$s KB</string>
 

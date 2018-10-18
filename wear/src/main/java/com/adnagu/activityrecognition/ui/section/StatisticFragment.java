@@ -1,5 +1,6 @@
 package com.adnagu.activityrecognition.ui.section;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,11 +44,6 @@ public class StatisticFragment extends BaseFragment implements AmbientMode {
     @BindView(R.id.tvDatabaseSize)
     TextView tvDatabaseSize;
 
-    @OnClick(R.id.btnReset) void resetDatabase() {
-        getContext().deleteDatabase(Utils.DATABASE_NAME);
-        setDatabaseInformation();
-    }
-
     public StatisticFragment() {
 
     }
@@ -57,11 +53,9 @@ public class StatisticFragment extends BaseFragment implements AmbientMode {
         View view = inflater.inflate(R.layout.fragment_statistic, container, false);
         ButterKnife.bind(this, view);
 
-        appDatabase = AppDatabase.getInstance(getContext());
-        sensorRecordDao = appDatabase.sensorRecordDao();
-        sensorValueDao = appDatabase.sensorValueDao();
-
         setDatabaseInformation();
+
+        //TODO: Set database information when replacing fragment.
 
         return view;
     }
@@ -83,7 +77,11 @@ public class StatisticFragment extends BaseFragment implements AmbientMode {
 
     }
 
-    protected void setDatabaseInformation() {
+    public void setDatabaseInformation() {
+        appDatabase = AppDatabase.getInstance(getContext());
+        sensorRecordDao = appDatabase.sensorRecordDao();
+        sensorValueDao = appDatabase.sensorValueDao();
+
         tvSensorRecords.setText(String.valueOf(sensorRecordDao.getCount()));
         tvSensorValues.setText(String.valueOf(sensorValueDao.getCount()));
 

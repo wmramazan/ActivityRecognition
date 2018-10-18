@@ -1,8 +1,10 @@
 package com.adnagu.activityrecognition.ui;
 
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.support.wear.widget.drawer.WearableActionDrawerView;
 import android.support.wear.widget.drawer.WearableNavigationDrawerView;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.adnagu.activityrecognition.R;
 import com.adnagu.activityrecognition.adapter.NavigationAdapter;
@@ -22,12 +25,15 @@ import com.adnagu.activityrecognition.common.BaseActivity;
 import com.adnagu.activityrecognition.ui.section.ActivityRecognitionFragment;
 import com.adnagu.activityrecognition.ui.section.SensorRecordFragment;
 import com.adnagu.activityrecognition.ui.section.StatisticFragment;
+import com.adnagu.activityrecognition.utils.Utils;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import ticwear.design.app.AlertDialog;
+import ticwear.design.utils.WindowUtils;
 
 public class MainActivity extends BaseActivity implements
         AmbientModeSupport.AmbientCallbackProvider,
@@ -72,15 +78,14 @@ public class MainActivity extends BaseActivity implements
         navigationDrawerView.getController().peekDrawer();
 
         actionDrawerView.setPeekOnScrollDownEnabled(true);
+        actionDrawerView.setOnMenuItemClickListener(this);
 
-        //activityRecognitionFragment = new ActivityRecognitionFragment();
-        //replaceFragment(activityRecognitionFragment);
-        SensorRecordFragment sensorRecordFragment = new SensorRecordFragment();
-        replaceFragment(sensorRecordFragment);
-
-        //startActivity(new Intent(this, ListActivity.class));
+        activityRecognitionFragment = new ActivityRecognitionFragment();
+        replaceFragment(activityRecognitionFragment);
 
         saveSensors();
+
+        navigationDrawerView.setCurrentItem(Section.Statistic.ordinal(), true);
     }
 
     @Override
@@ -95,7 +100,6 @@ public class MainActivity extends BaseActivity implements
     }
 
     protected void saveSensors() {
-        // TODO: Add async task.
         SensorDao sensorDao = AppDatabase.getInstance(this).sensorDao();
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         Log.d(DEBUG_TAG, "Number of sensors: " + sensorDao.getCount());
@@ -129,7 +133,29 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.menu_reset:
+                showDialog(new AlertDialog.Builder(this)
+                        .setTitle(R.string.reset_database)
+                        .setMessage(R.string.reset_database_warning)
+                        .setPositiveButtonIcon(ticwear.design.R.drawable.tic_ic_btn_ok, (dialogInterface, which) -> {
+                            dialogInterface.dismiss();
+                            deleteDatabase(Utils.DATABASE_NAME);
+                            navigationDrawerView.setCurrentItem(Section.Statistic.ordinal(), true);
+                            Toast.makeText(this, R.string.reset_database_success, Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButtonIcon(ticwear.design.R.drawable.tic_ic_btn_cancel, (dialogInterface, which) -> dialogInterface.dismiss())
+                        .setDelayConfirmAction(DialogInterface.BUTTON_NEGATIVE, 5000)
+                        .create()
+                );
+                break;
+        }
         return false;
+    }
+
+    public void showDialog(Dialog dialog) {
+        WindowUtils.clipToScreenShape(dialog.getWindow());
+        dialog.show();
     }
 
     @Override
