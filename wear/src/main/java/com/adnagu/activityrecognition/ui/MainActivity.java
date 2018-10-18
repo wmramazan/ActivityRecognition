@@ -27,6 +27,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity implements
         AmbientModeSupport.AmbientCallbackProvider,
@@ -48,6 +49,10 @@ public class MainActivity extends BaseActivity implements
     @BindView(R.id.bottom_action_drawer)
     WearableActionDrawerView actionDrawerView;
 
+    @OnClick(R.id.content_frame) void hideActionDrawer() {
+        actionDrawerView.getController().closeDrawer();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +70,8 @@ public class MainActivity extends BaseActivity implements
         navigationDrawerView.setAdapter(navigationAdapter);
         navigationDrawerView.addOnItemSelectedListener(this);
         navigationDrawerView.getController().peekDrawer();
+
+        actionDrawerView.setPeekOnScrollDownEnabled(true);
 
         //activityRecognitionFragment = new ActivityRecognitionFragment();
         //replaceFragment(activityRecognitionFragment);
@@ -142,5 +149,7 @@ public class MainActivity extends BaseActivity implements
                 replaceFragment(statisticFragment);
                 break;
         }
+
+        hideActionDrawer();
     }
 }

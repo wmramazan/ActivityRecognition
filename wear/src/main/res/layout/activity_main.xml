@@ -27,13 +27,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/wear_primary"
-        app:navigationStyle="multiPage" />
+        app:navigationStyle="singlePage" />
 
     <android.support.wear.widget.drawer.WearableActionDrawerView
         android:id="@+id/bottom_action_drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/wear_primary"
+        app:drawerTitle="@string/actions"
+        app:enableAutoPeek="true"
         app:actionMenu="@menu/action_drawer_menu" />
 
 </android.support.wear.widget.drawer.WearableDrawerLayout>
