@@ -50,6 +50,7 @@ public class SensorRecordFragment extends BaseFragment implements AmbientMode {
     TextView recordText;
 
     @OnClick(R.id.activity_name) void chooseActivity() {
+        activityName.setEnabled(false);
         Intent intent = new Intent(getActivity(), ListActivity.class);
         startActivityForResult(intent, Utils.RequestCode.CHOOSE_ACTIVITY);
     }
@@ -73,6 +74,13 @@ public class SensorRecordFragment extends BaseFragment implements AmbientMode {
         serviceIntent = new Intent(getActivity(), SensorRecordService.class);
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        activityName.setEnabled(true);
     }
 
     public void toggleRecording() {

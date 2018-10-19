@@ -27,6 +27,7 @@ public class SensorRecordService extends Service implements SensorEventListener 
     Sensor sensor;
 
     int activityTypeId;
+    int sensor_record;
 
     public SensorRecordService() {
 
@@ -58,25 +59,27 @@ public class SensorRecordService extends Service implements SensorEventListener 
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
-
         Log.d(DEBUG_TAG, "onDestroy");
+        Log.d(DEBUG_TAG, String.valueOf(sensor_record));
         sensorManager.unregisterListener(this);
+
+        super.onDestroy();
     }
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        Log.d(DEBUG_TAG, "onSensorChanged");
-        Log.d(DEBUG_TAG, "SensorEntity Accuracy: " + sensorEvent.accuracy);
+        sensor_record++;
+        //Log.d(DEBUG_TAG, "onSensorChanged");
+        //Log.d(DEBUG_TAG, "SensorEntity Accuracy: " + sensorEvent.accuracy);
 
         /*
         if (sensorEvent.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE)
             return;
         */
 
-        new SensorRecordTask(this).execute(sensorEvent);
+        //new SensorRecordTask(this, activityTypeId).execute(sensorEvent);
 
-        Log.d(DEBUG_TAG, sensorEvent.sensor.getName() + ": " + sensorEvent.values[0]);
+        //Log.d(DEBUG_TAG, sensorEvent.sensor.getName() + ": " + sensorEvent.values[0]);
     }
 
     @Override
@@ -96,12 +99,17 @@ public class SensorRecordService extends Service implements SensorEventListener 
     static class SensorRecordTask extends AsyncTask<SensorEvent, Void, Void> {
 
         private WeakReference<SensorRecordService> serviceReference;
+        private int activityType;
+
         private AppDatabase appDatabase;
         private SensorRecordDao sensorRecordDao;
         private SensorValueDao sensorValueDao;
 
-        SensorRecordTask(SensorRecordService service) {
+        SensorRecordTask(SensorRecordService service, int activityType) {
+            Log.d("SensorRecordTask", "constructor");
+
             serviceReference = new WeakReference<>(service);
+            this.activityType = activityType;
 
             appDatabase = AppDatabase.getInstance(serviceReference.get());
             sensorRecordDao = appDatabase.sensorRecordDao();
@@ -110,11 +118,12 @@ public class SensorRecordService extends Service implements SensorEventListener 
 
         @Override
         protected Void doInBackground(SensorEvent... sensorEvents) {
+            Log.d("SensorRecordTask", "doInBackground");
             SensorEvent sensorEvent = sensorEvents[0];
             SensorRecordEntity sensorRecord = new SensorRecordEntity(
                     sensorEvent.timestamp,
                     sensorEvent.sensor.getType(),
-                    serviceReference.get().activityTypeId
+                    activityType
             );
 
             long recordId = sensorRecordDao.insert(sensorRecord)[0];
@@ -128,6 +137,13 @@ public class SensorRecordService extends Service implements SensorEventListener 
             }
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            appDatabase.close();
         }
     }
 }

@@ -27,6 +27,6 @@
 
     <dimen name="list_item_icon_margin_left">24dp</dimen>
 
-    <dimen name="item_statistic_item_margin">4dp</dimen>
+    <dimen name="item_statistic_item_margin">3dp</dimen>
     <dimen name="item_statistic_label_width">80dp</dimen>
 </resources>
