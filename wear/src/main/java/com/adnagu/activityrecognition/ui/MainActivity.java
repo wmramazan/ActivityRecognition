@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.wear.ambient.AmbientModeSupport;
 import android.support.wear.widget.drawer.WearableActionDrawerView;
 import android.support.wear.widget.drawer.WearableNavigationDrawerView;
+import android.support.wearable.activity.ConfirmationActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -100,7 +101,8 @@ public class MainActivity extends BaseActivity implements
     }
 
     protected void saveSensors() {
-        SensorDao sensorDao = AppDatabase.getInstance(this).sensorDao();
+        AppDatabase appDatabase = AppDatabase.getInstance(this);
+        SensorDao sensorDao = appDatabase.sensorDao();
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         Log.d(DEBUG_TAG, "Number of sensors: " + sensorDao.getCount());
 
@@ -124,6 +126,8 @@ public class MainActivity extends BaseActivity implements
                 sensorDao.insert(sensor);
             }
         }
+
+        appDatabase.close();
     }
 
     @Override
@@ -140,9 +144,12 @@ public class MainActivity extends BaseActivity implements
                         .setMessage(R.string.reset_database_warning)
                         .setPositiveButtonIcon(ticwear.design.R.drawable.tic_ic_btn_ok, (dialogInterface, which) -> {
                             dialogInterface.dismiss();
-                            deleteDatabase(Utils.DATABASE_NAME);
-                            navigationDrawerView.setCurrentItem(Section.Statistic.ordinal(), true);
-                            Toast.makeText(this, R.string.reset_database_success, Toast.LENGTH_SHORT).show();
+
+                            if (deleteDatabase(Utils.DATABASE_NAME)) {
+                                navigationDrawerView.setCurrentItem(Section.Statistic.ordinal(), true);
+                                Utils.showMessage(ConfirmationActivity.SUCCESS_ANIMATION, MainActivity.this, R.string.reset_database_success);
+                            } else
+                                Utils.showMessage(ConfirmationActivity.FAILURE_ANIMATION, MainActivity.this, R.string.reset_database_error);
                         })
                         .setNegativeButtonIcon(ticwear.design.R.drawable.tic_ic_btn_cancel, (dialogInterface, which) -> dialogInterface.dismiss())
                         .setDelayConfirmAction(DialogInterface.BUTTON_NEGATIVE, 5000)
