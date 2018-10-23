@@ -90,7 +90,5 @@ public class StatisticFragment extends BaseFragment implements AmbientMode {
                         String.valueOf((int) Math.floor(file.length() / 1024))
                 )
         );
-
-        appDatabase.close();
     }
 }

@@ -126,8 +126,6 @@ public class MainActivity extends BaseActivity implements
                 sensorDao.insert(sensor);
             }
         }
-
-        appDatabase.close();
     }
 
     @Override

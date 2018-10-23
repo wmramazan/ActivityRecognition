@@ -142,8 +142,6 @@ public class SensorRecordService extends Service implements SensorEventListener 
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
-            appDatabase.close();
         }
     }
 }
