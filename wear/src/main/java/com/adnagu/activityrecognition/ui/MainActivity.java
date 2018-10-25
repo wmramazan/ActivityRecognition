@@ -86,7 +86,7 @@ public class MainActivity extends BaseActivity implements
 
         saveSensors();
 
-        navigationDrawerView.setCurrentItem(Section.Statistic.ordinal(), true);
+        navigationDrawerView.setCurrentItem(Section.SensorRecord.ordinal(), true);
     }
 
     @Override
