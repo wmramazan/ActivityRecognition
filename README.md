@@ -3,8 +3,10 @@
 A mobile application which detects complex activities of user by using sensors of smart watch.
 
 ## To-Do List
-- [ ] Complete UI of the application
-- [ ] Complete SensorDataService
-- [ ] Complete SensorDataFragment
+- [x] Complete UI of the application
+- [x] Complete SensorRecordService
+- [x] Complete SensorRecordFragment
+- [ ] Complete UI of mobile application
 - [ ] Sync database with phone
 - [ ] Move sensor data for free space
+- [ ] Complete UI of ActivityRecognitionFragment
