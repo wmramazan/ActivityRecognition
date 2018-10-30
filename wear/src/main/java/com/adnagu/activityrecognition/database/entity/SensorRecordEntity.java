@@ -28,10 +28,14 @@ public class SensorRecordEntity {
     @ColumnInfo(name = "activity_id")
     private int activityId;
 
-    public SensorRecordEntity(long timestamp, int sensorId, int activityId) {
+    @ColumnInfo(name = "values")
+    private String values;
+
+    public SensorRecordEntity(long timestamp, int sensorId, int activityId, String values) {
         this.timestamp = timestamp;
         this.sensorId = sensorId;
         this.activityId = activityId;
+        this.values = values;
     }
 
     public int getId() {
@@ -64,5 +68,13 @@ public class SensorRecordEntity {
 
     public void setActivityId(int activityId) {
         this.activityId = activityId;
+    }
+
+    public String getValues() {
+        return values;
+    }
+
+    public void setValues(String values) {
+        this.values = values;
     }
 }

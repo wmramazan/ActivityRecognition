@@ -75,32 +75,6 @@
                 android:singleLine="true"
                 android:gravity="end"
                 android:alpha="0.7"
-                android:text="@string/sensor_values" />
-
-            <TextView
-                android:id="@+id/tvSensorValues"
-                style="@style/TextAppearance.Ticwear.Small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/item_statistic_item_margin"
-                android:singleLine="true"
-                android:textSize="@dimen/tic_text_size_small_2" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/TextAppearance.Ticwear.Caption"
-                android:layout_width="@dimen/item_statistic_label_width"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/item_statistic_item_margin"
-                android:singleLine="true"
-                android:gravity="end"
-                android:alpha="0.7"
                 android:text="@string/database_size" />
 
             <TextView

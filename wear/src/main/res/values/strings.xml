@@ -29,7 +29,7 @@
 
     <string name="reset_database">Reset Database</string>
     <string name="reset_database_warning">All sensor records will be deleted. Are you sure to reset database?</string>
-    <string name="reset_database_success">All records have been deleted.</string>
+    <string name="reset_database_success">%1$s records have been deleted.</string>
     <string name="reset_database_error">Couldn\'t reset database.</string>
 
     <string name="database_size_value">%1$s KB</string>

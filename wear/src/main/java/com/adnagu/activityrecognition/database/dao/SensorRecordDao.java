@@ -36,4 +36,7 @@ public interface SensorRecordDao {
     @Delete
     void delete(SensorRecordEntity sensorRecord);
 
+    @Query("DELETE FROM sensor_record")
+    int deleteAll();
+
 }

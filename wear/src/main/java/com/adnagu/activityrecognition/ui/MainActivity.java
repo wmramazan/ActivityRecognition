@@ -20,6 +20,7 @@ import com.adnagu.activityrecognition.R;
 import com.adnagu.activityrecognition.adapter.NavigationAdapter;
 import com.adnagu.activityrecognition.database.AppDatabase;
 import com.adnagu.activityrecognition.database.dao.SensorDao;
+import com.adnagu.activityrecognition.database.dao.SensorRecordDao;
 import com.adnagu.activityrecognition.database.entity.SensorEntity;
 import com.adnagu.activityrecognition.model.Section;
 import com.adnagu.activityrecognition.common.BaseActivity;
@@ -49,6 +50,10 @@ public class MainActivity extends BaseActivity implements
     private ActivityRecognitionFragment activityRecognitionFragment;
     private SensorRecordFragment sensorRecordFragment;
     private StatisticFragment statisticFragment;
+
+    private AppDatabase appDatabase;
+    private SensorDao sensorDao;
+    private SensorRecordDao sensorRecordDao;
 
     @BindView(R.id.top_navigation_drawer)
     WearableNavigationDrawerView navigationDrawerView;
@@ -84,9 +89,13 @@ public class MainActivity extends BaseActivity implements
         activityRecognitionFragment = new ActivityRecognitionFragment();
         replaceFragment(activityRecognitionFragment);
 
-        saveSensors();
-
         navigationDrawerView.setCurrentItem(Section.SensorRecord.ordinal(), true);
+
+        appDatabase = AppDatabase.getInstance(this);
+        sensorDao = appDatabase.sensorDao();
+        sensorRecordDao = appDatabase.sensorRecordDao();
+
+        saveSensors();
     }
 
     @Override
@@ -101,10 +110,10 @@ public class MainActivity extends BaseActivity implements
     }
 
     protected void saveSensors() {
-        AppDatabase appDatabase = AppDatabase.getInstance(this);
-        SensorDao sensorDao = appDatabase.sensorDao();
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         Log.d(DEBUG_TAG, "Number of sensors: " + sensorDao.getCount());
+
+        //TODO: Check unsupported sensors.
 
         if (null != sensorManager && !sensorDao.hasAny()) {
             List<Sensor> deviceSensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
@@ -143,11 +152,23 @@ public class MainActivity extends BaseActivity implements
                         .setPositiveButtonIcon(ticwear.design.R.drawable.tic_ic_btn_ok, (dialogInterface, which) -> {
                             dialogInterface.dismiss();
 
-                            if (deleteDatabase(Utils.DATABASE_NAME)) {
+                            int numberOfRecords = sensorRecordDao.deleteAll();
+                            if (numberOfRecords > 0) {
                                 navigationDrawerView.setCurrentItem(Section.Statistic.ordinal(), true);
-                                Utils.showMessage(ConfirmationActivity.SUCCESS_ANIMATION, MainActivity.this, R.string.reset_database_success);
+                                Utils.showMessage(
+                                        ConfirmationActivity.SUCCESS_ANIMATION,
+                                        MainActivity.this,
+                                        String.format(
+                                                getString(R.string.reset_database_success),
+                                                String.valueOf(numberOfRecords)
+                                        )
+                                );
                             } else
-                                Utils.showMessage(ConfirmationActivity.FAILURE_ANIMATION, MainActivity.this, R.string.reset_database_error);
+                                Utils.showMessage(
+                                        ConfirmationActivity.FAILURE_ANIMATION,
+                                        MainActivity.this,
+                                        getString(R.string.reset_database_error)
+                                );
                         })
                         .setNegativeButtonIcon(ticwear.design.R.drawable.tic_ic_btn_cancel, (dialogInterface, which) -> dialogInterface.dismiss())
                         .setDelayConfirmAction(DialogInterface.BUTTON_NEGATIVE, 5000)

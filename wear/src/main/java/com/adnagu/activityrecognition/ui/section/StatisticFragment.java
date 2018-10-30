@@ -1,6 +1,5 @@
 package com.adnagu.activityrecognition.ui.section;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import com.adnagu.activityrecognition.common.AmbientMode;
 import com.adnagu.activityrecognition.common.BaseFragment;
 import com.adnagu.activityrecognition.database.AppDatabase;
 import com.adnagu.activityrecognition.database.dao.SensorRecordDao;
-import com.adnagu.activityrecognition.database.dao.SensorValueDao;
 import com.adnagu.activityrecognition.utils.Utils;
 
 import java.io.File;
@@ -33,16 +31,27 @@ public class StatisticFragment extends BaseFragment implements AmbientMode {
 
     AppDatabase appDatabase;
     SensorRecordDao sensorRecordDao;
-    SensorValueDao sensorValueDao;
 
     @BindView(R.id.tvSensorRecords)
     TextView tvSensorRecords;
 
-    @BindView(R.id.tvSensorValues)
-    TextView tvSensorValues;
-
     @BindView(R.id.tvDatabaseSize)
     TextView tvDatabaseSize;
+
+    @OnClick(R.id.tvSensorRecords) public void setDatabaseInformation() {
+        appDatabase = AppDatabase.getInstance(getContext());
+        sensorRecordDao = appDatabase.sensorRecordDao();
+
+        tvSensorRecords.setText(String.valueOf(sensorRecordDao.getCount()));
+
+        File file = getContext().getDatabasePath(Utils.DATABASE_NAME);
+        tvDatabaseSize.setText(
+                String.format(
+                        getString(R.string.database_size_value),
+                        String.valueOf((int) Math.floor(file.length() / 1024))
+                )
+        );
+    }
 
     public StatisticFragment() {
 
@@ -73,22 +82,5 @@ public class StatisticFragment extends BaseFragment implements AmbientMode {
     @Override
     public void onExitAmbient() {
 
-    }
-
-    public void setDatabaseInformation() {
-        appDatabase = AppDatabase.getInstance(getContext());
-        sensorRecordDao = appDatabase.sensorRecordDao();
-        sensorValueDao = appDatabase.sensorValueDao();
-
-        tvSensorRecords.setText(String.valueOf(sensorRecordDao.getCount()));
-        tvSensorValues.setText(String.valueOf(sensorValueDao.getCount()));
-
-        File file = getContext().getDatabasePath(Utils.DATABASE_NAME);
-        tvDatabaseSize.setText(
-                String.format(
-                        getString(R.string.database_size_value),
-                        String.valueOf((int) Math.floor(file.length() / 1024))
-                )
-        );
     }
 }
