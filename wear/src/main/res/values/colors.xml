@@ -10,4 +10,6 @@
     <color name="wear_warning">@color/tic_basic_orange_darken</color>
     <color name="wear_success">@color/tic_basic_green_darken</color>
 
+    <color name="ic_launcher_background">@color/wear_primary_darken</color>
+
 </resources>
