@@ -19,6 +19,7 @@
     <string name="activity_brushing_teeth">Brushing Teeth</string>
 
     <string name="click_to_record">Click button to record.</string>
+    <string name="click_to_recognize">Click button to start.</string>
     <string name="recording">Recording..</string>
     <string name="choose_activity">Choose an activity.</string>
     <string name="title_activity_test">TestActivity</string>

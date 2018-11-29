@@ -43,13 +43,13 @@ public class SensorRecordFragment extends BaseFragment implements AmbientMode {
     @BindView(R.id.button_record)
     FloatingActionButton recordButton;
 
-    @BindView(R.id.activity_name)
+    @BindView(R.id.text_activity_name)
     TextView activityName;
 
-    @BindView(R.id.record_text)
+    @BindView(R.id.text_record)
     TextView recordText;
 
-    @OnClick(R.id.activity_name) void chooseActivity() {
+    @OnClick(R.id.text_activity_name) void chooseActivity() {
         activityName.setEnabled(false);
         Intent intent = new Intent(getActivity(), ListActivity.class);
         startActivityForResult(intent, Utils.RequestCode.CHOOSE_ACTIVITY);

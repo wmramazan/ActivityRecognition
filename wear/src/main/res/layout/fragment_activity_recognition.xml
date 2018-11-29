@@ -15,11 +15,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="@dimen/inner_frame_layout_padding"
+        android:gravity="center"
         app:boxedEdges="all">
 
         <ImageView
             style="@style/WindowIcon.Ticwear"
-            android:src="@drawable/ic_activity_recognition"/>
+            android:src="@drawable/ic_activity_recognition"
+            android:contentDescription="@string/section_activity_recognition"/>
 
         <ticwear.design.widget.ScalableTextView
             style="@style/TextAppearance.Ticwear"
@@ -30,8 +32,31 @@
 
         <TextView
             android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_margin="@dimen/default_margin"
+            android:background="@color/light_grey" />
+
+        <ticwear.design.widget.FloatingActionButton
+            android:id="@+id/button_activity"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/text_long_content"/>
+            android:layout_gravity="center_horizontal"
+            android:elevation="0dp"
+            android:src="@drawable/ic_activity_recognition"
+            android:clickable="true"
+            android:focusable="true"
+            app:tic_borderWidth="0dp"
+            app:tic_circularDrawableStyle="@style/Widget.Ticwear.CircularProgressDrawable"
+            app:tic_fabSize="normal"/>
+
+        <TextView
+            android:id="@+id/text_activity"
+            style="@style/TextAppearance.Ticwear.Small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:text="@string/click_to_recognize"
+            android:gravity="center"/>
 
     </LinearLayout>
 

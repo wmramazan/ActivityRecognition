@@ -32,13 +32,13 @@ public class StatisticFragment extends BaseFragment implements AmbientMode {
     AppDatabase appDatabase;
     SensorRecordDao sensorRecordDao;
 
-    @BindView(R.id.tvSensorRecords)
+    @BindView(R.id.text_sensor_records)
     TextView tvSensorRecords;
 
-    @BindView(R.id.tvDatabaseSize)
+    @BindView(R.id.text_database_size)
     TextView tvDatabaseSize;
 
-    @OnClick(R.id.tvSensorRecords) public void setDatabaseInformation() {
+    @OnClick(R.id.text_sensor_records) public void setDatabaseInformation() {
         appDatabase = AppDatabase.getInstance(getContext());
         sensorRecordDao = appDatabase.sensorRecordDao();
 

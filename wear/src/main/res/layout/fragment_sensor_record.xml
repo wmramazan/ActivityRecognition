@@ -59,7 +59,7 @@
                 app:tic_fabSize="mini"/>
 
             <TextView
-                android:id="@+id/activity_name"
+                android:id="@+id/text_activity_name"
                 style="@style/TextAppearance.Ticwear.Caption"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/record_text"
+            android:id="@+id/text_record"
             style="@style/TextAppearance.Ticwear.Small"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
