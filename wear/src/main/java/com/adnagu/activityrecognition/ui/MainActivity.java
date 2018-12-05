@@ -27,6 +27,7 @@ import com.adnagu.activityrecognition.common.BaseActivity;
 import com.adnagu.activityrecognition.ui.section.ActivityRecognitionFragment;
 import com.adnagu.activityrecognition.ui.section.SensorRecordFragment;
 import com.adnagu.activityrecognition.ui.section.StatisticFragment;
+import com.adnagu.activityrecognition.utils.ArffFile;
 import com.adnagu.activityrecognition.utils.Utils;
 
 import java.util.List;
@@ -44,16 +45,16 @@ public class MainActivity extends BaseActivity implements
 
     private final String DEBUG_TAG = getClass().getName();
 
-    private NavigationAdapter navigationAdapter;
-    private FragmentManager fragmentManager;
+    NavigationAdapter navigationAdapter;
+    FragmentManager fragmentManager;
 
-    private ActivityRecognitionFragment activityRecognitionFragment;
-    private SensorRecordFragment sensorRecordFragment;
-    private StatisticFragment statisticFragment;
+    ActivityRecognitionFragment activityRecognitionFragment;
+    SensorRecordFragment sensorRecordFragment;
+    StatisticFragment statisticFragment;
 
-    private AppDatabase appDatabase;
-    private SensorDao sensorDao;
-    private SensorRecordDao sensorRecordDao;
+    AppDatabase appDatabase;
+    SensorDao sensorDao;
+    SensorRecordDao sensorRecordDao;
 
     @BindView(R.id.top_navigation_drawer)
     WearableNavigationDrawerView navigationDrawerView;
@@ -174,6 +175,9 @@ public class MainActivity extends BaseActivity implements
                         .setDelayConfirmAction(DialogInterface.BUTTON_NEGATIVE, 5000)
                         .create()
                 );
+                break;
+            case R.id.menu_save_arff:
+                ArffFile.saveAsArff(sensorRecordDao.getAll(), 5);
                 break;
         }
         return false;
