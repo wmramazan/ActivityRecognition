@@ -3,10 +3,7 @@ package com.adnagu.activityrecognition.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
-import android.support.annotation.StringRes;
 import android.support.wearable.activity.ConfirmationActivity;
-
-import com.adnagu.activityrecognition.R;
 
 /**
  * Utils

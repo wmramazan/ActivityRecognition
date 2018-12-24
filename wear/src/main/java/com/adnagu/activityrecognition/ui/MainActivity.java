@@ -14,16 +14,15 @@ import android.support.wear.widget.drawer.WearableNavigationDrawerView;
 import android.support.wearable.activity.ConfirmationActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.adnagu.activityrecognition.R;
 import com.adnagu.activityrecognition.adapter.NavigationAdapter;
+import com.adnagu.activityrecognition.common.BaseActivity;
 import com.adnagu.activityrecognition.database.AppDatabase;
 import com.adnagu.activityrecognition.database.dao.SensorDao;
 import com.adnagu.activityrecognition.database.dao.SensorRecordDao;
 import com.adnagu.activityrecognition.database.entity.SensorEntity;
 import com.adnagu.activityrecognition.model.Section;
-import com.adnagu.activityrecognition.common.BaseActivity;
 import com.adnagu.activityrecognition.ui.section.ActivityRecognitionFragment;
 import com.adnagu.activityrecognition.ui.section.SensorRecordFragment;
 import com.adnagu.activityrecognition.ui.section.StatisticFragment;
@@ -177,7 +176,7 @@ public class MainActivity extends BaseActivity implements
                 );
                 break;
             case R.id.menu_save_arff:
-                ArffFile.saveAsArff(sensorRecordDao.getAll(), 5);
+                ArffFile.saveAsArff(this, sensorRecordDao.getAll(), 5);
                 break;
         }
         return false;

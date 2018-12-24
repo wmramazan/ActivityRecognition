@@ -13,8 +13,6 @@ import com.adnagu.activityrecognition.model.Activity;
 import com.adnagu.activityrecognition.utils.RecyclerItemClickListener;
 import com.adnagu.activityrecognition.utils.Utils;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

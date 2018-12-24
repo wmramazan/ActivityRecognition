@@ -2,15 +2,13 @@ package com.adnagu.activityrecognition.utils;
 
 import android.content.Context;
 import android.hardware.Sensor;
+import android.util.Log;
 
-import com.adnagu.activityrecognition.database.entity.SensorEntity;
 import com.adnagu.activityrecognition.database.entity.SensorRecordEntity;
+import com.adnagu.activityrecognition.model.Activity;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,6 +18,8 @@ import java.util.List;
  * Created on 12/5/2018
  */
 public class ArffFile {
+
+    private static final String DEBUG_TAG = "ArffFile";
 
     public static final String  FILE_NAME = "ActivityRecords.arff";
     public static final int     NANO_SECONDS = 1000000000;
@@ -59,7 +59,15 @@ public class ArffFile {
             writer.write("@relation activity_recognition\n\n");
 
             // Write attributes
-            writer.write("@attribute activity {0,1,2,3,4,5,6}\n");
+            StringBuilder activityIds = new StringBuilder();
+            for (int i = 0; i < Activity.values().length; i++)
+                activityIds.append(i).append(",");
+
+            activityIds.deleteCharAt(activityIds.length() - 1);
+
+            Log.d(DEBUG_TAG, activityIds.toString());
+
+            writer.write("@attribute activity {" + activityIds.toString() +"}\n");
             writer.write("@attribute sequence sensor_records");
 
             for (int sensorType : SENSOR_TYPES)
@@ -78,7 +86,6 @@ public class ArffFile {
                 SensorRecordEntity sensorRecord = sensorRecords.get(index);
                 if (isValidSensorType(sensorRecord.getId())) {
                     lastTimestamp = sensorRecord.getTimestamp();
-
                 }
             }
 

@@ -1,9 +1,8 @@
 package com.adnagu.activityrecognition.ui;
 
 import android.content.Intent;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
 
 import com.adnagu.activityrecognition.R;
 import com.adnagu.activityrecognition.common.BaseActivity;
