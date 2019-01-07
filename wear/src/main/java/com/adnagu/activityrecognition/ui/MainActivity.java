@@ -176,7 +176,7 @@ public class MainActivity extends BaseActivity implements
                 );
                 break;
             case R.id.menu_save_arff:
-                ArffFile.saveAsArff(this, sensorRecordDao.getAll(), 5);
+                ArffFile.saveAsArff(this, sensorRecordDao, 5);
                 break;
         }
         return false;
