@@ -34,6 +34,7 @@
     <string name="reset_database_error">Couldn\'t reset database.</string>
 
     <string name="save_as_arff">Save records as arff</string>
+    <string name="save_as_arff_success">Your records have been saved as arff file.</string>
 
     <string name="database_size_value">%1$s KB</string>
 

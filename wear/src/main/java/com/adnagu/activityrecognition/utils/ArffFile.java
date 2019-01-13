@@ -85,14 +85,19 @@ public class ArffFile {
             writer.write("@data\n");
 
             for (Activity activity : Activity.values()) {
-                ArrayList<ArrayList<String>> sensorValues = new ArrayList<>();
+                ArrayList<ArrayList<ArffRecord>> sensorValues = new ArrayList<>();
                 for (int SENSOR_TYPE : SENSOR_TYPES) {
-                    ArrayList<String> values = new ArrayList<>();
+                    ArrayList<ArffRecord> values = new ArrayList<>();
                     List<SensorRecordEntity> sensorRecords = sensorRecordDao.getAllInOrder(SENSOR_TYPE, activity.ordinal());
 
                     for (SensorRecordEntity sensorRecord : sensorRecords) {
                         String value = sensorRecord.getValues();
-                        values.add(value.substring(1, value.length()));
+                        values.add(
+                                new ArffRecord(
+                                        value.substring(1, value.length()),
+                                        toSeconds(sensorRecord.getTimestamp())
+                                )
+                        );
                     }
 
                     sensorValues.add(values);
@@ -103,12 +108,33 @@ public class ArffFile {
                     if (min_value > sensorValues.get(i).size())
                         min_value = sensorValues.get(i).size();
 
+                int difference, lastTimestamp;
+
                 for (int i = 0; i < min_value; i++) {
+                    difference = 0;
+                    lastTimestamp = 0;
+
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append(activity.ordinal()).append(',');
                     stringBuilder.append('\'');
-                    for (int j = 0; j < SENSOR_TYPES.length; j++)
-                        stringBuilder.append(sensorValues.get(j).get(i)).append(',');
+
+                    while (difference < windowLength) {
+
+                        for (int j = 0; j < SENSOR_TYPES.length; j++) {
+                            ArffRecord record = sensorValues.get(j).get(i);
+                            stringBuilder.append(record.getValue()).append(',');
+
+                            if (lastTimestamp != 0)
+                                difference = record.getTimestamp() - lastTimestamp;
+                            lastTimestamp = record.getTimestamp();
+                        }
+
+                        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+                        stringBuilder.append("\n");
+
+                        i++;
+                    }
+
                     stringBuilder.append('\'');
                     writer.write(stringBuilder.toString());
                     writer.write("\n");
@@ -126,6 +152,10 @@ public class ArffFile {
             if (id == SENSOR_TYPE)
                 return true;
         return false;
+    }
+
+    private static int toSeconds(long milliSeconds) {
+        return (int) (milliSeconds / NANO_SECONDS);
     }
 
 }

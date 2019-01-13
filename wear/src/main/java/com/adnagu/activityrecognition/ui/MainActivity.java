@@ -176,7 +176,14 @@ public class MainActivity extends BaseActivity implements
                 );
                 break;
             case R.id.menu_save_arff:
+                showProgress();
                 ArffFile.saveAsArff(this, sensorRecordDao, 5);
+                Utils.showMessage(
+                        ConfirmationActivity.SUCCESS_ANIMATION,
+                        MainActivity.this,
+                        getString(R.string.save_as_arff_success)
+                );
+                hideProgress();
                 break;
         }
         return false;
