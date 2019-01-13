@@ -70,10 +70,8 @@ public class ArffFile {
 
             activityIds.deleteCharAt(activityIds.length() - 1);
 
-            Log.d(DEBUG_TAG, activityIds.toString());
-
             writer.write("@attribute activity {" + activityIds.toString() +"}\n");
-            writer.write("@attribute sequence sensor_records\n");
+            writer.write("@attribute sequence relational\n");
 
             for (int sensorType : SENSOR_TYPES)
                 for (int i = 0; i < 3; i++)
@@ -84,18 +82,24 @@ public class ArffFile {
             // Write records
             writer.write("@data\n");
 
+            long limit = windowLength * NANO_SECONDS;
+
             for (Activity activity : Activity.values()) {
+                Log.d(DEBUG_TAG, "Activity: " + activity.ordinal());
+
                 ArrayList<ArrayList<ArffRecord>> sensorValues = new ArrayList<>();
                 for (int SENSOR_TYPE : SENSOR_TYPES) {
                     ArrayList<ArffRecord> values = new ArrayList<>();
+                    Log.d(DEBUG_TAG, "Sensor Type: " + SENSOR_TYPE);
                     List<SensorRecordEntity> sensorRecords = sensorRecordDao.getAllInOrder(SENSOR_TYPE, activity.ordinal());
+                    Log.d(DEBUG_TAG, "Record Size: " + sensorRecords.size());
 
                     for (SensorRecordEntity sensorRecord : sensorRecords) {
                         String value = sensorRecord.getValues();
                         values.add(
                                 new ArffRecord(
-                                        value.substring(1, value.length()),
-                                        toSeconds(sensorRecord.getTimestamp())
+                                        value.substring(1, value.length() - 1),
+                                        sensorRecord.getTimestamp()
                                 )
                         );
                     }
@@ -108,31 +112,38 @@ public class ArffFile {
                     if (min_value > sensorValues.get(i).size())
                         min_value = sensorValues.get(i).size();
 
-                int difference, lastTimestamp;
+                Log.d(DEBUG_TAG, "Min. Value: " + min_value);
+
+                long lastTimestamp;
+                boolean loop;
 
                 for (int i = 0; i < min_value; i++) {
-                    difference = 0;
                     lastTimestamp = 0;
+                    loop = true;
 
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append(activity.ordinal()).append(',');
                     stringBuilder.append('\'');
 
-                    while (difference < windowLength) {
+                    while (i < min_value && loop) {
+                        ArffRecord firstRecord = sensorValues.get(0).get(i);
+                        Log.d(DEBUG_TAG, "Record Timestamp: " + firstRecord.getTimestamp());
 
-                        for (int j = 0; j < SENSOR_TYPES.length; j++) {
-                            ArffRecord record = sensorValues.get(j).get(i);
-                            stringBuilder.append(record.getValue()).append(',');
+                        if (lastTimestamp == 0)
+                            lastTimestamp = firstRecord.getTimestamp();
+                        else if (firstRecord.getTimestamp() - lastTimestamp > limit)
+                            loop = false;
 
-                            if (lastTimestamp != 0)
-                                difference = record.getTimestamp() - lastTimestamp;
-                            lastTimestamp = record.getTimestamp();
-                        }
+                        for (int j = 0; j < SENSOR_TYPES.length; j++)
+                            stringBuilder.append(sensorValues.get(j).get(i).getValue()).append(',');
 
                         stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-                        stringBuilder.append("\n");
+                        stringBuilder.append("\\n");
 
                         i++;
+
+                        Log.d(DEBUG_TAG, "Loop: " + loop);
+                        Log.d(DEBUG_TAG, "Last Timestamp: " + lastTimestamp);
                     }
 
                     stringBuilder.append('\'');
@@ -152,10 +163,6 @@ public class ArffFile {
             if (id == SENSOR_TYPE)
                 return true;
         return false;
-    }
-
-    private static int toSeconds(long milliSeconds) {
-        return (int) (milliSeconds / NANO_SECONDS);
     }
 
 }

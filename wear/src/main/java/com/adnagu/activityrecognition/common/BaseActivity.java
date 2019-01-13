@@ -2,8 +2,8 @@ package com.adnagu.activityrecognition.common;
 
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
+import android.util.Log;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import com.adnagu.activityrecognition.R;
 
@@ -15,24 +15,31 @@ import com.adnagu.activityrecognition.R;
  */
 public abstract class BaseActivity extends WearableActivity {
 
-    ProgressBar progressBar;
+    View progress;
     View contentFrame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
 
-        progressBar = findViewById(R.id.progress_bar);
+    @Override
+    public void setContentView(int layoutResID) {
+        super.setContentView(layoutResID);
+
+        progress = findViewById(R.id.llProgress);
         contentFrame = findViewById(R.id.content_frame);
     }
 
     public void showProgress() {
-        progressBar.setVisibility(View.VISIBLE);
+        Log.d("BaseActivity", "showProgress");
+        progress.setVisibility(View.VISIBLE);
         contentFrame.setVisibility(View.GONE);
     }
 
     public void hideProgress() {
-        progressBar.setVisibility(View.GONE);
+        Log.d("BaseActivity", "hideProgress");
+        progress.setVisibility(View.GONE);
         contentFrame.setVisibility(View.VISIBLE);
     }
 

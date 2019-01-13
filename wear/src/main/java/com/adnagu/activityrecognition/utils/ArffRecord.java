@@ -8,9 +8,9 @@ package com.adnagu.activityrecognition.utils;
  */
 public class ArffRecord {
     private String value;
-    private int timestamp;
+    private long timestamp;
 
-    ArffRecord(String value, int timestamp) {
+    ArffRecord(String value, long timestamp) {
         this.value = value;
         this.timestamp = timestamp;
     }
@@ -23,11 +23,11 @@ public class ArffRecord {
         this.value = value;
     }
 
-    public int getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(int timestamp) {
+    public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
 }

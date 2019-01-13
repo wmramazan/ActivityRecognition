@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.wear.ambient.AmbientModeSupport;
 import android.support.wear.widget.drawer.WearableActionDrawerView;
 import android.support.wear.widget.drawer.WearableNavigationDrawerView;
@@ -176,14 +177,17 @@ public class MainActivity extends BaseActivity implements
                 );
                 break;
             case R.id.menu_save_arff:
+                hideActionDrawer();
                 showProgress();
-                ArffFile.saveAsArff(this, sensorRecordDao, 5);
-                Utils.showMessage(
-                        ConfirmationActivity.SUCCESS_ANIMATION,
-                        MainActivity.this,
-                        getString(R.string.save_as_arff_success)
-                );
-                hideProgress();
+                new Handler().postDelayed(() -> {
+                    ArffFile.saveAsArff(this, sensorRecordDao, 5);
+                    Utils.showMessage(
+                            ConfirmationActivity.SUCCESS_ANIMATION,
+                            MainActivity.this,
+                            getString(R.string.save_as_arff_success)
+                    );
+                    hideProgress();
+                }, 1000);
                 break;
         }
         return false;
