@@ -1,16 +1,16 @@
-package com.adnagu.activityrecognition.utils;
+package com.adnagu.activityrecognition.ml;
 
 /**
- * ArffRecord
+ * SequentialArffRecord
  *
  * @author ramazan.vapurcu
  * Created on 1/12/2019
  */
-public class ArffRecord {
+public class SequentialArffRecord {
     private String value;
     private long timestamp;
 
-    ArffRecord(String value, long timestamp) {
+    SequentialArffRecord(String value, long timestamp) {
         this.value = value;
         this.timestamp = timestamp;
     }

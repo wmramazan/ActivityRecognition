@@ -8,10 +8,15 @@ import android.content.Context;
 
 import com.adnagu.activityrecognition.database.converter.DateConverter;
 import com.adnagu.activityrecognition.database.converter.JSONConverter;
+import com.adnagu.activityrecognition.database.dao.ActivityDao;
+import com.adnagu.activityrecognition.database.dao.ActivityRecordDao;
 import com.adnagu.activityrecognition.database.dao.SensorDao;
 import com.adnagu.activityrecognition.database.dao.SensorRecordDao;
-import com.adnagu.activityrecognition.database.entity.SensorEntity;
+import com.adnagu.activityrecognition.database.entity.ActivityEntity;
+import com.adnagu.activityrecognition.database.entity.ActivityRecordEntity;
 import com.adnagu.activityrecognition.database.entity.SensorRecordEntity;
+import com.adnagu.activityrecognition.database.entity.SensorEntity;
+import com.adnagu.activityrecognition.model.Activity;
 import com.adnagu.activityrecognition.utils.Utils;
 
 /**
@@ -20,7 +25,7 @@ import com.adnagu.activityrecognition.utils.Utils;
  * @author ramazan.vapurcu
  * Created on 10/2/2018
  */
-@Database(entities = {SensorEntity.class, SensorRecordEntity.class}, version = 1, exportSchema = false)
+@Database(entities = {ActivityEntity.class, ActivityRecordEntity.class, SensorEntity.class, SensorRecordEntity.class}, version = 1, exportSchema = false)
 @TypeConverters({DateConverter.class, JSONConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -28,6 +33,8 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private static volatile AppDatabase INSTANCE;
 
+    public abstract ActivityDao activityDao();
+    public abstract ActivityRecordDao activityRecordDao();
     public abstract SensorDao sensorDao();
     public abstract SensorRecordDao sensorRecordDao();
 

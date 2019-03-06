@@ -143,7 +143,7 @@ public class SensorRecordFragment extends BaseFragment implements AmbientMode {
         Log.d(DEBUG_TAG, "Selected Activity: " + index);
         selectedActivityIndex = index;
         activityName.setText(getString(Activity.values()[index].title_res));
-        serviceIntent.putExtra(Utils.ACTIVITY_INDEX, selectedActivityIndex);
+        serviceIntent.putExtra(Utils.ACTIVITY_ID, selectedActivityIndex);
     }
 
     @Override
@@ -151,7 +151,7 @@ public class SensorRecordFragment extends BaseFragment implements AmbientMode {
         if (resultCode == android.app.Activity.RESULT_OK) {
             switch (requestCode) {
                 case Utils.RequestCode.CHOOSE_ACTIVITY:
-                    setActivity(data.getIntExtra(Utils.ACTIVITY_INDEX, 0));
+                    setActivity(data.getIntExtra(Utils.ACTIVITY_ID, 0));
                     break;
             }
         }

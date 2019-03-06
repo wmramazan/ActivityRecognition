@@ -20,17 +20,14 @@ import com.adnagu.activityrecognition.R;
 import com.adnagu.activityrecognition.adapter.NavigationAdapter;
 import com.adnagu.activityrecognition.common.BaseActivity;
 import com.adnagu.activityrecognition.database.AppDatabase;
-import com.adnagu.activityrecognition.database.dao.SensorDao;
 import com.adnagu.activityrecognition.database.dao.SensorRecordDao;
-import com.adnagu.activityrecognition.database.entity.SensorEntity;
 import com.adnagu.activityrecognition.model.Section;
 import com.adnagu.activityrecognition.ui.section.ActivityRecognitionFragment;
 import com.adnagu.activityrecognition.ui.section.SensorRecordFragment;
 import com.adnagu.activityrecognition.ui.section.StatisticFragment;
-import com.adnagu.activityrecognition.utils.ArffFile;
+import com.adnagu.activityrecognition.ml.SequentialArffFile;
+import com.adnagu.activityrecognition.utils.DatabaseUtils;
 import com.adnagu.activityrecognition.utils.Utils;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,7 +50,6 @@ public class MainActivity extends BaseActivity implements
     StatisticFragment statisticFragment;
 
     AppDatabase appDatabase;
-    SensorDao sensorDao;
     SensorRecordDao sensorRecordDao;
 
     @BindView(R.id.top_navigation_drawer)
@@ -93,10 +89,9 @@ public class MainActivity extends BaseActivity implements
         navigationDrawerView.setCurrentItem(Section.SensorRecord.ordinal(), true);
 
         appDatabase = AppDatabase.getInstance(this);
-        sensorDao = appDatabase.sensorDao();
         sensorRecordDao = appDatabase.sensorRecordDao();
 
-        saveSensors();
+        DatabaseUtils.prepareDatabase(this);
     }
 
     @Override
@@ -108,34 +103,6 @@ public class MainActivity extends BaseActivity implements
 
     protected void replaceFragment(Fragment fragment) {
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-    }
-
-    protected void saveSensors() {
-        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        Log.d(DEBUG_TAG, "Number of sensors: " + sensorDao.getCount());
-
-        //TODO: Check unsupported sensors.
-
-        if (null != sensorManager && !sensorDao.hasAny()) {
-            List<Sensor> deviceSensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
-
-            for (Sensor deviceSensor : deviceSensors) {
-                Log.d(DEBUG_TAG, deviceSensor.getName());
-
-                SensorEntity sensor = new SensorEntity(
-                        deviceSensor.getType(),
-                        deviceSensor.getName(),
-                        deviceSensor.getVendor(),
-                        deviceSensor.getMinDelay(),
-                        deviceSensor.getMaxDelay(),
-                        deviceSensor.getMaximumRange(),
-                        deviceSensor.getResolution(),
-                        deviceSensor.getPower()
-                );
-
-                sensorDao.insert(sensor);
-            }
-        }
     }
 
     @Override
@@ -180,7 +147,7 @@ public class MainActivity extends BaseActivity implements
                 hideActionDrawer();
                 showProgress();
                 new Handler().postDelayed(() -> {
-                    ArffFile.saveAsArff(this, sensorRecordDao, 5);
+                    SequentialArffFile.saveAsArff(this, sensorRecordDao, 5);
                     Utils.showMessage(
                             ConfirmationActivity.SUCCESS_ANIMATION,
                             MainActivity.this,

@@ -1,11 +1,9 @@
-package com.adnagu.activityrecognition.utils;
+package com.adnagu.activityrecognition.ml;
 
 import android.content.Context;
 import android.hardware.Sensor;
 import android.util.Log;
-import android.util.StringBuilderPrinter;
 
-import com.adnagu.activityrecognition.database.converter.JSONConverter;
 import com.adnagu.activityrecognition.database.dao.SensorRecordDao;
 import com.adnagu.activityrecognition.database.entity.SensorRecordEntity;
 import com.adnagu.activityrecognition.model.Activity;
@@ -16,14 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ArffFile
+ * SequentialArffFile
  *
  * @author ramazan.vapurcu
  * Created on 12/5/2018
  */
-public class ArffFile {
+public class SequentialArffFile {
 
-    private static final String DEBUG_TAG = "ArffFile";
+    private static final String DEBUG_TAG = "SequentialArffFile";
 
     public static final String  FILE_NAME = "ActivityRecords.arff";
     public static final int     NANO_SECONDS = 1000000000;
@@ -87,9 +85,9 @@ public class ArffFile {
             for (Activity activity : Activity.values()) {
                 Log.d(DEBUG_TAG, "Activity: " + activity.ordinal());
 
-                ArrayList<ArrayList<ArffRecord>> sensorValues = new ArrayList<>();
+                ArrayList<ArrayList<SequentialArffRecord>> sensorValues = new ArrayList<>();
                 for (int SENSOR_TYPE : SENSOR_TYPES) {
-                    ArrayList<ArffRecord> values = new ArrayList<>();
+                    ArrayList<SequentialArffRecord> values = new ArrayList<>();
                     Log.d(DEBUG_TAG, "Sensor Type: " + SENSOR_TYPE);
                     List<SensorRecordEntity> sensorRecords = sensorRecordDao.getAllInOrder(SENSOR_TYPE, activity.ordinal());
                     Log.d(DEBUG_TAG, "Record Size: " + sensorRecords.size());
@@ -97,7 +95,7 @@ public class ArffFile {
                     for (SensorRecordEntity sensorRecord : sensorRecords) {
                         String value = sensorRecord.getValues();
                         values.add(
-                                new ArffRecord(
+                                new SequentialArffRecord(
                                         value.substring(1, value.length() - 1),
                                         sensorRecord.getTimestamp()
                                 )
@@ -126,7 +124,7 @@ public class ArffFile {
                     stringBuilder.append('\'');
 
                     while (i < min_value && loop) {
-                        ArffRecord firstRecord = sensorValues.get(0).get(i);
+                        SequentialArffRecord firstRecord = sensorValues.get(0).get(i);
                         Log.d(DEBUG_TAG, "Record Timestamp: " + firstRecord.getTimestamp());
 
                         if (lastTimestamp == 0)

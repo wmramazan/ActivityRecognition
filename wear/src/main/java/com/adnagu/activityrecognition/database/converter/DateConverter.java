@@ -21,4 +21,5 @@ public class DateConverter {
     public static Long toTimestamp(Date date) {
         return date == null ? null : date.getTime();
     }
+
 }

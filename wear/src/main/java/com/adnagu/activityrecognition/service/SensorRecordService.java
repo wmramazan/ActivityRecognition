@@ -14,33 +14,36 @@ import android.util.Log;
 
 import com.adnagu.activityrecognition.database.AppDatabase;
 import com.adnagu.activityrecognition.database.converter.JSONConverter;
+import com.adnagu.activityrecognition.database.dao.ActivityRecordDao;
 import com.adnagu.activityrecognition.database.dao.SensorRecordDao;
+import com.adnagu.activityrecognition.database.entity.ActivityRecordEntity;
 import com.adnagu.activityrecognition.database.entity.SensorRecordEntity;
 import com.adnagu.activityrecognition.utils.Utils;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 public class SensorRecordService extends Service implements SensorEventListener {
 
     private final String DEBUG_TAG = getClass().getName();
-    private final int    SENSOR_RECORD_CACHE = 1000;
+    private final int    CACHE_SIZE = 200;
 
     AppDatabase appDatabase;
+    ActivityRecordDao activityRecordDao;
     SensorRecordDao sensorRecordDao;
-
-    HandlerThread handlerThread;
-    Handler handler;
 
     SensorManager sensorManager;
 
-    SensorRecordEntity[] sensorRecordEntities;
+    ArrayList<SensorRecordEntity> sensorRecords;
 
-    int activityTypeId;
-    int sensorRecordIndex;
+    int activityId;
+    int activityRecordId;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(DEBUG_TAG, "onStartCommand");
 
-        activityTypeId = intent.getIntExtra(Utils.ACTIVITY_INDEX, 0);
+        activityId = intent.getIntExtra(Utils.ACTIVITY_ID, 0);
         init();
 
         return START_NOT_STICKY;
@@ -49,24 +52,19 @@ public class SensorRecordService extends Service implements SensorEventListener 
     @Override
     public void onDestroy() {
         Log.d(DEBUG_TAG, "onDestroy");
-        Log.d(DEBUG_TAG, "sensorRecordIndex: " + sensorRecordIndex);
 
         stopRecording();
-        handlerThread.quitSafely();
         super.onDestroy();
     }
 
     protected void init() {
         Log.d(DEBUG_TAG, "init");
-        handlerThread = new HandlerThread(Utils.DATABASE_HANDLER_THREAD, Process.THREAD_PRIORITY_BACKGROUND);
-        handlerThread.start();
-
-        handler = new Handler(handlerThread.getLooper());
 
         appDatabase = AppDatabase.getInstance(this);
+        activityRecordDao = appDatabase.activityRecordDao();
         sensorRecordDao = appDatabase.sensorRecordDao();
 
-        sensorRecordEntities = new SensorRecordEntity[SENSOR_RECORD_CACHE];
+        sensorRecords = new ArrayList<>();
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         if (null != sensorManager)
@@ -81,18 +79,20 @@ public class SensorRecordService extends Service implements SensorEventListener 
             else
                 sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
         }
+
+        long[] results = activityRecordDao.insert(
+                new ActivityRecordEntity(
+                        activityId,
+                        new Date()
+                )
+        );
+        activityRecordId = (int) results[0];
     }
 
     protected void stopRecording() {
         sensorManager.unregisterListener(this);
 
-        if (sensorRecordIndex != 0) {
-            SensorRecordEntity[] remainingRecords = new SensorRecordEntity[sensorRecordIndex];
-            System.arraycopy(sensorRecordEntities, 0, remainingRecords, 0, sensorRecordIndex);
-
-            handler.post(() -> sensorRecordDao.insert(remainingRecords));
-            sensorRecordIndex = 0;
-        }
+        saveRecords();
     }
 
     @Override
@@ -108,21 +108,25 @@ public class SensorRecordService extends Service implements SensorEventListener 
             return;
         */
 
-        if (sensorRecordIndex >= SENSOR_RECORD_CACHE) {
-            handler.post(() -> sensorRecordDao.insert(sensorRecordEntities));
-            sensorRecordIndex = 0;
-        }
-
-        sensorRecordEntities[sensorRecordIndex++] = new SensorRecordEntity(
+        sensorRecords.add(new SensorRecordEntity(
+                JSONConverter.fromArray(sensorEvent.values),
+                new Date(),
                 sensorEvent.timestamp,
                 sensorEvent.sensor.getType(),
-                activityTypeId,
-                JSONConverter.fromArray(sensorEvent.values)
-        );
+                activityRecordId
+        ));
+
+        if (sensorRecords.size() == CACHE_SIZE)
+            saveRecords();
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
 
+    }
+
+    private void saveRecords() {
+        sensorRecordDao.insert(sensorRecords);
+        sensorRecords.clear();
     }
 }

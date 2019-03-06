@@ -30,14 +30,17 @@ public interface SensorRecordDao {
     @Query("SELECT * FROM sensor_record")
     List<SensorRecordEntity> getAll();
 
-    @Query("SELECT * FROM sensor_record ORDER BY sensor_record.sensor_id, sensor_record.timestamp")
-    List<SensorRecordEntity> getAllInOrder();
+    @Query("SELECT sensor_record.* FROM sensor_record, activity_record WHERE sensor_record.sensor_id = activity_record.id = sensor_record.activity_record_id AND sensor_record.sensor_id IN (1,2,4,9,10) AND activity_record.activity_id = :activityId ORDER BY sensor_record.sensor_id, sensor_record.timestamp")
+    List<SensorRecordEntity> getAllInOrder(int activityId);
 
-    @Query("SELECT * FROM sensor_record WHERE sensor_record.sensor_id = :sensorId AND sensor_record.activity_id = :activityId ORDER BY sensor_record.sensor_id, sensor_record.timestamp")
+    @Query("SELECT sensor_record.* FROM sensor_record, activity_record WHERE sensor_record.sensor_id = activity_record.id = sensor_record.activity_record_id AND sensor_record.sensor_id = :sensorId AND activity_record.activity_id = :activityId ORDER BY sensor_record.sensor_id, sensor_record.timestamp")
     List<SensorRecordEntity> getAllInOrder(int sensorId, int activityId);
 
     @Insert
     long[] insert(SensorRecordEntity... sensorRecords);
+
+    @Insert
+    void insert(List<SensorRecordEntity> sensorRecords);
 
     @Delete
     void delete(SensorRecordEntity sensorRecord);

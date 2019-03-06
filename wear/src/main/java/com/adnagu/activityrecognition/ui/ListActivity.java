@@ -40,7 +40,7 @@ public class ListActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent();
-                intent.putExtra(Utils.ACTIVITY_INDEX, position);
+                intent.putExtra(Utils.ACTIVITY_ID, position);
                 setResult(RESULT_OK, intent);
                 finish();
             }

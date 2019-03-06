@@ -14,22 +14,15 @@ import android.support.wearable.activity.ConfirmationActivity;
 public class Utils {
 
     public static final String DATABASE_NAME = "ActivityRecognition.db";
-    public static final String DATABASE_HANDLER_THREAD = "database";
 
-    public static final String ACTIVITY_INDEX = "index";
+    public static final String ACTIVITY_ID = "ACTIVITY_ID";
 
     public static final int[] SENSOR_TYPES = {
             Sensor.TYPE_ACCELEROMETER,
             Sensor.TYPE_MAGNETIC_FIELD,
             Sensor.TYPE_GYROSCOPE,
             Sensor.TYPE_GRAVITY,
-            Sensor.TYPE_LINEAR_ACCELERATION,
-            Sensor.TYPE_ROTATION_VECTOR,
-            Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED,
-            Sensor.TYPE_GAME_ROTATION_VECTOR,
-            Sensor.TYPE_GYROSCOPE_UNCALIBRATED,
-            Sensor.TYPE_SIGNIFICANT_MOTION,
-            Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR
+            Sensor.TYPE_LINEAR_ACCELERATION
     };
 
     public class RequestCode {
