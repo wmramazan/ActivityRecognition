@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.adnagu.activityrecognition.R;
-import com.adnagu.activityrecognition.common.AmbientMode;
 import com.adnagu.activityrecognition.common.BaseFragment;
 import com.adnagu.activityrecognition.database.AppDatabase;
+import com.adnagu.activityrecognition.database.dao.ActivityRecordDao;
 import com.adnagu.activityrecognition.database.dao.SensorRecordDao;
 import com.adnagu.activityrecognition.utils.Utils;
 
@@ -25,12 +25,16 @@ import butterknife.OnClick;
  * @author ramazan.vapurcu
  * Created on 10/3/2018
  */
-public class StatisticFragment extends BaseFragment implements AmbientMode {
+public class StatisticFragment extends BaseFragment {
 
     private final String DEBUG_TAG = getClass().getName();
 
     AppDatabase appDatabase;
+    ActivityRecordDao activityRecordDao;
     SensorRecordDao sensorRecordDao;
+
+    @BindView(R.id.text_activity_records)
+    TextView tvActivityRecords;
 
     @BindView(R.id.text_sensor_records)
     TextView tvSensorRecords;
@@ -39,16 +43,14 @@ public class StatisticFragment extends BaseFragment implements AmbientMode {
     TextView tvDatabaseSize;
 
     @OnClick(R.id.text_sensor_records) public void setDatabaseInformation() {
-        appDatabase = AppDatabase.getInstance(getContext());
-        sensorRecordDao = appDatabase.sensorRecordDao();
-
+        tvActivityRecords.setText(String.valueOf(activityRecordDao.getCount()));
         tvSensorRecords.setText(String.valueOf(sensorRecordDao.getCount()));
 
         File file = getContext().getDatabasePath(Utils.DATABASE_NAME);
         tvDatabaseSize.setText(
                 String.format(
                         getString(R.string.database_size_value),
-                        String.valueOf((int) Math.floor(file.length() / 1024))
+                        String.valueOf((int) Math.floor(file.length() >> 10))
                 )
         );
     }
@@ -61,6 +63,10 @@ public class StatisticFragment extends BaseFragment implements AmbientMode {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_statistic, container, false);
         ButterKnife.bind(this, view);
+
+        appDatabase = AppDatabase.getInstance(getContext());
+        activityRecordDao = appDatabase.activityRecordDao();
+        sensorRecordDao = appDatabase.sensorRecordDao();
 
         setDatabaseInformation();
 

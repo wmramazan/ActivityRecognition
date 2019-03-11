@@ -6,18 +6,15 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.IBinder;
-import android.os.Process;
 import android.util.Log;
 
 import com.adnagu.activityrecognition.database.AppDatabase;
-import com.adnagu.activityrecognition.database.converter.JSONConverter;
 import com.adnagu.activityrecognition.database.dao.ActivityRecordDao;
 import com.adnagu.activityrecognition.database.dao.SensorRecordDao;
 import com.adnagu.activityrecognition.database.entity.ActivityRecordEntity;
 import com.adnagu.activityrecognition.database.entity.SensorRecordEntity;
+import com.adnagu.activityrecognition.model.SensorType;
 import com.adnagu.activityrecognition.utils.Utils;
 
 import java.util.ArrayList;
@@ -72,8 +69,8 @@ public class SensorRecordService extends Service implements SensorEventListener 
     }
 
     protected void startRecording() {
-        for (int sensorType : Utils.SENSOR_TYPES) {
-            Sensor sensor = sensorManager.getDefaultSensor(sensorType);
+        for (SensorType sensorType : SensorType.values()) {
+            Sensor sensor = sensorManager.getDefaultSensor(sensorType.id);
             if (null == sensor)
                 Log.d(DEBUG_TAG, "Unsupported sensor: " + sensorType);
             else
@@ -109,7 +106,7 @@ public class SensorRecordService extends Service implements SensorEventListener 
         */
 
         sensorRecords.add(new SensorRecordEntity(
-                JSONConverter.fromArray(sensorEvent.values),
+                Utils.toList(sensorEvent.values),
                 new Date(),
                 sensorEvent.timestamp,
                 sensorEvent.sensor.getType(),

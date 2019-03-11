@@ -2,9 +2,10 @@ package com.adnagu.activityrecognition.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.wear.widget.drawer.WearableNavigationDrawerView;
 
 import com.adnagu.activityrecognition.model.Section;
+
+import androidx.wear.widget.drawer.WearableNavigationDrawerView;
 
 /**
  * NavigationAdapter

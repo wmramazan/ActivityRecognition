@@ -1,17 +1,19 @@
 package com.adnagu.activityrecognition.ui.section;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.adnagu.activityrecognition.R;
-import com.adnagu.activityrecognition.common.AmbientMode;
 import com.adnagu.activityrecognition.common.BaseFragment;
 import com.adnagu.activityrecognition.model.Activity;
 import com.adnagu.activityrecognition.service.SensorRecordService;
@@ -30,15 +32,20 @@ import ticwear.design.widget.FloatingActionButton;
  * @author ramazan.vapurcu
  * Created on 10/3/2018
  */
-public class SensorRecordFragment extends BaseFragment implements AmbientMode {
+public class SensorRecordFragment extends BaseFragment {
 
     private final String    DEBUG_TAG = getClass().getName();
     private final Activity  DEFAULT_ACTIVITY = Activity.UsingComputer;
+    private final long      WAKELOCK_TIMEOUT = 30*60*1000L;
 
     Intent serviceIntent;
+    PowerManager.WakeLock wakeLock;
 
     int selectedActivityIndex;
     boolean isRecording;
+
+    @BindView(R.id.llActiveContent)
+    LinearLayout llActiveContent;
 
     @BindView(R.id.button_record)
     FloatingActionButton recordButton;
@@ -72,6 +79,9 @@ public class SensorRecordFragment extends BaseFragment implements AmbientMode {
 
         setActivity(DEFAULT_ACTIVITY);
 
+        PowerManager powerManager = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ActivityRecognition::WakeLock");
+
         return view;
     }
 
@@ -103,6 +113,8 @@ public class SensorRecordFragment extends BaseFragment implements AmbientMode {
             getContext().startService(serviceIntent);
             recordButton.setShowProgress(true);
             recordText.setText(R.string.recording);
+
+            wakeLock.acquire(WAKELOCK_TIMEOUT);
         }
     }
 
@@ -113,17 +125,21 @@ public class SensorRecordFragment extends BaseFragment implements AmbientMode {
             getContext().stopService(serviceIntent);
             recordButton.setShowProgress(false);
             recordText.setText(R.string.click_to_record);
+
+            wakeLock.release();
         }
     }
 
     @Override
     public void onEnterAmbient() {
-
+        llActiveContent.setVisibility(View.GONE);
+        recordText.getPaint().setAntiAlias(false);
     }
 
     @Override
     public void onExitAmbient() {
-
+        llActiveContent.setVisibility(View.VISIBLE);
+        recordText.getPaint().setAntiAlias(true);
     }
 
     protected void forceRippleAnimation(View view) {

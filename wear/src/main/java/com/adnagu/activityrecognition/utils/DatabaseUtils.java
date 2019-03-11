@@ -3,7 +3,6 @@ package com.adnagu.activityrecognition.utils;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.util.Log;
 
 import com.adnagu.activityrecognition.database.AppDatabase;
 import com.adnagu.activityrecognition.database.dao.ActivityDao;
@@ -12,7 +11,6 @@ import com.adnagu.activityrecognition.database.entity.ActivityEntity;
 import com.adnagu.activityrecognition.database.entity.SensorEntity;
 import com.adnagu.activityrecognition.model.Activity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

@@ -1,12 +1,12 @@
 package com.adnagu.activityrecognition.database.converter;
 
-import android.arch.persistence.room.TypeConverter;
-
-import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
+import java.util.List;
+
+import androidx.room.TypeConverter;
 
 /**
  * JSONConverter
@@ -17,19 +17,13 @@ import java.util.ArrayList;
 public class JSONConverter {
 
     @TypeConverter
-    public static ArrayList<Float> fromString(String value) {
-        Type listType = new TypeToken<ArrayList<Float>>() {}.getType();
-        return new Gson().fromJson(value, listType);
+    public static List<Float> toList(String string) {
+        Type listType = new TypeToken<List<Float>>() {}.getType();
+        return new Gson().fromJson(string, listType);
     }
 
     @TypeConverter
-    public static String fromArrayList(ArrayList<Float> list) {
-        Gson gson = new Gson();
-        return gson.toJson(list);
-    }
-
-    @TypeConverter
-    public static String fromArray(float[] list) {
+    public static String toString(List<Float> list) {
         Gson gson = new Gson();
         return gson.toJson(list);
     }

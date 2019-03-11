@@ -1,12 +1,12 @@
 package com.adnagu.activityrecognition.database.dao;
 
-import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Insert;
-import android.arch.persistence.room.Query;
-
 import com.adnagu.activityrecognition.database.entity.ActivityRecordEntity;
 
 import java.util.List;
+
+import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.Query;
 
 /**
  * ActivityRecordDao
@@ -17,6 +17,9 @@ import java.util.List;
 @Dao
 public interface ActivityRecordDao {
 
+    @Query("SELECT COUNT(*) FROM activity_record")
+    int getCount();
+
     @Query("SELECT * FROM activity_record WHERE id == :id")
     ActivityRecordEntity get(int id);
 
@@ -25,5 +28,8 @@ public interface ActivityRecordDao {
 
     @Insert
     long[] insert(ActivityRecordEntity... activityRecords);
+
+    @Query("DELETE FROM activity_record WHERE id = (SELECT id FROM activity_record ORDER BY id DESC)")
+    int deleteLastRecord();
 
 }

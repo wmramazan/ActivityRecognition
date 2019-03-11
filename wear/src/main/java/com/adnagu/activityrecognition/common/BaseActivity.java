@@ -1,11 +1,17 @@
 package com.adnagu.activityrecognition.common;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.View;
 
 import com.adnagu.activityrecognition.R;
+
+import androidx.core.content.ContextCompat;
+import androidx.wear.widget.drawer.WearableDrawerLayout;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * BaseActivity
@@ -15,7 +21,16 @@ import com.adnagu.activityrecognition.R;
  */
 public abstract class BaseActivity extends WearableActivity {
 
+    protected FragmentManager fragmentManager;
+    protected BaseFragment fragment;
+
+    @BindView(R.id.drawer_layout)
+    WearableDrawerLayout drawerLayout;
+
+    @BindView(R.id.llProgress)
     View progress;
+
+    @BindView(R.id.content_frame)
     View contentFrame;
 
     @Override
@@ -26,9 +41,9 @@ public abstract class BaseActivity extends WearableActivity {
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
+        ButterKnife.bind(this);
 
-        progress = findViewById(R.id.llProgress);
-        contentFrame = findViewById(R.id.content_frame);
+        fragmentManager = getFragmentManager();
     }
 
     public void showProgress() {
@@ -43,4 +58,24 @@ public abstract class BaseActivity extends WearableActivity {
         contentFrame.setVisibility(View.VISIBLE);
     }
 
+    public void replaceFragment(BaseFragment fragment) {
+        this.fragment = fragment;
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+    }
+
+    @Override
+    public void onEnterAmbient(Bundle ambientDetails) {
+        super.onEnterAmbient(ambientDetails);
+        drawerLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.black));
+
+        fragment.onEnterAmbient();
+    }
+
+    @Override
+    public void onExitAmbient() {
+        super.onExitAmbient();
+        drawerLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.wear_primary_darken));
+
+        fragment.onExitAmbient();
+    }
 }

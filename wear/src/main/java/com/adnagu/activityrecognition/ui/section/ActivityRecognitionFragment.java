@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.adnagu.activityrecognition.R;
-import com.adnagu.activityrecognition.common.AmbientMode;
 import com.adnagu.activityrecognition.common.BaseFragment;
 
 import butterknife.BindView;
@@ -21,7 +20,7 @@ import ticwear.design.widget.FloatingActionButton;
  * @author ramazan.vapurcu
  * Created on 10/3/2018
  */
-public class ActivityRecognitionFragment extends BaseFragment implements AmbientMode {
+public class ActivityRecognitionFragment extends BaseFragment {
 
     private final String DEBUG_TAG = getClass().getName();
 

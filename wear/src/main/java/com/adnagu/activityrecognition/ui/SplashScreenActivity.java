@@ -3,11 +3,11 @@ package com.adnagu.activityrecognition.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.wearable.activity.WearableActivity;
 
 import com.adnagu.activityrecognition.R;
-import com.adnagu.activityrecognition.common.BaseActivity;
 
-public class SplashScreenActivity extends BaseActivity {
+public class SplashScreenActivity extends WearableActivity {
 
     protected final int DELAY_MILLIS = 1000;
 

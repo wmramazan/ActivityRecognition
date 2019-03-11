@@ -2,21 +2,21 @@ package com.adnagu.activityrecognition.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 
 import com.adnagu.activityrecognition.R;
 import com.adnagu.activityrecognition.adapter.ActivityAdapter;
-import com.adnagu.activityrecognition.common.BaseActivity;
 import com.adnagu.activityrecognition.model.Activity;
 import com.adnagu.activityrecognition.utils.RecyclerItemClickListener;
 import com.adnagu.activityrecognition.utils.Utils;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ListActivity extends BaseActivity {
+public class ListActivity extends WearableActivity {
 
     ActivityAdapter activityAdapter;
 

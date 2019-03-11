@@ -2,16 +2,12 @@ package com.adnagu.activityrecognition.ml;
 
 import android.content.Context;
 import android.hardware.Sensor;
-import android.util.Log;
 
 import com.adnagu.activityrecognition.database.dao.SensorRecordDao;
-import com.adnagu.activityrecognition.database.entity.SensorRecordEntity;
 import com.adnagu.activityrecognition.model.Activity;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * SequentialArffFile
@@ -32,12 +28,12 @@ public class SequentialArffFile {
             Sensor.TYPE_GYROSCOPE,
             Sensor.TYPE_GRAVITY,
             Sensor.TYPE_LINEAR_ACCELERATION,
-            /*Sensor.TYPE_ROTATION_VECTOR,
-            Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED,
-            Sensor.TYPE_GAME_ROTATION_VECTOR,
-            Sensor.TYPE_GYROSCOPE_UNCALIBRATED,
-            Sensor.TYPE_SIGNIFICANT_MOTION,
-            Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR*/
+            /*SensorType.TYPE_ROTATION_VECTOR,
+            SensorType.TYPE_MAGNETIC_FIELD_UNCALIBRATED,
+            SensorType.TYPE_GAME_ROTATION_VECTOR,
+            SensorType.TYPE_GYROSCOPE_UNCALIBRATED,
+            SensorType.TYPE_SIGNIFICANT_MOTION,
+            SensorType.TYPE_GEOMAGNETIC_ROTATION_VECTOR*/
     };
     public static final char[]  VALUE_TYPES = {
             'x',
@@ -82,13 +78,13 @@ public class SequentialArffFile {
 
             long limit = windowLength * NANO_SECONDS;
 
-            for (Activity activity : Activity.values()) {
+            /*for (Activity activity : Activity.values()) {
                 Log.d(DEBUG_TAG, "Activity: " + activity.ordinal());
 
                 ArrayList<ArrayList<SequentialArffRecord>> sensorValues = new ArrayList<>();
                 for (int SENSOR_TYPE : SENSOR_TYPES) {
                     ArrayList<SequentialArffRecord> values = new ArrayList<>();
-                    Log.d(DEBUG_TAG, "Sensor Type: " + SENSOR_TYPE);
+                    Log.d(DEBUG_TAG, "SensorType Type: " + SENSOR_TYPE);
                     List<SensorRecordEntity> sensorRecords = sensorRecordDao.getAllInOrder(SENSOR_TYPE, activity.ordinal());
                     Log.d(DEBUG_TAG, "Record Size: " + sensorRecords.size());
 
@@ -148,7 +144,7 @@ public class SequentialArffFile {
                     writer.write(stringBuilder.toString());
                     writer.write("\n");
                 }
-            }
+            }*/
 
             writer.close();
         } catch (IOException e) {

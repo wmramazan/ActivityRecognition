@@ -3,6 +3,20 @@ package com.adnagu.activityrecognition.model;
 public enum Feature {
     min,
     max,
+    range,
+    mean,
+    quadraticMean,
+    std,
+    variance,
+    medianTop,
+    medianMiddle,
+    medianBottom,
+    kurtosis,
+    popVariance,
+    skewness
+    /*
+    min,
+    max,
     maxDec,
     maxInc,
     range,
@@ -41,4 +55,5 @@ public enum Feature {
     maxima3,
     maxima4,
     maxima5
+    */
 }

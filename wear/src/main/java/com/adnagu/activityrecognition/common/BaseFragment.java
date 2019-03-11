@@ -8,5 +8,5 @@ import android.app.Fragment;
  * @author ramazan.vapurcu
  * Created on 10/10/2018
  */
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements AmbientMode {
 }

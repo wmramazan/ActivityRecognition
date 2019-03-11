@@ -8,5 +8,5 @@ A mobile application which detects complex activities of user by using sensors o
 - [x] Complete SensorRecordFragment
 - [ ] Complete UI of mobile application
 - [ ] Sync database with phone
-- [ ] Move sensor data for free space
+- [ ] Move sensorType data for free space
 - [ ] Complete UI of ActivityRecognitionFragment

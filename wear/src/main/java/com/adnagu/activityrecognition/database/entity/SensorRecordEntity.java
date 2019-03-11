@@ -1,12 +1,13 @@
 package com.adnagu.activityrecognition.database.entity;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
-import android.arch.persistence.room.Index;
-import android.arch.persistence.room.PrimaryKey;
-
 import java.util.Date;
+import java.util.List;
+
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
 
 /**
  * SensorRecordEntity
@@ -23,7 +24,7 @@ public class SensorRecordEntity {
     private int id;
 
     @ColumnInfo(name = "values")
-    private String values;
+    private List<Float> values;
 
     @ColumnInfo(name = "date")
     private Date date;
@@ -37,7 +38,7 @@ public class SensorRecordEntity {
     @ColumnInfo(name = "activity_record_id")
     private int activityRecordId;
 
-    public SensorRecordEntity(String values, Date date, long timestamp, int sensorId, int activityRecordId) {
+    public SensorRecordEntity(List<Float> values, Date date, long timestamp, int sensorId, int activityRecordId) {
         this.values = values;
         this.date = date;
         this.timestamp = timestamp;
@@ -53,11 +54,11 @@ public class SensorRecordEntity {
         this.id = id;
     }
 
-    public String getValues() {
+    public List<Float> getValues() {
         return values;
     }
 
-    public void setValues(String values) {
+    public void setValues(List<Float> values) {
         this.values = values;
     }
 

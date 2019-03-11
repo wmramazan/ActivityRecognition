@@ -24,8 +24,8 @@
     <string name="choose_activity">Choose an activity.</string>
     <string name="title_activity_test">TestActivity</string>
 
+    <string name="activity_records">Activity Records</string>
     <string name="sensor_records">Sensor Records</string>
-    <string name="sensor_values">Sensor Values</string>
     <string name="database_size">Database Size</string>
 
     <string name="reset_database">Reset Database</string>
@@ -33,8 +33,13 @@
     <string name="reset_database_success">%1$s records have been deleted.</string>
     <string name="reset_database_error">Couldn\'t reset database.</string>
 
-    <string name="save_as_arff">Save records as arff</string>
+    <string name="save_as_arff">Save Records as ARFF</string>
     <string name="save_as_arff_success">Your records have been saved as arff file.</string>
+
+    <string name="delete_last_record">Delete Last Record</string>
+    <string name="delete_last_record_warning">The last record will be deleted. Are you sure to delete?</string>
+    <string name="delete_last_record_success">The last record has been deleted.</string>
+    <string name="delete_last_record_error">Couldn\'t delete the last record.</string>
 
     <string name="database_size_value">%1$s KB</string>
 
