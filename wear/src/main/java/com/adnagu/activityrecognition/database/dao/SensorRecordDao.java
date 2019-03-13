@@ -2,6 +2,7 @@ package com.adnagu.activityrecognition.database.dao;
 
 import com.adnagu.activityrecognition.database.entity.SensorRecordEntity;
 
+import java.util.Date;
 import java.util.List;
 
 import androidx.room.Dao;
@@ -35,6 +36,12 @@ public interface SensorRecordDao {
 
     @Query("SELECT * FROM sensor_record WHERE activity_record_id = :activityRecordId AND sensor_id = :sensorId")
     List<SensorRecordEntity> getAll(int activityRecordId, int sensorId);
+
+    @Query("SELECT * FROM sensor_record WHERE activity_record_id = :activityRecordId LIMIT 1")
+    SensorRecordEntity getFirst(int activityRecordId);
+
+    @Query("SELECT * FROM sensor_record WHERE activity_record_id = :activityRecordId AND timestamp BETWEEN :firstDate AND :lastDate")
+    List<SensorRecordEntity> getBetween(int activityRecordId, Date firstDate, Date lastDate);
 
     /*@Query("SELECT sensor_record.* FROM sensor_record, activity_record WHERE sensor_record.sensor_id = activity_record.id = sensor_record.activity_record_id AND sensor_record.sensor_id IN (1,2,4,9,10) AND activity_record.activity_id = :activityId ORDER BY sensor_record.sensor_id, sensor_record.timestamp")
     List<SensorRecordEntity> getAllInOrder(int activityId);

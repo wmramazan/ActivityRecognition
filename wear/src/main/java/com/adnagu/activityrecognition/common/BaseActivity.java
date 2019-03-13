@@ -1,10 +1,12 @@
 package com.adnagu.activityrecognition.common;
 
 import android.app.FragmentManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.adnagu.activityrecognition.R;
 
@@ -20,6 +22,8 @@ import butterknife.ButterKnife;
  * Created on 10/10/2018
  */
 public abstract class BaseActivity extends WearableActivity {
+    
+    protected String DEBUG_TAG = getClass().getName();
 
     protected FragmentManager fragmentManager;
     protected BaseFragment fragment;
@@ -29,6 +33,12 @@ public abstract class BaseActivity extends WearableActivity {
 
     @BindView(R.id.llProgress)
     View progress;
+
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
+
+    @BindView(R.id.progress_circle)
+    ProgressBar progressCircle;
 
     @BindView(R.id.content_frame)
     View contentFrame;
@@ -47,13 +57,26 @@ public abstract class BaseActivity extends WearableActivity {
     }
 
     public void showProgress() {
-        Log.d("BaseActivity", "showProgress");
+        Log.d(DEBUG_TAG, "showProgress");
         progress.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
+        progressCircle.setVisibility(View.VISIBLE);
         contentFrame.setVisibility(View.GONE);
     }
 
+    public void setProgressBar(int progress) {
+        Log.d(DEBUG_TAG, "Progress: " + progress);
+        progressBar.setVisibility(View.VISIBLE);
+        progressCircle.setVisibility(View.GONE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            progressBar.setProgress(progress, true);
+        } else {
+            progressBar.setProgress(progress);
+        }
+    }
+
     public void hideProgress() {
-        Log.d("BaseActivity", "hideProgress");
+        Log.d(DEBUG_TAG, "hideProgress");
         progress.setVisibility(View.GONE);
         contentFrame.setVisibility(View.VISIBLE);
     }

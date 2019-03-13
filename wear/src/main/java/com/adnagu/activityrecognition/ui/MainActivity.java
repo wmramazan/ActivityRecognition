@@ -44,6 +44,8 @@ public class MainActivity extends BaseActivity implements
     ActivityRecordDao activityRecordDao;
     SensorRecordDao sensorRecordDao;
 
+    Handler handler;
+
     @BindView(R.id.top_navigation_drawer)
     WearableNavigationDrawerView navigationDrawerView;
 
@@ -83,6 +85,7 @@ public class MainActivity extends BaseActivity implements
         sensorRecordDao = appDatabase.sensorRecordDao();
 
         DatabaseUtils.prepareDatabase(this);
+        handler = new Handler();
     }
 
     @Override
@@ -128,13 +131,16 @@ public class MainActivity extends BaseActivity implements
             case R.id.menu_save_arff:
                 hideActionDrawer();
                 showProgress();
-                ArffFile.saveAsArff(this, 4, 50);
-                Utils.showMessage(
-                        ConfirmationActivity.SUCCESS_ANIMATION,
-                        MainActivity.this,
-                        getString(R.string.save_as_arff_success)
-                );
-                hideProgress();
+                new Thread(() -> {
+                    ArffFile arffFile = new ArffFile(this, progress -> handler.post(() -> setProgressBar(progress)));
+                    arffFile.save(4, 50);
+                    Utils.showMessage(
+                            ConfirmationActivity.SUCCESS_ANIMATION,
+                            MainActivity.this,
+                            getString(R.string.save_as_arff_success)
+                    );
+                    handler.post(this::hideProgress);
+                }).start();
                 break;
             case R.id.menu_delete_last_record:
                 showDialog(new AlertDialog.Builder(this)
