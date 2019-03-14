@@ -39,6 +39,12 @@ public class ArffFile {
     private ActivityRecordDao activityRecordDao;
     private SensorRecordDao sensorRecordDao;
 
+    private FeatureExtraction featureExtraction;
+
+    private Date windowStartDate;
+    private Date windowEndDate;
+    private Date lastDate;
+
     private int windowLength;
     private int overlapping;
 
@@ -93,8 +99,7 @@ public class ArffFile {
     private void writeRecords() throws IOException {
         write("@data\n");
 
-        FeatureExtraction featureExtraction = new FeatureExtraction();
-        int windowStartIndex, windowEndIndex;
+        featureExtraction = new FeatureExtraction();
 
         List<ActivityRecordEntity> activityRecordEntities = activityRecordDao.getAll();
         for (int index = 0; index < activityRecordEntities.size(); index++) {
@@ -106,7 +111,50 @@ public class ArffFile {
             String activityName = Activity.values()[activityRecordEntity.getActivityId()].name();
             Log.d(DEBUG_TAG, "Activity Record: " + activityName);
 
-            for (SensorType sensorType : SensorType.values()) {
+            while (nextWindow(activityRecordEntity.getId())) {
+                for (SensorType sensorType : SensorType.values()) {
+                    List<List<Float>> segments = new ArrayList<>();
+                    for (char ignored : sensorType.values)
+                        segments.add(new ArrayList<>());
+
+                    List<SensorRecordEntity> window = getWindow(activityRecordEntity.getId(), sensorType.id);
+
+                    for (SensorRecordEntity sensorRecordEntity : window) {
+                        List<Float> values = sensorRecordEntity.getValues();
+
+                        if (sensorType.values.length > 3) {
+                            float x_square = values.get(0) * values.get(0);
+                            float y_square = values.get(1) * values.get(1);
+                            float z_square = values.get(2) * values.get(2);
+                            values.add(
+                                    (float) Math.sqrt(x_square + y_square + z_square)
+                            );
+
+                            if (sensorType.values.length == 5)
+                                values.add(
+                                        (float) Math.sqrt(x_square + z_square)
+                                );
+                        }
+
+                        for (int i = 0; i < sensorType.values.length; i++)
+                            segments.get(i).add(
+                                    values.get(i)
+                            );
+                    }
+
+                    for (List<Float> segment : segments) {
+                        List<Float> featureValues = featureExtraction.getFeatureValues(segment);
+                        for (Float value : featureValues) {
+                            //writer.write(String.valueOf(value) + ",");
+                            writer.write(String.valueOf(value.isNaN() ? 0.0 : value) + ",");
+                        }
+                    }
+                }
+
+                write("'" + activityName + "'\n");
+            }
+
+            /*for (SensorType sensorType : SensorType.values()) {
                 List<SensorRecordEntity> sensorRecordEntities = sensorRecordDao.getAll(activityRecordEntity.getId(), sensorType.id);
 
                 windowStartIndex = 0;
@@ -170,12 +218,41 @@ public class ArffFile {
                     else
                         windowStartIndex = windowEndIndex;
                 }
-            }
+            }*/
         }
     }
 
     private void close() throws IOException {
         writer.close();
+    }
+
+    private boolean nextWindow(int activityRecordId) {
+        if (windowStartDate == null) {
+            SensorRecordEntity firstRecord = sensorRecordDao.getFirst(activityRecordId);
+            if (firstRecord == null)
+                return false;
+
+            windowStartDate = firstRecord.getDate();
+            windowEndDate = DateUtils.addSeconds(windowStartDate, windowLength);
+            lastDate = sensorRecordDao.getLast(activityRecordId).getDate();
+        } else {
+            windowStartDate = DateUtils.addMilliseconds(windowStartDate, overlapping);
+            windowEndDate = DateUtils.addMilliseconds(windowEndDate, overlapping);
+        }
+
+        Log.d(DEBUG_TAG, "WindowStartDate: " + windowStartDate);
+        Log.d(DEBUG_TAG, "WindowEndDate: " + windowEndDate);
+
+        if (windowStartDate.after(lastDate)) {
+            windowStartDate = null;
+            return false;
+        }
+
+        return true;
+    }
+
+    private List<SensorRecordEntity> getWindow(int activityRecordId, int sensorRecordId) {
+        return sensorRecordDao.getBetween(activityRecordId, sensorRecordId, windowStartDate, windowEndDate);
     }
 
     /**
@@ -185,7 +262,7 @@ public class ArffFile {
      */
     public void save(int windowLength, int overlapping) {
         this.windowLength = windowLength;
-        this.overlapping = overlapping;
+        this.overlapping = (windowLength * overlapping) * 10; // ms
 
         Log.d(DEBUG_TAG, "Saving ARFF file.");
         Log.d(DEBUG_TAG, "Window Length: " + windowLength);
