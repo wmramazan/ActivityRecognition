@@ -7,9 +7,9 @@ import android.view.View;
 
 import com.adnagu.activityrecognition.R;
 import com.adnagu.activityrecognition.adapter.ActivityAdapter;
-import com.adnagu.activityrecognition.model.Activity;
 import com.adnagu.activityrecognition.utils.RecyclerItemClickListener;
 import com.adnagu.activityrecognition.utils.Utils;
+import com.adnagu.common.model.Activity;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;

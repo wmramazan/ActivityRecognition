@@ -8,10 +8,10 @@ import android.widget.TextView;
 
 import com.adnagu.activityrecognition.R;
 import com.adnagu.activityrecognition.common.BaseFragment;
-import com.adnagu.activityrecognition.database.AppDatabase;
-import com.adnagu.activityrecognition.database.dao.ActivityRecordDao;
-import com.adnagu.activityrecognition.database.dao.SensorRecordDao;
-import com.adnagu.activityrecognition.utils.Utils;
+import com.adnagu.common.database.AppDatabase;
+import com.adnagu.common.database.dao.ActivityRecordDao;
+import com.adnagu.common.database.dao.SensorRecordDao;
+import com.adnagu.common.utils.DatabaseUtils;
 
 import java.io.File;
 
@@ -46,7 +46,7 @@ public class StatisticFragment extends BaseFragment {
         tvActivityRecords.setText(String.valueOf(activityRecordDao.getCount()));
         tvSensorRecords.setText(String.valueOf(sensorRecordDao.getCount()));
 
-        File file = getContext().getDatabasePath(Utils.DATABASE_NAME);
+        File file = getContext().getDatabasePath(DatabaseUtils.DATABASE_NAME);
         tvDatabaseSize.setText(
                 String.format(
                         getString(R.string.database_size_value),

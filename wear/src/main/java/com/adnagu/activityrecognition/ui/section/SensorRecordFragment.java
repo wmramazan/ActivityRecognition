@@ -15,10 +15,10 @@ import android.widget.TextView;
 
 import com.adnagu.activityrecognition.R;
 import com.adnagu.activityrecognition.common.BaseFragment;
-import com.adnagu.activityrecognition.model.Activity;
 import com.adnagu.activityrecognition.service.SensorRecordService;
 import com.adnagu.activityrecognition.ui.ListActivity;
 import com.adnagu.activityrecognition.utils.Utils;
+import com.adnagu.common.model.Activity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

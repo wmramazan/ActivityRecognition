@@ -1,4 +1,4 @@
-package com.adnagu.activityrecognition;
+package com.adnagu.common;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.adnagu.activityrecognition", appContext.getPackageName());
+        assertEquals("com.adnagu.common.test", appContext.getPackageName());
     }
 }

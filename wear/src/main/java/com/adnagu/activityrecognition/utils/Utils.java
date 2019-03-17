@@ -15,8 +15,6 @@ import java.util.List;
  */
 public class Utils {
 
-    public static final String DATABASE_NAME = "ActivityRecognition.db";
-
     public static final String ACTIVITY_ID = "ACTIVITY_ID";
 
     public class RequestCode {

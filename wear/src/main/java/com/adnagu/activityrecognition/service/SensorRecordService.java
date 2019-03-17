@@ -9,13 +9,13 @@ import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.adnagu.activityrecognition.database.AppDatabase;
-import com.adnagu.activityrecognition.database.dao.ActivityRecordDao;
-import com.adnagu.activityrecognition.database.dao.SensorRecordDao;
-import com.adnagu.activityrecognition.database.entity.ActivityRecordEntity;
-import com.adnagu.activityrecognition.database.entity.SensorRecordEntity;
-import com.adnagu.activityrecognition.model.SensorType;
 import com.adnagu.activityrecognition.utils.Utils;
+import com.adnagu.common.database.AppDatabase;
+import com.adnagu.common.database.dao.ActivityRecordDao;
+import com.adnagu.common.database.dao.SensorRecordDao;
+import com.adnagu.common.database.entity.ActivityRecordEntity;
+import com.adnagu.common.database.entity.SensorRecordEntity;
+import com.adnagu.common.model.SensorType;
 
 import java.util.ArrayList;
 import java.util.Date;

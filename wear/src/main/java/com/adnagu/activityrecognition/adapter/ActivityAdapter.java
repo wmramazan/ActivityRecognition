@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.adnagu.activityrecognition.R;
-import com.adnagu.activityrecognition.model.Activity;
+import com.adnagu.common.model.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;

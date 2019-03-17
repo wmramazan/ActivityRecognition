@@ -1,4 +1,4 @@
-package com.adnagu.activityrecognition;
+package com.adnagu.common;
 
 import org.junit.Test;
 

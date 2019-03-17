@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Common</string>
+
+    <string name="activity_icon">Activity Icon</string>
+    <string name="activity_using_computer">Using Computer</string>
+    <string name="activity_washing_dishes">Washing Dishes</string>
+    <string name="activity_driving_car">Driving Car</string>
+    <string name="activity_eating_meal">Eating Meal</string>
+    <string name="activity_playing_video_game">Playing Video Game</string>
+    <string name="activity_having_shower">Having Shower</string>
+    <string name="activity_playing_guitar">Playing Guitar</string>
+    <string name="activity_brushing_teeth">Brushing Teeth</string>
+</resources>
