@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +57,7 @@ public class ActivityRecognitionFragment extends BaseFragment {
     FeatureExtraction featureExtraction;
     FeatureFilter featureFilter;
 
+    Handler handler;
     Vibrator vibrator;
 
     List<Float> featureValues;
@@ -88,6 +89,7 @@ public class ActivityRecognitionFragment extends BaseFragment {
         serviceIntent = new Intent(getContext(), SensorRecordService.class);
         serviceIntent.putExtra(Utils.TEST, true);
 
+        handler = new Handler();
         vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
 
         AppDatabase appDatabase = AppDatabase.getInstance(getContext());
@@ -172,10 +174,12 @@ public class ActivityRecognitionFragment extends BaseFragment {
             slidingWindow.processRecord(activityRecord);
 
             // Update activity record.
-            activityText.setText(
-                    getString(Activity.values()[activityPrediction.getPrediction()].title_res)
-            );
-            Log.d(DEBUG_TAG, activityText.getText().toString());
+            Activity activity = Activity.values()[activityPrediction.getPrediction()];
+
+            handler.post(() -> {
+                activityText.setText(activity.title_res);
+                activityButton.setImageResource(activity.drawable_res);
+            });
             vibrate();
         }).start();
     }

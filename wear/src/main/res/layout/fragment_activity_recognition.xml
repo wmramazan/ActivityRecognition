@@ -43,6 +43,7 @@
             android:layout_gravity="center_horizontal"
             android:elevation="0dp"
             android:src="@drawable/ic_activity_recognition"
+            android:tint="@color/white"
             android:clickable="true"
             android:focusable="true"
             app:tic_borderWidth="0dp"

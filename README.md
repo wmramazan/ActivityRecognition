@@ -13,3 +13,13 @@ A mobile application which detects complex activities of user by using sensors o
 
 ## Thanks
 [MeiyappanKannappa](https://github.com/MeiyappanKannappa/Weka-Android)
+
+## Icons
+- Using Computer (Icon made by Freepik from www.flaticon.com) 
+- Washing Dishes (Icon made by Freepik from www.flaticon.com) 
+- Driving Car (Icon made by Smashicons from www.flaticon.com) 
+- Eating Meal (Icon made by mynamepong from www.flaticon.com) 
+- Playing Video Game (Icon made by mynamepong from www.flaticon.com) 
+- Having Shower (Icon made by smalllikeart from www.flaticon.com) 
+- Playing Guitar (Icon made by Freepik from www.flaticon.com) 
+- Brushing Teeth (Icon made by Swifticons from www.flaticon.com) 

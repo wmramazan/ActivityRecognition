@@ -26,6 +26,7 @@
     <dimen name="activity_name_margin_right">12dp</dimen>
 
     <dimen name="list_item_icon_margin_left">24dp</dimen>
+    <dimen name="list_item_text_margin_left">8dp</dimen>
 
     <dimen name="item_statistic_item_margin">3dp</dimen>
     <dimen name="item_statistic_label_width">80dp</dimen>

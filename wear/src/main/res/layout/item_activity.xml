@@ -13,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/list_item_icon_margin_left"
+        android:tint="@color/white"
         android:contentDescription="@string/activity_icon"/>
 
     <TextView
@@ -20,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginStart="@dimen/list_item_text_margin_left"
         android:textSize="@dimen/item_activity_title_size"
         android:textColor="@color/white"
         android:ellipsize="end"/>
