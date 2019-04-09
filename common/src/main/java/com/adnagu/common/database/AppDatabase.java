@@ -15,6 +15,7 @@ import com.adnagu.common.database.entity.SensorRecordEntity;
 import com.adnagu.common.database.view.Frequency;
 import com.adnagu.common.utils.DatabaseUtils;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -28,7 +29,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
  * @author ramazan.vapurcu
  * Created on 10/2/2018
  */
-@Database(entities = {ActivityEntity.class, ActivityRecordEntity.class, SensorEntity.class, SensorRecordEntity.class}, views = {Frequency.class}, version = 2, exportSchema = false)
+@Database(entities = {ActivityEntity.class, ActivityRecordEntity.class, SensorEntity.class, SensorRecordEntity.class}, views = {Frequency.class}, version = 3, exportSchema = false)
 @TypeConverters({DateConverter.class, JSONConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -46,7 +47,10 @@ public abstract class AppDatabase extends RoomDatabase {
             synchronized (AppDatabase.class) {
                 if (null == INSTANCE)
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DatabaseUtils.DATABASE_NAME)
-                            .addMigrations(MIGRATION_1_2)
+                            .addMigrations(
+                                    MIGRATION_1_2,
+                                    MIGRATION_2_3
+                            )
                             .allowMainThreadQueries()
                             .build();
             }
@@ -60,6 +64,13 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             database.execSQL("CREATE VIEW `Frequency` AS SELECT AVG(number_of_records) / number_of_sensors as frequency FROM (SELECT COUNT(id) AS number_of_records, COUNT(DISTINCT(sensor_id)) AS number_of_sensors, datetime(sensor_record.date / 1000, 'unixepoch') as date_string FROM sensor_record GROUP BY date_string)");
+        }
+    };
+
+    private static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE activity_record ADD COLUMN test INTEGER NOT NULL DEFAULT 0");
         }
     };
 

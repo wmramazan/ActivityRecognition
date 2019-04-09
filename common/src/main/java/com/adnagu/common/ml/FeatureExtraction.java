@@ -24,7 +24,11 @@ public class FeatureExtraction {
         featureValues = new ArrayList<>();
         statistics = new DescriptiveStatistics();
     }
-    
+
+    public void setFeatures(Feature[] features) {
+        this.features = features;
+    }
+
     private void addFeatureValue(Feature feature) {
         switch (feature) {
             case min:
@@ -34,7 +38,10 @@ public class FeatureExtraction {
                 featureValues.add((float) statistics.getMax());
                 break;
             case range:
-                featureValues.add(featureValues.get(Feature.max.ordinal()) - featureValues.get(Feature.min.ordinal()));
+                if (featureValues.size() > 2)
+                    featureValues.add(featureValues.get(Feature.max.ordinal()) - featureValues.get(Feature.min.ordinal()));
+                else
+                    featureValues.add((float) statistics.getMax() - (float) statistics.getMin());
                 break;
             case mean:
                 featureValues.add((float) statistics.getMean());

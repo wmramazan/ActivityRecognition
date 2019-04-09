@@ -16,10 +16,59 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/message"
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_small"
             android:text="@string/title_home" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/window_length"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/value_window_length"
+                android:hint="@string/window_length"
+                android:inputType="numberDecimal"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/overlapping"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/value_overlapping"
+                android:hint="@string/overlapping"
+                android:inputType="numberDecimal"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/limit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/value_limit"
+                android:hint="@string/limit"
+                android:inputType="numberDecimal"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/button_save_as"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save_as_arff"/>
 
         <ProgressBar
             android:id="@+id/progress_bar"
@@ -34,12 +83,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center" />
-
-        <Button
-            android:id="@+id/button_save_as"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/save_as_arff"/>
 
     </LinearLayout>
 

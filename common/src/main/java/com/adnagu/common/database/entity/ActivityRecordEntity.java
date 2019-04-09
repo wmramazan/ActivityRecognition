@@ -25,9 +25,13 @@ public class ActivityRecordEntity {
     @ColumnInfo(name = "date")
     private Date date;
 
-    public ActivityRecordEntity(int activityId, Date date) {
+    @ColumnInfo(name = "test")
+    private boolean test;
+
+    public ActivityRecordEntity(int activityId, Date date, boolean test) {
         this.activityId = activityId;
         this.date = date;
+        this.test = test;
     }
 
     public int getId() {
@@ -52,5 +56,13 @@ public class ActivityRecordEntity {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public boolean isTest() {
+        return test;
+    }
+
+    public void setTest(boolean test) {
+        this.test = test;
     }
 }

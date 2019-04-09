@@ -1,11 +1,9 @@
 package com.adnagu.activityrecognition.ui.section;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,16 +34,14 @@ public class SensorRecordFragment extends BaseFragment {
 
     private final String    DEBUG_TAG = getClass().getName();
     private final Activity  DEFAULT_ACTIVITY = Activity.UsingComputer;
-    private final long      WAKELOCK_TIMEOUT = 30*60*1000L;
 
     Intent serviceIntent;
-    PowerManager.WakeLock wakeLock;
 
     int selectedActivityIndex;
-    boolean isRecording;
+    boolean recording;
 
-    @BindView(R.id.llActiveContent)
-    LinearLayout llActiveContent;
+    @BindView(R.id.active_content)
+    LinearLayout active_content;
 
     @BindView(R.id.button_record)
     FloatingActionButton recordButton;
@@ -79,9 +75,6 @@ public class SensorRecordFragment extends BaseFragment {
 
         setActivity(DEFAULT_ACTIVITY);
 
-        PowerManager powerManager = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ActivityRecognition::WakeLock");
-
         return view;
     }
 
@@ -100,45 +93,45 @@ public class SensorRecordFragment extends BaseFragment {
     }
 
     public void toggleRecording() {
-        if (isRecording)
+        if (isRecording())
             stopRecording();
         else
             startRecording();
     }
 
     public void startRecording() {
-        if (!isRecording) {
-            isRecording = true;
+        if (!isRecording()) {
+            recording = true;
 
             getContext().startService(serviceIntent);
             recordButton.setShowProgress(true);
             recordText.setText(R.string.recording);
 
-            wakeLock.acquire(WAKELOCK_TIMEOUT);
+            acquireWakeLock();
         }
     }
 
     public void stopRecording() {
-        if (isRecording) {
-            isRecording = false;
+        if (isRecording()) {
+            recording = false;
 
             getContext().stopService(serviceIntent);
             recordButton.setShowProgress(false);
             recordText.setText(R.string.click_to_record);
 
-            wakeLock.release();
+            releaseWakeLock();
         }
     }
 
     @Override
     public void onEnterAmbient() {
-        llActiveContent.setVisibility(View.GONE);
+        active_content.setVisibility(View.GONE);
         recordText.getPaint().setAntiAlias(false);
     }
 
     @Override
     public void onExitAmbient() {
-        llActiveContent.setVisibility(View.VISIBLE);
+        active_content.setVisibility(View.VISIBLE);
         recordText.getPaint().setAntiAlias(true);
     }
 
@@ -171,5 +164,9 @@ public class SensorRecordFragment extends BaseFragment {
                     break;
             }
         }
+    }
+
+    public boolean isRecording() {
+        return recording;
     }
 }

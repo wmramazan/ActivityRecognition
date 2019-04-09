@@ -3,6 +3,7 @@ package com.adnagu.activityrecognition.common;
 import android.app.FragmentManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.View;
@@ -21,12 +22,15 @@ import butterknife.ButterKnife;
  * @author ramazan.vapurcu
  * Created on 10/10/2018
  */
-public abstract class BaseActivity extends WearableActivity {
+public abstract class BaseActivity extends WearableActivity implements BaseView {
     
     protected String DEBUG_TAG = getClass().getName();
+    protected long   WAKELOCK_TIMEOUT = 30 * 60 * 1000L;
 
     protected FragmentManager fragmentManager;
     protected BaseFragment fragment;
+
+    protected PowerManager.WakeLock wakeLock;
 
     @BindView(R.id.drawer_layout)
     WearableDrawerLayout drawerLayout;
@@ -54,6 +58,16 @@ public abstract class BaseActivity extends WearableActivity {
         ButterKnife.bind(this);
 
         fragmentManager = getFragmentManager();
+
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ActivityRecognition::WakeLock");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        releaseWakeLock();
     }
 
     public void showProgress() {
@@ -100,5 +114,17 @@ public abstract class BaseActivity extends WearableActivity {
         drawerLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.wear_primary_darken));
 
         fragment.onExitAmbient();
+    }
+
+    @Override
+    public void acquireWakeLock() {
+        Log.d(DEBUG_TAG, "acquireWakeLock");
+        wakeLock.acquire(WAKELOCK_TIMEOUT);
+    }
+
+    @Override
+    public void releaseWakeLock() {
+        Log.d(DEBUG_TAG, "releaseWakeLock");
+        wakeLock.release();
     }
 }

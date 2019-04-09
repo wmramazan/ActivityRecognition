@@ -33,6 +33,8 @@ public class SensorRecordService extends Service implements SensorEventListener 
 
     ArrayList<SensorRecordEntity> sensorRecords;
 
+    boolean test;
+
     int activityId;
     int activityRecordId;
 
@@ -41,6 +43,7 @@ public class SensorRecordService extends Service implements SensorEventListener 
         Log.d(DEBUG_TAG, "onStartCommand");
 
         activityId = intent.getIntExtra(Utils.ACTIVITY_ID, 0);
+        test = intent.getBooleanExtra(Utils.TEST, false);
         init();
 
         return START_NOT_STICKY;
@@ -77,10 +80,14 @@ public class SensorRecordService extends Service implements SensorEventListener 
                 sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
         }
 
+        if (test)
+            activityRecordDao.deleteRecordsForTest();
+
         long[] results = activityRecordDao.insert(
                 new ActivityRecordEntity(
                         activityId,
-                        new Date()
+                        new Date(),
+                        test
                 )
         );
         activityRecordId = (int) results[0];

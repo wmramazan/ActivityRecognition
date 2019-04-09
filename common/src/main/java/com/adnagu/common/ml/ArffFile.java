@@ -5,20 +5,15 @@ import android.util.Log;
 
 import com.adnagu.common.database.AppDatabase;
 import com.adnagu.common.database.dao.ActivityRecordDao;
-import com.adnagu.common.database.dao.SensorRecordDao;
 import com.adnagu.common.database.entity.ActivityRecordEntity;
-import com.adnagu.common.database.entity.SensorRecordEntity;
 import com.adnagu.common.model.Activity;
 import com.adnagu.common.model.Feature;
 import com.adnagu.common.model.SensorType;
 import com.adnagu.common.utils.listener.OnProgressListener;
-
-import org.apache.commons.lang3.time.DateUtils;
+import com.adnagu.common.utils.listener.OnWindowListener;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,22 +24,21 @@ import java.util.List;
  */
 public class ArffFile {
 
-    private final String DEBUG_TAG = "ArffFile";
-    private static final String FILE_NAME = "ActivityRecords.arff";
+    public static final String FILE_NAME = "ActivityRecords.arff";
+
+    private final String DEBUG_TAG = getClass().getName();
 
     private Context context;
     private OnProgressListener onProgressListener;
 
     private OutputStreamWriter writer;
     private ActivityRecordDao activityRecordDao;
-    private SensorRecordDao sensorRecordDao;
 
-    private Date windowStartDate;
-    private Date windowEndDate;
-    private Date lastDate;
+    private FeatureFilter featureFilter;
+    private FeatureExtraction featureExtraction;
+    private SlidingWindow slidingWindow;
 
-    private int windowLength;
-    private int overlapping;
+    private String activityName;
 
     public ArffFile(Context context) {
         this.context = context;
@@ -62,7 +56,31 @@ public class ArffFile {
     private void init() {
         AppDatabase appDatabase = AppDatabase.getInstance(context);
         activityRecordDao = appDatabase.activityRecordDao();
-        sensorRecordDao = appDatabase.sensorRecordDao();
+
+        featureFilter = new FeatureFilter();
+        featureExtraction = new FeatureExtraction();
+        slidingWindow = new SlidingWindow(appDatabase.sensorRecordDao(), new OnWindowListener() {
+            @Override
+            public void onWindowStart() {
+                featureFilter.init();
+            }
+
+            @Override
+            public void onWindowSegment(List<Float> segment) {
+                featureExtraction.setFeatures(featureFilter.getFeatureArray());
+
+                List<Float> featureValues = featureExtraction.getFeatureValues(segment);
+                for (Float value : featureValues) {
+                    //writer.write(String.valueOf(value) + ",");
+                    write(String.valueOf(value.isNaN() ? 0.0 : value) + ",");
+                }
+            }
+
+            @Override
+            public void onWindowFinish() {
+                write("'" + activityName + "'\n");
+            }
+        });
     }
 
     private void createFile() throws IOException {
@@ -75,15 +93,20 @@ public class ArffFile {
         write("@relation activity_recognition\n\n");
     }
 
-    private void write(String str) throws IOException {
-        writer.write(str);
+    private void write(String str) {
+        try {
+            writer.write(str);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void writeAttributes() throws IOException {
         for (SensorType sensorType : SensorType.values())
             for (char value : sensorType.values)
                 for (Feature feature : Feature.values())
-                    writer.write("@attribute " + sensorType.prefix + "_" + feature.name() + "_" + value + " numeric\n");
+                    if (featureFilter.isValidFeature())
+                        writer.write("@attribute " + sensorType.prefix + "_" + feature.name() + "_" + value + " numeric\n");
 
         StringBuilder activities = new StringBuilder();
         for (Activity activity : Activity.values())
@@ -94,132 +117,22 @@ public class ArffFile {
         write("@attribute 'Class' {" + activities.toString() + "}\n");
     }
 
-    private void writeRecords() throws IOException {
+    private void writeRecords() {
         write("@data\n");
 
-        FeatureExtraction featureExtraction = new FeatureExtraction();
-
-        List<ActivityRecordEntity> activityRecordEntities = activityRecordDao.getAll();
+        List<ActivityRecordEntity> activityRecordEntities = activityRecordDao.getRecordsForTraining();
         for (int index = 0; index < activityRecordEntities.size(); index++) {
-            ActivityRecordEntity activityRecordEntity = activityRecordEntities.get(index);
+            ActivityRecordEntity activityRecord = activityRecordEntities.get(index);
 
             /*if (activityRecordEntity.getId() < 26)
                 continue;*/
 
             if (onProgressListener != null)
-                onProgressListener.onProgress((index * 100) / activityRecordEntities.size());
+                onProgressListener.onProgress((index * 100) / (activityRecordEntities.size() - 1));
 
-            String activityName = Activity.values()[activityRecordEntity.getActivityId()].name();
-            Log.d(DEBUG_TAG, "Activity Record: " + activityName);
+            activityName = Activity.values()[activityRecord.getActivityId()].name();
 
-            while (nextWindow(activityRecordEntity.getId())) {
-                for (SensorType sensorType : SensorType.values()) {
-                    List<List<Float>> segments = new ArrayList<>();
-                    for (char ignored : sensorType.values)
-                        segments.add(new ArrayList<>());
-
-                    List<SensorRecordEntity> window = getWindow(activityRecordEntity.getId(), sensorType.id);
-
-                    for (SensorRecordEntity sensorRecordEntity : window) {
-                        List<Float> values = sensorRecordEntity.getValues();
-
-                        if (sensorType.values.length > 3) {
-                            float x_square = values.get(0) * values.get(0);
-                            float y_square = values.get(1) * values.get(1);
-                            float z_square = values.get(2) * values.get(2);
-                            values.add(
-                                    (float) Math.sqrt(x_square + y_square + z_square)
-                            );
-
-                            if (sensorType.values.length == 5)
-                                values.add(
-                                        (float) Math.sqrt(x_square + z_square)
-                                );
-                        }
-
-                        for (int i = 0; i < sensorType.values.length; i++)
-                            segments.get(i).add(
-                                    values.get(i)
-                            );
-                    }
-
-                    for (List<Float> segment : segments) {
-                        List<Float> featureValues = featureExtraction.getFeatureValues(segment);
-                        for (Float value : featureValues) {
-                            //writer.write(String.valueOf(value) + ",");
-                            writer.write(String.valueOf(value.isNaN() ? 0.0 : value) + ",");
-                        }
-                    }
-                }
-
-                write("'" + activityName + "'\n");
-            }
-
-            /*for (SensorType sensorType : SensorType.values()) {
-                List<SensorRecordEntity> sensorRecordEntities = sensorRecordDao.getAll(activityRecordEntity.getId(), sensorType.id);
-
-                windowStartIndex = 0;
-                windowEndIndex = 1;
-
-                Log.d(DEBUG_TAG, "SensorRecordEntities Size: " + sensorRecordEntities.size());
-                while (windowStartIndex < sensorRecordEntities.size()) {
-                    Log.d(DEBUG_TAG, "WindowStartIndex: " + windowStartIndex);
-                    Date date = sensorRecordEntities.get(windowStartIndex).getDate();
-                    date = DateUtils.addSeconds(date, windowLength);
-
-                    while (windowEndIndex < sensorRecordEntities.size() && date.after(sensorRecordEntities.get(windowEndIndex).getDate()))
-                        windowEndIndex++;
-
-                    Log.d(DEBUG_TAG, "WindowEndIndex: " + windowEndIndex);
-
-                    List<List<Float>> segments = new ArrayList<>();
-                    for (char ignored : sensorType.values)
-                        segments.add(new ArrayList<>());
-
-                    List<SensorRecordEntity> window = sensorRecordEntities.subList(windowStartIndex, windowEndIndex);
-                    for (SensorRecordEntity sensorRecordEntity : window) {
-                        List<Float> values = sensorRecordEntity.getValues();
-
-                        if (sensorType.values.length > 3) {
-                            float x_square = values.get(0) * values.get(0);
-                            float y_square = values.get(1) * values.get(1);
-                            float z_square = values.get(2) * values.get(2);
-                            values.add(
-                                    (float) Math.sqrt(x_square + y_square + z_square)
-                            );
-
-                            if (sensorType.values.length == 5)
-                                values.add(
-                                        (float) Math.sqrt(x_square + z_square)
-                                );
-                        }
-
-                        for (int i = 0; i < sensorType.values.length; i++)
-                            segments.get(i).add(
-                                    values.get(i)
-                            );
-                    }
-
-                    for (List<Float> segment : segments) {
-                        List<Float> featureValues = featureExtraction.getFeatureValues(segment);
-                        for (Float value : featureValues) {
-                            //writer.write(String.valueOf(value) + ",");
-                            writer.write(String.valueOf(value.isNaN() ? 0.0 : value) + ",");
-                        }
-                    }
-
-                    write("'" + activityName + "'\n");
-
-                    if (windowEndIndex == sensorRecordEntities.size())
-                        break;
-
-                    int value = (windowEndIndex - windowStartIndex) * overlapping;
-                    if (value > 100)
-                        windowStartIndex += value / 100;
-                    else
-                        windowStartIndex = windowEndIndex;
-                }
-            }*/
+            slidingWindow.processRecord(activityRecord);
         }
     }
 
@@ -227,47 +140,11 @@ public class ArffFile {
         writer.close();
     }
 
-    private boolean nextWindow(int activityRecordId) {
-        if (windowStartDate == null) {
-            SensorRecordEntity firstRecord = sensorRecordDao.getFirst(activityRecordId);
-            if (firstRecord == null)
-                return false;
-
-            windowStartDate = firstRecord.getDate();
-            windowEndDate = DateUtils.addSeconds(windowStartDate, windowLength);
-            lastDate = sensorRecordDao.getLast(activityRecordId).getDate();
-        } else {
-            windowStartDate = DateUtils.addMilliseconds(windowStartDate, overlapping);
-            windowEndDate = DateUtils.addMilliseconds(windowEndDate, overlapping);
-        }
-
-        Log.d(DEBUG_TAG, "WindowStartDate: " + windowStartDate);
-        Log.d(DEBUG_TAG, "WindowEndDate: " + windowEndDate);
-
-        if (windowStartDate.after(lastDate)) {
-            windowStartDate = null;
-            return false;
-        }
-
-        return true;
-    }
-
-    private List<SensorRecordEntity> getWindow(int activityRecordId, int sensorRecordId) {
-        return sensorRecordDao.getBetween(activityRecordId, sensorRecordId, windowStartDate, windowEndDate);
-    }
-
     /**
      * Save as ARFF file for Weka.
-     * @param windowLength integer value (second)
-     * @param overlapping integer value (percent)
      */
-    public void save(int windowLength, int overlapping) {
-        this.windowLength = windowLength;
-        this.overlapping = (windowLength * overlapping) * 10; // ms
-
+    public void save() {
         Log.d(DEBUG_TAG, "Saving ARFF file.");
-        Log.d(DEBUG_TAG, "Window Length: " + windowLength);
-        Log.d(DEBUG_TAG, "Overlapping: " + overlapping);
 
         try {
             createFile();
@@ -277,5 +154,26 @@ public class ArffFile {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Save as ARFF file for Weka.
+     * @param windowLength integer value (second)
+     * @param overlapping integer value (percent)
+     */
+    public void save(int windowLength, int overlapping) {
+        slidingWindow.setParameters(windowLength, overlapping, SlidingWindow.LIMIT);
+        save();
+    }
+
+    /**
+     * Save as ARFF file for Weka.
+     * @param windowLength integer value (second)
+     * @param overlapping integer value (percent)
+     * @param limit integer value (minute)
+     */
+    public void save(int windowLength, int overlapping, int limit) {
+        slidingWindow.setParameters(windowLength, overlapping, limit);
+        save();
     }
 }

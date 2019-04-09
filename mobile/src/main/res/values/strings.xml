@@ -4,5 +4,14 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     
+    <string name="window_length">Window Length (sec)</string>
+    <string name="overlapping">Overlapping (%)</string>
+    <string name="limit">Limit (min)</string>
     <string name="save_as_arff">Save as ARFF</string>
+
+    <string name="value_window_length">4</string>
+    <string name="value_overlapping">50</string>
+    <string name="value_limit">0</string>
+
+    <string name="saving">Saving..</string>
 </resources>

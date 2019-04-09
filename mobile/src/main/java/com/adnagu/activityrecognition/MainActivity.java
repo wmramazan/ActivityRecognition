@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -20,8 +21,17 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.message)
-    TextView mTextMessage;
+    @BindView(R.id.title)
+    TextView title;
+
+    @BindView(R.id.window_length)
+    EditText windowLength;
+
+    @BindView(R.id.overlapping)
+    EditText overlapping;
+
+    @BindView(R.id.limit)
+    EditText limit;
 
     @BindView(R.id.navigation)
     BottomNavigationView navigation;
@@ -32,14 +42,26 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.progress_message)
     TextView progressMessage;
 
+    boolean progressing;
+
     @OnClick(R.id.button_save_as)
     public void saveAsArff() {
-        Handler handler = new Handler();
-        new Thread(() -> {
-            ArffFile arffFile = new ArffFile(this, progress -> handler.post(() -> setProgressBar(progress)));
-            arffFile.save(4, 50);
-            setProgressMessage("Completed.");
-        }).start();
+        if (!isProgressing()) {
+            setProgressMessage(getString(R.string.saving));
+            progressing = true;
+
+            Handler handler = new Handler();
+            new Thread(() -> {
+                ArffFile arffFile = new ArffFile(this, progress -> handler.post(() -> setProgressBar(progress)));
+                arffFile.save(
+                        Integer.valueOf(windowLength.getText().toString()),
+                        Integer.valueOf(overlapping.getText().toString()),
+                        Integer.valueOf(limit.getText().toString())
+                );
+                setProgressMessage("Completed.");
+                progressing = false;
+            }).start();
+        }
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -49,13 +71,13 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
+                    title.setText(R.string.title_home);
                     return true;
                 case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
+                    title.setText(R.string.title_dashboard);
                     return true;
                 case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
+                    title.setText(R.string.title_notifications);
                     return true;
             }
             return false;
@@ -87,5 +109,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void setProgressMessage(CharSequence message) {
         progressMessage.setText(message);
+    }
+
+    public boolean isProgressing() {
+        return progressing;
     }
 }

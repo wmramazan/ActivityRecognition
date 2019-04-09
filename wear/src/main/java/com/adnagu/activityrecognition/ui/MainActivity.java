@@ -78,7 +78,7 @@ public class MainActivity extends BaseActivity implements
         activityRecognitionFragment = new ActivityRecognitionFragment();
         replaceFragment(activityRecognitionFragment);
 
-        navigationDrawerView.setCurrentItem(Section.SensorRecord.ordinal(), true);
+        //navigationDrawerView.setCurrentItem(Section.SensorRecord.ordinal(), true);
 
         appDatabase = AppDatabase.getInstance(this);
         activityRecordDao = appDatabase.activityRecordDao();

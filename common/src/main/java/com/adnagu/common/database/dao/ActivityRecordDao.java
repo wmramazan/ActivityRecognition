@@ -26,10 +26,22 @@ public interface ActivityRecordDao {
     @Query("SELECT * FROM activity_record")
     List<ActivityRecordEntity> getAll();
 
+    @Query("SELECT * FROM activity_record WHERE test = 0")
+    List<ActivityRecordEntity> getRecordsForTraining();
+
+    @Query("SELECT * FROM activity_record WHERE test = 1")
+    List<ActivityRecordEntity> getRecordsForTest();
+
+    @Query("SELECT * FROM activity_record WHERE test = 1 ORDER BY id DESC LIMIT 1")
+    ActivityRecordEntity getLastRecordForTest();
+
     @Insert
     long[] insert(ActivityRecordEntity... activityRecords);
 
     @Query("DELETE FROM activity_record WHERE id = (SELECT id FROM activity_record ORDER BY id DESC)")
     int deleteLastRecord();
+
+    @Query("DELETE FROM activity_record WHERE test = 1")
+    int deleteRecordsForTest();
 
 }
