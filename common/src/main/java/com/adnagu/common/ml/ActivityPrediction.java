@@ -98,7 +98,7 @@ public class ActivityPrediction {
         }
 
         for (int i = 0; i < predictions.length; i++)
-            Log.d(DEBUG_TAG, "Activity Prediction: " + i + "->" + predictions[i]);
+            Log.d(DEBUG_TAG, Activity.values()[i].name() + "->" + predictions[i]);
 
         return index;
     }

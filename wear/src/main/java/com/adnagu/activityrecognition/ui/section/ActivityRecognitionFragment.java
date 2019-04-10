@@ -98,7 +98,7 @@ public class ActivityRecognitionFragment extends BaseFragment {
 
         activityPrediction = new ActivityPrediction(getContext());
         featureExtraction = new FeatureExtraction();
-        featureFilter = new FeatureFilter(false);
+        featureFilter = new FeatureFilter();
 
         slidingWindow = new SlidingWindow(sensorRecordDao, new OnWindowListener() {
             @Override
