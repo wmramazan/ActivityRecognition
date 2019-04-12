@@ -81,7 +81,7 @@ public class SensorRecordService extends Service implements SensorEventListener 
         }
 
         if (test)
-            activityRecordDao.deleteRecordsForTest();
+            activityRecordDao.deleteTestRecords();
 
         long[] results = activityRecordDao.insert(
                 new ActivityRecordEntity(
