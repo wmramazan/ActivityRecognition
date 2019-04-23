@@ -24,14 +24,24 @@ import java.util.List;
  */
 public class ArffFile {
 
-    public static final String FILE_NAME = "ActivityRecords.arff";
+    public static final String TRAINING_FILE_NAME = "TrainingDataSet.arff";
+    public static final String TEST_FILE_NAME     = "TestDataSet.arff";
+    public static final int    PERCENTAGE_SPLIT   = 70;
+
+    private enum State {
+        ALL,
+        TRAINING,
+        TEST
+    }
 
     private final String DEBUG_TAG = getClass().getName();
 
     private Context context;
     private OnProgressListener onProgressListener;
 
-    private OutputStreamWriter writer;
+    private OutputStreamWriter trainingWriter;
+    private OutputStreamWriter testWriter;
+
     private ActivityRecordDao activityRecordDao;
 
     private FeatureFilter featureFilter;
@@ -39,6 +49,7 @@ public class ArffFile {
     private SlidingWindow slidingWindow;
 
     private String activityName;
+    private State state;
 
     public ArffFile(Context context) {
         this.context = context;
@@ -70,10 +81,8 @@ public class ArffFile {
                 featureExtraction.setFeatures(featureFilter.getFeatureArray());
 
                 List<Float> featureValues = featureExtraction.getFeatureValues(segment);
-                for (Float value : featureValues) {
-                    //writer.write(String.valueOf(value) + ",");
+                for (Float value : featureValues)
                     write(String.valueOf(value.isNaN() ? 0.0 : value) + ",");
-                }
             }
 
             @Override
@@ -81,19 +90,26 @@ public class ArffFile {
                 write("'" + activityName + "'\n");
             }
         });
-    }
 
-    private void createFile() throws IOException {
-        writer = new OutputStreamWriter(
-                context.openFileOutput(
-                        FILE_NAME,
-                        Context.MODE_PRIVATE
-                )
-        );
-        write("@relation activity_recognition\n\n");
+        state = State.ALL;
     }
 
     private void write(String str) {
+        switch (state) {
+            case ALL:
+                write(trainingWriter, str);
+                write(testWriter, str);
+                break;
+            case TRAINING:
+                write(trainingWriter, str);
+                break;
+            case TEST:
+                write(testWriter, str);
+                break;
+        }
+    }
+
+    private void write(OutputStreamWriter writer, String str) {
         try {
             writer.write(str);
         } catch (IOException e) {
@@ -101,12 +117,28 @@ public class ArffFile {
         }
     }
 
+    private void createFiles() throws IOException {
+        trainingWriter = new OutputStreamWriter(
+                context.openFileOutput(
+                        TRAINING_FILE_NAME,
+                        Context.MODE_PRIVATE
+                )
+        );
+        testWriter = new OutputStreamWriter(
+                context.openFileOutput(
+                        TEST_FILE_NAME,
+                        Context.MODE_PRIVATE
+                )
+        );
+        write("@relation activity_recognition\n\n");
+    }
+
     private void writeAttributes() throws IOException {
         for (SensorType sensorType : SensorType.values())
             for (char value : sensorType.values)
                 for (Feature feature : Feature.values())
                     if (featureFilter.isValidFeature())
-                        writer.write("@attribute " + sensorType.prefix + "_" + feature.name() + "_" + value + " numeric\n");
+                        write("@attribute " + sensorType.prefix + "_" + feature.name() + "_" + value + " numeric\n");
 
         StringBuilder activities = new StringBuilder();
         for (Activity activity : Activity.values())
@@ -120,12 +152,39 @@ public class ArffFile {
     private void writeRecords() {
         write("@data\n");
 
-        List<ActivityRecordEntity> activityRecordEntities = activityRecordDao.getRecordsForTraining();
+        for (Activity activity : Activity.values()) {
+            List<ActivityRecordEntity> activityRecords = activityRecordDao.getRecords(activity.ordinal());
+
+            if (onProgressListener != null)
+                onProgressListener.onProgress(((activity.ordinal() + 1) * 100) / Activity.values().length);
+
+            activityName = activity.name();
+
+            if (activityRecords.size() > 0) {
+                int splitIndex = activityRecords.size() * PERCENTAGE_SPLIT / 100;
+
+                Log.d(DEBUG_TAG, "Activity Record Size: " + activityRecords.size());
+                Log.d(DEBUG_TAG, "Split Index: " + splitIndex);
+
+                state = State.TRAINING;
+
+                int i;
+                for (i = 0; i < splitIndex; i++)
+                    slidingWindow.processRecord(activityRecords.get(i));
+
+                state = State.TEST;
+
+                for (i = splitIndex; i < activityRecords.size(); i++)
+                    slidingWindow.processRecord(activityRecords.get(i));
+            }
+        }
+
+        /*List<ActivityRecordEntity> activityRecordEntities = activityRecordDao.getTrainingRecords();
         for (int index = 0; index < activityRecordEntities.size(); index++) {
             ActivityRecordEntity activityRecord = activityRecordEntities.get(index);
 
-            /*if (activityRecordEntity.getId() < 26)
-                continue;*/
+            *//*if (activityRecordEntity.getId() < 26)
+                continue;*//*
 
             if (onProgressListener != null)
                 onProgressListener.onProgress((index * 100) / (activityRecordEntities.size() - 1));
@@ -133,11 +192,12 @@ public class ArffFile {
             activityName = Activity.values()[activityRecord.getActivityId()].name();
 
             slidingWindow.processRecord(activityRecord);
-        }
+        }*/
     }
 
     private void close() throws IOException {
-        writer.close();
+        trainingWriter.close();
+        testWriter.close();
     }
 
     /**
@@ -147,7 +207,7 @@ public class ArffFile {
         Log.d(DEBUG_TAG, "Saving ARFF file.");
 
         try {
-            createFile();
+            createFiles();
             writeAttributes();
             writeRecords();
             close();
