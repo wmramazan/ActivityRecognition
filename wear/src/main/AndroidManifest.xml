@@ -45,6 +45,11 @@
             android:enabled="true"
             android:exported="false" />
 
+        <service
+            android:name=".service.ActivityRecognitionService"
+            android:enabled="true"
+            android:exported="false" />
+
         <activity
             android:name=".ui.ListActivity"
             android:label="@string/title_activity_list" />
