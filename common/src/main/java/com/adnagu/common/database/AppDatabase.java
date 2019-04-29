@@ -14,6 +14,8 @@ import com.adnagu.common.database.converter.DateConverter;
 import com.adnagu.common.database.converter.JSONConverter;
 import com.adnagu.common.database.dao.ActivityDao;
 import com.adnagu.common.database.dao.ActivityRecordDao;
+import com.adnagu.common.database.dao.PredictionDao;
+import com.adnagu.common.database.dao.PredictionRecordDao;
 import com.adnagu.common.database.dao.SensorDao;
 import com.adnagu.common.database.dao.SensorRecordDao;
 import com.adnagu.common.database.entity.ActivityEntity;
@@ -43,6 +45,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract ActivityRecordDao activityRecordDao();
     public abstract SensorDao sensorDao();
     public abstract SensorRecordDao sensorRecordDao();
+    public abstract PredictionDao predictionDao();
+    public abstract PredictionRecordDao predictionRecordDao();
 
     public static AppDatabase getInstance(Context context) {
         if (null == INSTANCE)
