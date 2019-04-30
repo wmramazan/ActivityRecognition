@@ -1,7 +1,6 @@
 package com.adnagu.common.ml;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.adnagu.common.R;
 import com.adnagu.common.model.Activity;
@@ -97,8 +96,8 @@ public class ActivityPrediction {
             }
         }
 
-        for (int i = 0; i < predictions.length; i++)
-            Log.d(DEBUG_TAG, Activity.values()[i].name() + "->" + predictions[i]);
+        /*for (int i = 0; i < predictions.length; i++)
+            Log.d(DEBUG_TAG, Activity.values()[i].name() + "->" + predictions[i]);*/
 
         return index;
     }

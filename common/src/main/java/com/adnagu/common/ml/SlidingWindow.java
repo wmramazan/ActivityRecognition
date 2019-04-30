@@ -1,7 +1,5 @@
 package com.adnagu.common.ml;
 
-import android.util.Log;
-
 import com.adnagu.common.database.dao.SensorRecordDao;
 import com.adnagu.common.database.entity.ActivityRecordEntity;
 import com.adnagu.common.database.entity.SensorRecordEntity;
@@ -70,9 +68,10 @@ public class SlidingWindow {
         this.activityRecord = activityRecord;
 
         String activityName = Activity.values()[activityRecord.getActivityId()].name();
-        Log.d(DEBUG_TAG, "Activity Record: " + activityName);
-        Log.d(DEBUG_TAG, "Window Length: " + windowLength);
-        Log.d(DEBUG_TAG, "Overlapping: " + overlapping);
+        System.out.println(activityName);
+        //Log.d(DEBUG_TAG, "Activity Record: " + activityName);
+        //Log.d(DEBUG_TAG, "Window Length: " + windowLength);
+        //Log.d(DEBUG_TAG, "Overlapping: " + overlapping);
 
         while (nextWindow()) {
             onWindowListener.onWindowStart();
@@ -137,8 +136,9 @@ public class SlidingWindow {
 
         durations[activityRecord.getActivityId()] += range;
 
-        Log.d(DEBUG_TAG, "WindowStartDate: " + windowStartDate);
-        Log.d(DEBUG_TAG, "WindowEndDate: " + windowEndDate);
+        System.out.println(windowStartDate);
+        //Log.d(DEBUG_TAG, "WindowStartDate: " + windowStartDate);
+        //Log.d(DEBUG_TAG, "WindowEndDate: " + windowEndDate);
 
         if (windowStartDate.after(lastDate) || (limit != 0 && durations[activityRecord.getActivityId()] > limit)) {
             windowStartDate = null;

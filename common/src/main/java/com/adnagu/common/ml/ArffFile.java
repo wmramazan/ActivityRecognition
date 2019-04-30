@@ -1,10 +1,10 @@
 package com.adnagu.common.ml;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.adnagu.common.database.AppDatabase;
 import com.adnagu.common.database.dao.ActivityRecordDao;
+import com.adnagu.common.database.dao.SensorRecordDao;
 import com.adnagu.common.database.entity.ActivityRecordEntity;
 import com.adnagu.common.model.Activity;
 import com.adnagu.common.model.Feature;
@@ -39,10 +39,11 @@ public class ArffFile {
     private Context context;
     private OnProgressListener onProgressListener;
 
-    private OutputStreamWriter trainingWriter;
-    private OutputStreamWriter testWriter;
+    protected OutputStreamWriter trainingWriter;
+    protected OutputStreamWriter testWriter;
 
     private ActivityRecordDao activityRecordDao;
+    private SensorRecordDao sensorRecordDao;
 
     private FeatureFilter featureFilter;
     private FeatureExtraction featureExtraction;
@@ -64,13 +65,23 @@ public class ArffFile {
         init();
     }
 
+    public ArffFile(ActivityRecordDao activityRecordDao, SensorRecordDao sensorRecordDao) {
+        this.activityRecordDao = activityRecordDao;
+        this.sensorRecordDao = sensorRecordDao;
+
+        init();
+    }
+
     private void init() {
-        AppDatabase appDatabase = AppDatabase.getInstance(context);
-        activityRecordDao = appDatabase.activityRecordDao();
+        if (context != null) {
+            AppDatabase appDatabase = AppDatabase.getInstance(context);
+            activityRecordDao = appDatabase.activityRecordDao();
+            sensorRecordDao = appDatabase.sensorRecordDao();
+        }
 
         featureFilter = new FeatureFilter();
         featureExtraction = new FeatureExtraction();
-        slidingWindow = new SlidingWindow(appDatabase.sensorRecordDao(), new OnWindowListener() {
+        slidingWindow = new SlidingWindow(sensorRecordDao, new OnWindowListener() {
             @Override
             public void onWindowStart() {
                 featureFilter.init();
@@ -94,7 +105,7 @@ public class ArffFile {
         state = State.ALL;
     }
 
-    private void write(String str) {
+    protected void write(String str) {
         switch (state) {
             case ALL:
                 write(trainingWriter, str);
@@ -117,7 +128,7 @@ public class ArffFile {
         }
     }
 
-    private void createFiles() throws IOException {
+    protected void createFiles() throws IOException {
         trainingWriter = new OutputStreamWriter(
                 context.openFileOutput(
                         TRAINING_FILE_NAME,
@@ -163,8 +174,8 @@ public class ArffFile {
             if (activityRecords.size() > 0) {
                 int splitIndex = activityRecords.size() * PERCENTAGE_SPLIT / 100;
 
-                Log.d(DEBUG_TAG, "Activity Record Size: " + activityRecords.size());
-                Log.d(DEBUG_TAG, "Split Index: " + splitIndex);
+                //Log.d(DEBUG_TAG, "Activity Record Size: " + activityRecords.size());
+                //Log.d(DEBUG_TAG, "Split Index: " + splitIndex);
 
                 state = State.TRAINING;
 
@@ -204,7 +215,7 @@ public class ArffFile {
      * Save as ARFF file for Weka.
      */
     public void save() {
-        Log.d(DEBUG_TAG, "Saving ARFF file.");
+        //Log.d(DEBUG_TAG, "Saving ARFF file.");
 
         try {
             createFiles();

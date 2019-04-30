@@ -1,12 +1,13 @@
 package com.adnagu.common.database.entity;
 
-import java.util.Date;
-
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
+import java.util.Date;
 
 /**
  * ActivityRecordEntity
@@ -27,6 +28,14 @@ public class ActivityRecordEntity {
 
     @ColumnInfo(name = "test")
     private boolean test;
+
+    @Ignore
+    public ActivityRecordEntity(int id, int activityId, Date date, boolean test) {
+        this.id = id;
+        this.activityId = activityId;
+        this.date = date;
+        this.test = test;
+    }
 
     public ActivityRecordEntity(int activityId, Date date, boolean test) {
         this.activityId = activityId;

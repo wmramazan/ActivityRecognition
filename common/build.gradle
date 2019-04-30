@@ -43,5 +43,5 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'org.apache.commons:commons-math3:3.6.1'
     implementation 'org.apache.commons:commons-lang3:3.8.1'
-    implementation files('libs/weka.jar')
+    implementation files('libs/*')
 }

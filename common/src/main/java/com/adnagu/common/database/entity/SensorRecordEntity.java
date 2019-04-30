@@ -1,13 +1,14 @@
 package com.adnagu.common.database.entity;
 
-import java.util.Date;
-import java.util.List;
-
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * SensorRecordEntity
@@ -37,6 +38,16 @@ public class SensorRecordEntity {
 
     @ColumnInfo(name = "activity_record_id")
     private int activityRecordId;
+
+    @Ignore
+    public SensorRecordEntity(int id, List<Float> values, Date date, long timestamp, int sensorId, int activityRecordId) {
+        this.id = id;
+        this.values = values;
+        this.date = date;
+        this.timestamp = timestamp;
+        this.sensorId = sensorId;
+        this.activityRecordId = activityRecordId;
+    }
 
     public SensorRecordEntity(List<Float> values, Date date, long timestamp, int sensorId, int activityRecordId) {
         this.values = values;

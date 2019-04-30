@@ -21,7 +21,7 @@ public interface PredictionRecordDao {
     @Query("SELECT id FROM prediction_record")
     boolean hasAny();
 
-    @Query("SELECT * FROM prediction_record WHERE id == :id")
+    @Query("SELECT * FROM prediction_record WHERE id = :id")
     PredictionRecordEntity get(int id);
 
     @Query("SELECT * FROM prediction_record")

@@ -1,14 +1,14 @@
 package com.adnagu.common.database.dao;
 
-import com.adnagu.common.database.entity.SensorEntity;
-
-import java.util.List;
-
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+
+import com.adnagu.common.database.entity.SensorEntity;
+
+import java.util.List;
 
 /**
  * SensorDao
@@ -25,7 +25,7 @@ public interface SensorDao {
     @Query("SELECT COUNT(*) FROM sensor")
     int getCount();
 
-    @Query("SELECT * FROM sensor WHERE id == :id")
+    @Query("SELECT * FROM sensor WHERE id = :id")
     SensorEntity get(int id);
 
     @Query("SELECT * FROM sensor")
