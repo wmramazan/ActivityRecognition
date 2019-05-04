@@ -93,7 +93,7 @@ public class ArffFile {
 
                 List<Float> featureValues = featureExtraction.getFeatureValues(segment);
                 for (Float value : featureValues)
-                    write(String.valueOf(value.isNaN() ? 0.0 : value) + ",");
+                    write((value.isNaN() ? 0.0 : value) + ",");
             }
 
             @Override
