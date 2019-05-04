@@ -9,10 +9,7 @@ import com.adnagu.common.model.Activity;
 import com.adnagu.common.model.SensorType;
 import com.adnagu.common.utils.listener.OnWindowListener;
 
-import org.apache.commons.lang3.time.DateUtils;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,6 +23,7 @@ public class SlidingWindow {
     public static final int WINDOW_LENGTH = 4;
     public static final int OVERLAPPING = 50;
     public static final int LIMIT = 0;
+    public static final int FREQUENCY = 100;
 
     private final String DEBUG_TAG = getClass().getName();
 
@@ -33,24 +31,30 @@ public class SlidingWindow {
     private OnWindowListener onWindowListener;
 
     private ActivityRecordEntity activityRecord;
+    private List<List<SensorRecordEntity>> sensorRecords;
 
-    private int windowLength;
-    private int overlapping;
-    private int range;
-    private int limit;
+    private SensorType[] sensorTypes;
 
-    private Date windowStartDate;
-    private Date windowEndDate;
-    private Date lastDate;
+    private int windowIndexLength;
+    private int windowIndexAddition;
+    private float range;
+    private float limit;
 
-    private long[] durations;
+    private int windowStartIndex;
+    private int windowEndIndex;
+    private int windowLastIndex;
+
+    private float[] durations;
 
     public SlidingWindow(SensorRecordDao sensorRecordDao, OnWindowListener onWindowListener) {
         this.sensorRecordDao = sensorRecordDao;
         this.onWindowListener = onWindowListener;
 
-        durations = new long[Activity.values().length];
+        durations = new float[Activity.values().length];
         setParameters(WINDOW_LENGTH, OVERLAPPING, LIMIT);
+
+        sensorTypes = SensorType.values();
+        sensorRecords = new ArrayList<>();
     }
 
     /**
@@ -60,24 +64,29 @@ public class SlidingWindow {
      * @param limit integer value (minute)
      */
     public void setParameters(int windowLength, int overlapping, int limit) {
-        this.windowLength = windowLength * 1000; // ms
-        this.overlapping = (windowLength * overlapping) * 10; // ms
-        this.range = this.windowLength - this.overlapping;
-        this.limit = limit * 60 * 1000;
+        this.windowIndexLength = windowLength * FREQUENCY;
+        this.windowIndexAddition = (windowIndexLength * (100 - overlapping)) / 100;
+        this.range = (float) windowIndexAddition / FREQUENCY;
+        this.limit = limit * 60;
     }
 
     public void processRecord(ActivityRecordEntity activityRecord) {
         this.activityRecord = activityRecord;
 
+        if (!prepareSensorRecords())
+            return;
+
+        resetWindow();
+
         String activityName = Activity.values()[activityRecord.getActivityId()].name();
         Log.d(DEBUG_TAG, "Activity Record: " + activityName);
-        Log.d(DEBUG_TAG, "Window Length: " + windowLength);
-        Log.d(DEBUG_TAG, "Overlapping: " + overlapping);
+        Log.d(DEBUG_TAG, "Window Index Length: " + windowIndexLength);
+        Log.d(DEBUG_TAG, "Window Index Addition: " + windowIndexAddition);
 
         while (nextWindow()) {
             onWindowListener.onWindowStart();
 
-            for (SensorType sensorType : SensorType.values()) {
+            for (SensorType sensorType : sensorTypes) {
                 List<List<Float>> segments = generateSegments(sensorType);
 
                 for (List<Float> segment : segments)
@@ -88,12 +97,45 @@ public class SlidingWindow {
         }
     }
 
+    private boolean prepareSensorRecords() {
+        clearRecords();
+
+        for (SensorType sensor : sensorTypes) {
+            List<SensorRecordEntity> sensorRecordEntities = sensorRecordDao.getAll(activityRecord.getId(), sensor.id);
+            if (sensorRecordEntities.size() == 0)
+                return false;
+
+            sensorRecords.add(sensorRecordEntities);
+        }
+
+
+        windowLastIndex = sensorRecords.get(0).size();
+
+        for (int i = 1; i < sensorRecords.size(); i++)
+            if (sensorRecords.get(i).size() < windowLastIndex)
+                windowLastIndex = sensorRecords.get(i).size();
+
+        return true;
+    }
+
+    private void clearRecords() {
+        for (List<SensorRecordEntity> list : sensorRecords)
+            list.clear();
+
+        sensorRecords.clear();
+    }
+
+    private void resetWindow() {
+        windowStartIndex = 0;
+        windowEndIndex = 0;
+    }
+
     private List<List<Float>> generateSegments(SensorType sensorType) {
         List<List<Float>> segments = new ArrayList<>();
         for (char ignored : sensorType.values)
             segments.add(new ArrayList<>());
 
-        List<SensorRecordEntity> window = getWindow(sensorType.id);
+        List<SensorRecordEntity> window = getWindow(sensorType.ordinal());
 
         for (SensorRecordEntity sensorRecordEntity : window) {
             List<Float> values = sensorRecordEntity.getValues();
@@ -122,33 +164,34 @@ public class SlidingWindow {
     }
 
     private boolean nextWindow() {
-        if (windowStartDate == null) {
-            SensorRecordEntity firstRecord = sensorRecordDao.getFirst(activityRecord.getId());
-            if (firstRecord == null)
-                return false;
-
-            windowStartDate = firstRecord.getDate();
-            windowEndDate = DateUtils.addMilliseconds(windowStartDate, windowLength);
-            lastDate = sensorRecordDao.getLast(activityRecord.getId()).getDate();
-        } else {
-            windowStartDate = DateUtils.addMilliseconds(windowStartDate, overlapping);
-            windowEndDate = DateUtils.addMilliseconds(windowEndDate, overlapping);
-        }
+        increaseWindowIndices();
 
         durations[activityRecord.getActivityId()] += range;
 
-        Log.d(DEBUG_TAG, "WindowStartDate: " + windowStartDate);
-        Log.d(DEBUG_TAG, "WindowEndDate: " + windowEndDate);
+        Log.d(DEBUG_TAG, "Window: " + windowStartIndex + ", " + windowEndIndex);
 
-        if (windowStartDate.after(lastDate) || (limit != 0 && durations[activityRecord.getActivityId()] > limit)) {
-            windowStartDate = null;
+        if (windowStartIndex >= windowEndIndex || (limit != 0 && durations[activityRecord.getActivityId()] > limit)) {
+            resetWindow();
             return false;
         }
 
         return true;
     }
 
-    private List<SensorRecordEntity> getWindow(int sensorId) {
-        return sensorRecordDao.getBetween(activityRecord.getId(), sensorId, windowStartDate, windowEndDate);
+    private void increaseWindowIndices() {
+        if (windowEndIndex == 0) {
+            windowStartIndex = 0;
+            windowEndIndex = windowIndexLength;
+        } else {
+            windowStartIndex += windowIndexAddition;
+            windowEndIndex += windowIndexAddition;
+        }
+
+        if (windowEndIndex > windowLastIndex)
+            windowEndIndex = windowLastIndex;
+    }
+
+    private List<SensorRecordEntity> getWindow(int sensorIndex) {
+        return sensorRecords.get(sensorIndex).subList(windowStartIndex, windowEndIndex);
     }
 }
