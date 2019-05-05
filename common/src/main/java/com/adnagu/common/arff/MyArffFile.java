@@ -18,6 +18,9 @@ import java.io.OutputStreamWriter;
  * Created on 4/30/2019
  */
 public class MyArffFile extends ArffFile {
+
+    String tag;
+
     public MyArffFile(Context context) {
         super(context);
     }
@@ -30,18 +33,29 @@ public class MyArffFile extends ArffFile {
         super(activityRecordDao, sensorRecordDao);
     }
 
+    public MyArffFile(ActivityRecordDao activityRecordDao, SensorRecordDao sensorRecordDao, OnProgressListener onProgressListener) {
+        super(activityRecordDao, sensorRecordDao, onProgressListener);
+    }
+
     @Override
     protected void createFiles() throws IOException {
         trainingWriter = new OutputStreamWriter(
                 new FileOutputStream(
-                        "c://arff//" + TRAINING_FILE_NAME
+                        "c://arff//training" + tag + ".arff"
                 )
         );
         testWriter = new OutputStreamWriter(
                 new FileOutputStream(
-                        "c://arff//" + TEST_FILE_NAME
+                        "c://arff//test" + tag + ".arff"
                 )
         );
         write("@relation activity_recognition\n\n");
+    }
+
+    @Override
+    public void save(int windowLength, int overlapping) {
+        tag = "_w" + windowLength + "o" + overlapping;
+        System.out.println("ArffFile" + tag);
+        super.save(windowLength, overlapping);
     }
 }

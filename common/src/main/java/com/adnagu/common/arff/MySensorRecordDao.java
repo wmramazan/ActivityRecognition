@@ -54,7 +54,27 @@ public class MySensorRecordDao implements SensorRecordDao {
 
     @Override
     public List<SensorRecordEntity> getAll(int activityRecordId, int sensorId) {
-        return null;
+        List<SensorRecordEntity> sensorRecords = new ArrayList<>();
+        String query = "SELECT * FROM sensor_record WHERE activity_record_id = " + activityRecordId + " AND sensor_id = " + sensorId;
+
+        try (Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                sensorRecords.add(
+                        new SensorRecordEntity(
+                                JSONConverter.toList(rs.getString("values")),
+                                DateConverter.toDate(rs.getLong("date")),
+                                rs.getLong("timestamp"),
+                                rs.getInt("sensor_id"),
+                                rs.getInt("activity_record_id")
+                        )
+                );
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return sensorRecords;
     }
 
     @Override

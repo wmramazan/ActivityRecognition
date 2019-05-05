@@ -72,6 +72,14 @@ public class ArffFile {
         init();
     }
 
+    public ArffFile(ActivityRecordDao activityRecordDao, SensorRecordDao sensorRecordDao, OnProgressListener onProgressListener) {
+        this.activityRecordDao = activityRecordDao;
+        this.sensorRecordDao = sensorRecordDao;
+        this.onProgressListener = onProgressListener;
+
+        init();
+    }
+
     private void init() {
         if (context != null) {
             AppDatabase appDatabase = AppDatabase.getInstance(context);
@@ -101,8 +109,6 @@ public class ArffFile {
                 write("'" + activityName + "'\n");
             }
         });
-
-        state = State.ALL;
     }
 
     protected void write(String str) {
@@ -144,7 +150,7 @@ public class ArffFile {
         write("@relation activity_recognition\n\n");
     }
 
-    private void writeAttributes() throws IOException {
+    private void writeAttributes() {
         for (SensorType sensorType : SensorType.values())
             for (char value : sensorType.values)
                 for (Feature feature : Feature.values())
@@ -163,6 +169,9 @@ public class ArffFile {
     private void writeRecords() {
         write("@data\n");
 
+        int trainingRecords = 0;
+        int testRecords = 0;
+
         for (Activity activity : Activity.values()) {
             List<ActivityRecordEntity> activityRecords = activityRecordDao.getRecords(activity.ordinal());
 
@@ -180,15 +189,23 @@ public class ArffFile {
                 state = State.TRAINING;
 
                 int i;
-                for (i = 0; i < splitIndex; i++)
+                for (i = 0; i < splitIndex; i++) {
+                    trainingRecords++;
                     slidingWindow.processRecord(activityRecords.get(i));
+                }
 
                 state = State.TEST;
 
-                for (i = splitIndex; i < activityRecords.size(); i++)
+                for (i = splitIndex; i < activityRecords.size(); i++) {
+                    testRecords++;
                     slidingWindow.processRecord(activityRecords.get(i));
+                }
             }
         }
+
+        System.out.println("Training Records: " + trainingRecords);
+        System.out.println("Test Records: " + testRecords);
+        System.out.println("Training Rate: " + (float) trainingRecords / (trainingRecords + testRecords));
 
         /*List<ActivityRecordEntity> activityRecordEntities = activityRecordDao.getTrainingRecords();
         for (int index = 0; index < activityRecordEntities.size(); index++) {
@@ -216,6 +233,7 @@ public class ArffFile {
      */
     public void save() {
         //Log.d(DEBUG_TAG, "Saving ARFF file.");
+        state = State.ALL;
 
         try {
             createFiles();

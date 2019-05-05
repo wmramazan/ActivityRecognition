@@ -1,7 +1,5 @@
 package com.adnagu.common.ml;
 
-import android.util.Log;
-
 import com.adnagu.common.database.dao.SensorRecordDao;
 import com.adnagu.common.database.entity.ActivityRecordEntity;
 import com.adnagu.common.database.entity.SensorRecordEntity;
@@ -78,7 +76,7 @@ public class SlidingWindow {
 
         resetWindow();
 
-        String activityName = Activity.values()[activityRecord.getActivityId()].name();
+        //String activityName = Activity.values()[activityRecord.getActivityId()].name();
         //Log.d(DEBUG_TAG, "Activity Record: " + activityName);
         //Log.d(DEBUG_TAG, "Window Index Length: " + windowIndexLength);
         //Log.d(DEBUG_TAG, "Window Index Addition: " + windowIndexAddition);
@@ -168,7 +166,7 @@ public class SlidingWindow {
 
         durations[activityRecord.getActivityId()] += range;
 
-        System.out.println(windowStartIndex + ", " + windowEndIndex);
+        //System.out.println(windowStartIndex + ", " + windowEndIndex);
         //Log.d(DEBUG_TAG, "Window: " + windowStartIndex + ", " + windowEndIndex);
 
         if (windowStartIndex >= windowEndIndex || (limit != 0 && durations[activityRecord.getActivityId()] > limit)) {
