@@ -3,14 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
+    android:type="@+type/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/wear_primary_darken"
     tools:context="com.adnagu.activityrecognition.ui.MainActivity">
 
     <LinearLayout
-        android:id="@+id/llProgress"
+        android:type="@+type/llProgress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -20,7 +20,7 @@
         android:visibility="gone">
 
         <ProgressBar
-            android:id="@+id/progress_bar"
+            android:type="@+type/progress_bar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
             android:visibility="gone"/>
 
         <ProgressBar
-            android:id="@+id/progress_circle"
+            android:type="@+type/progress_circle"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -47,21 +47,21 @@
         android:fillViewport="true">
 
         <FrameLayout
-            android:id="@+id/content_frame"
+            android:type="@+type/content_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
     </androidx.core.widget.NestedScrollView>
 
     <androidx.wear.widget.drawer.WearableNavigationDrawerView
-        android:id="@+id/top_navigation_drawer"
+        android:type="@+type/top_navigation_drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/wear_primary"
         app:navigationStyle="singlePage" />
 
     <androidx.wear.widget.drawer.WearableActionDrawerView
-        android:id="@+id/bottom_action_drawer"
+        android:type="@+type/bottom_action_drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/wear_primary"

@@ -1,14 +1,14 @@
 package com.adnagu.common.database.dao;
 
-import com.adnagu.common.database.entity.SensorRecordEntity;
-
-import java.util.Date;
-import java.util.List;
-
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+
+import com.adnagu.common.database.entity.SensorRecordEntity;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * SensorRecordDao
@@ -46,10 +46,10 @@ public interface SensorRecordDao {
     @Query("SELECT * FROM sensor_record WHERE activity_record_id = :activityRecordId AND sensor_id = :sensorId AND date BETWEEN :firstDate AND :lastDate")
     List<SensorRecordEntity> getBetween(int activityRecordId, int sensorId, Date firstDate, Date lastDate);
 
-    /*@Query("SELECT sensor_record.* FROM sensor_record, activity_record WHERE sensor_record.sensor_id = activity_record.id = sensor_record.activity_record_id AND sensor_record.sensor_id IN (1,2,4,9,10) AND activity_record.activity_id = :activityId ORDER BY sensor_record.sensor_id, sensor_record.timestamp")
+    /*@Query("SELECT sensor_record.* FROM sensor_record, activity_record WHERE sensor_record.sensor_id = activity_record.type = sensor_record.activity_record_id AND sensor_record.sensor_id IN (1,2,4,9,10) AND activity_record.activity_id = :activityId ORDER BY sensor_record.sensor_id, sensor_record.timestamp")
     List<SensorRecordEntity> getAllInOrder(int activityId);
 
-    @Query("SELECT sensor_record.* FROM sensor_record, activity_record WHERE sensor_record.sensor_id = activity_record.id = sensor_record.activity_record_id AND sensor_record.sensor_id = :sensorId AND activity_record.activity_id = :activityId ORDER BY sensor_record.sensor_id, sensor_record.timestamp")
+    @Query("SELECT sensor_record.* FROM sensor_record, activity_record WHERE sensor_record.sensor_id = activity_record.type = sensor_record.activity_record_id AND sensor_record.sensor_id = :sensorId AND activity_record.activity_id = :activityId ORDER BY sensor_record.sensor_id, sensor_record.timestamp")
     List<SensorRecordEntity> getAllInOrder(int sensorId, int activityId);*/
 
     @Insert

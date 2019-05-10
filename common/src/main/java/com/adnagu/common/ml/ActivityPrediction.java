@@ -62,7 +62,7 @@ public class ActivityPrediction {
         }
     }
 
-    private int predict(List<Float> featureValues) {
+    public int predict(List<Float> featureValues) {
         Instance instance = new DenseInstance(attributes.size());
 
         for (int i = 0; i < featureValues.size(); i++)

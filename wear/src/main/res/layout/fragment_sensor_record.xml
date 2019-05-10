@@ -19,7 +19,7 @@
         app:boxedEdges="all">
 
         <LinearLayout
-            android:id="@+id/active_content"
+            android:type="@+type/active_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -52,7 +52,7 @@
                 android:clipChildren="false">
 
                 <ticwear.design.widget.FloatingActionButton
-                    android:id="@+id/button_record"
+                    android:type="@+type/button_record"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -65,7 +65,7 @@
                     app:tic_fabSize="mini"/>
 
                 <TextView
-                    android:id="@+id/text_activity_name"
+                    android:type="@+type/text_activity_name"
                     style="@style/TextAppearance.Ticwear.Caption"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/text_record"
+            android:type="@+type/text_record"
             style="@style/TextAppearance.Ticwear.Small"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

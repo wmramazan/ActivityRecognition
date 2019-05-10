@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
+    android:type="@+type/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/title"
+            android:type="@+type/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/spacing_small"
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/window_length"
+                android:type="@+type/window_length"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/value_window_length"
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/overlapping"
+                android:type="@+type/overlapping"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/value_overlapping"
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/limit"
+                android:type="@+type/limit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/value_limit"
@@ -65,13 +65,13 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/button_save_as"
+            android:type="@+type/button_save_as"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/save_as_arff"/>
 
         <ProgressBar
-            android:id="@+id/progress_bar"
+            android:type="@+type/progress_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_tiny"
@@ -79,7 +79,7 @@
             android:max="100"/>
 
         <TextView
-            android:id="@+id/progress_message"
+            android:type="@+type/progress_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center" />
@@ -87,7 +87,7 @@
     </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/navigation"
+        android:type="@+type/navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="0dp"

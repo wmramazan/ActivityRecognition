@@ -15,8 +15,8 @@ import java.util.Date;
  * Created on 4/24/2019
  */
 @Entity(tableName = "prediction_record", foreignKeys = {
-        @ForeignKey(entity = ActivityEntity.class, parentColumns = "id", childColumns = "activity_id", onDelete = ForeignKey.CASCADE),
-        @ForeignKey(entity = PredictionEntity.class, parentColumns = "id", childColumns = "prediction_id", onDelete = ForeignKey.CASCADE)
+        @ForeignKey(entity = ActivityEntity.class, parentColumns = "type", childColumns = "activity_id", onDelete = ForeignKey.CASCADE),
+        @ForeignKey(entity = PredictionEntity.class, parentColumns = "type", childColumns = "prediction_id", onDelete = ForeignKey.CASCADE)
 }, indices = @Index(value = {"activity_id", "prediction_id"}))
 public class PredictionRecordEntity {
     @PrimaryKey
@@ -28,21 +28,16 @@ public class PredictionRecordEntity {
     @ColumnInfo(name = "prediction_id")
     private int predictionId;
 
-    @ColumnInfo(name = "startDate")
-    private Date startDate;
-
-    @ColumnInfo(name = "endDate")
-    private Date endDate;
+    @ColumnInfo(name = "date")
+    private Date date;
 
     @ColumnInfo(name = "correct")
     private boolean correct;
 
-    public PredictionRecordEntity(int id, int activityId, int predictionId, Date startDate, Date endDate, boolean correct) {
-        this.id = id;
+    public PredictionRecordEntity(int activityId, int predictionId, Date date, boolean correct) {
         this.activityId = activityId;
         this.predictionId = predictionId;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.date = date;
         this.correct = correct;
     }
 
@@ -70,20 +65,12 @@ public class PredictionRecordEntity {
         this.predictionId = predictionId;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public Date getDate() {
+        return date;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public boolean isCorrect() {

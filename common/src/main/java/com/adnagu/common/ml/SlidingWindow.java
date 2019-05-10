@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class SlidingWindow {
 
-    public static final int WINDOW_LENGTH = 4;
+    public static final int WINDOW_LENGTH = 6;
     public static final int OVERLAPPING = 50;
     public static final int LIMIT = 0;
     public static final int FREQUENCY = 100;
@@ -101,7 +101,7 @@ public class SlidingWindow {
         clearRecords();
 
         for (SensorType sensor : sensorTypes) {
-            List<SensorRecordEntity> sensorRecordEntities = sensorRecordDao.getAll(activityRecord.getId(), sensor.id);
+            List<SensorRecordEntity> sensorRecordEntities = sensorRecordDao.getAll(activityRecord.getId(), sensor.type);
             if (sensorRecordEntities.size() == 0)
                 return false;
 

@@ -28,6 +28,6 @@ public interface PredictionDao {
     List<PredictionEntity> getAll();
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insert(PredictionEntity... prediction);
+    long[] insert(PredictionEntity... prediction);
 
 }

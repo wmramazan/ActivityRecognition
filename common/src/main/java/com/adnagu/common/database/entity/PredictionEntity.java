@@ -23,8 +23,7 @@ public class PredictionEntity {
     @ColumnInfo(name = "correctness")
     private int correctness;
 
-    public PredictionEntity(int id, Date date, int correctness) {
-        this.id = id;
+    public PredictionEntity(Date date, int correctness) {
         this.date = date;
         this.correctness = correctness;
     }

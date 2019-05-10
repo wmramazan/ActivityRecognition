@@ -1,12 +1,12 @@
 package com.adnagu.common.database.entity;
 
-import java.util.Date;
-
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
+import java.util.Date;
 
 /**
  * ActivityRecordEntity
@@ -14,7 +14,7 @@ import androidx.room.PrimaryKey;
  * @author ramazan.vapurcu
  * Created on 03/04/19
  */
-@Entity(tableName = "activity_record", foreignKeys = @ForeignKey(entity = ActivityEntity.class, parentColumns = "id", childColumns = "activity_id", onDelete = ForeignKey.CASCADE), indices = @Index(value = {"activity_id"}))
+@Entity(tableName = "activity_record", foreignKeys = @ForeignKey(entity = ActivityEntity.class, parentColumns = "type", childColumns = "activity_id", onDelete = ForeignKey.CASCADE), indices = @Index(value = {"activity_id"}))
 public class ActivityRecordEntity {
     @PrimaryKey(autoGenerate = true)
     private int id;

@@ -85,7 +85,7 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("CREATE TABLE IF NOT EXISTS prediction (id INTEGER NOT NULL, date INTEGER, correctness INTEGER NOT NULL, PRIMARY KEY(id))");
-            database.execSQL("CREATE TABLE IF NOT EXISTS prediction_record (id INTEGER NOT NULL, activity_id INTEGER NOT NULL, prediction_id INTEGER NOT NULL, startDate INTEGER, endDate INTEGER, correct INTEGER NOT NULL, PRIMARY KEY(id), FOREIGN KEY('activity_id') REFERENCES activity('id') ON DELETE CASCADE, FOREIGN KEY('prediction_id') REFERENCES prediction('id') ON DELETE CASCADE)");
+            database.execSQL("CREATE TABLE IF NOT EXISTS prediction_record (id INTEGER NOT NULL, activity_id INTEGER NOT NULL, prediction_id INTEGER NOT NULL, startDate INTEGER, endDate INTEGER, correct INTEGER NOT NULL, PRIMARY KEY(id), FOREIGN KEY('activity_id') REFERENCES activity(type) ON DELETE CASCADE, FOREIGN KEY('prediction_id') REFERENCES prediction(type) ON DELETE CASCADE)");
             database.execSQL("CREATE INDEX index_prediction_record_activity_id_prediction_id ON prediction_record('activity_id', 'prediction_id')");
         }
     };

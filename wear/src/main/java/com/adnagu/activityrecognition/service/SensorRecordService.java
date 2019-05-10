@@ -73,7 +73,7 @@ public class SensorRecordService extends Service implements SensorEventListener 
 
     protected void startRecording() {
         for (SensorType sensorType : SensorType.values()) {
-            Sensor sensor = sensorManager.getDefaultSensor(sensorType.id);
+            Sensor sensor = sensorManager.getDefaultSensor(sensorType.type);
             if (null == sensor)
                 Log.d(DEBUG_TAG, "Unsupported sensor: " + sensorType);
             else

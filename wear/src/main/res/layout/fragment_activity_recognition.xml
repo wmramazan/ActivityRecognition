@@ -37,7 +37,7 @@
             android:background="@color/light_grey" />
 
         <ticwear.design.widget.FloatingActionButton
-            android:id="@+id/button_activity"
+            android:type="@+type/button_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -51,7 +51,7 @@
             app:tic_fabSize="normal"/>
 
         <TextView
-            android:id="@+id/text_activity"
+            android:type="@+type/text_activity"
             style="@style/TextAppearance.Ticwear.Small"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
