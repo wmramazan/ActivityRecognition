@@ -152,6 +152,7 @@ public class SensorRecordFragment extends BaseFragment {
         Log.d(DEBUG_TAG, "Selected Activity: " + index);
         selectedActivityIndex = index;
         activityName.setText(getString(Activity.values()[index].title_res));
+        recordButton.setImageResource(Activity.values()[index].drawable_res);
         serviceIntent.putExtra(Utils.ACTIVITY_ID, selectedActivityIndex);
     }
 
