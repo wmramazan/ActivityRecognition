@@ -125,6 +125,7 @@ public abstract class BaseActivity extends WearableActivity implements BaseView 
     @Override
     public void releaseWakeLock() {
         Log.d(DEBUG_TAG, "releaseWakeLock");
-        wakeLock.release();
+        if (wakeLock.isHeld())
+            wakeLock.release();
     }
 }
