@@ -9,7 +9,7 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:type="@+type/item_activity_icon"
+        android:id="@+id/item_activity_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/list_item_icon_margin_left"
@@ -17,7 +17,7 @@
         android:contentDescription="@string/activity_icon"/>
 
     <TextView
-        android:type="@+type/item_activity_name"
+        android:id="@+id/item_activity_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"

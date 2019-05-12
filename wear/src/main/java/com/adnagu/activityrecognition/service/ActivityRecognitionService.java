@@ -11,13 +11,16 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.adnagu.activityrecognition.utils.Utils;
 import com.adnagu.common.database.AppDatabase;
 import com.adnagu.common.database.dao.PredictionDao;
 import com.adnagu.common.database.dao.PredictionRecordDao;
 import com.adnagu.common.database.entity.PredictionEntity;
 import com.adnagu.common.database.entity.PredictionRecordEntity;
+import com.adnagu.common.database.entity.SensorRecordEntity;
 import com.adnagu.common.ml.ActivityPrediction;
 import com.adnagu.common.ml.FeatureExtraction;
+import com.adnagu.common.ml.FeatureFilter;
 import com.adnagu.common.ml.SlidingWindow;
 import com.adnagu.common.model.SensorType;
 
@@ -39,8 +42,9 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
     PredictionRecordDao predictionRecordDao;
 
     SensorManager sensorManager;
-    List<List<Float>> sensorValues;
+    List<List<SensorRecordEntity>> sensorValues;
     ActivityPrediction activityPrediction;
+    FeatureFilter featureFilter;
     FeatureExtraction featureExtraction;
 
     SensorType[] sensorTypes;
@@ -78,6 +82,7 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
             startRecognition();
 
         activityPrediction = new ActivityPrediction(this);
+        featureFilter = new FeatureFilter();
         featureExtraction = new FeatureExtraction();
 
         sensorTypes = SensorType.values();
@@ -135,8 +140,11 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
             }
         }
 
-        for (float value : event.values)
-            sensorValues.get(getSensorId(event.sensor.getType())).add(value);
+        sensorValues.get(getSensorId(event.sensor.getType())).add(
+                new SensorRecordEntity(
+                        Utils.toList(event.values)
+                )
+        );
 
         lastTimeMillis = System.currentTimeMillis();
     }
@@ -148,16 +156,20 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
 
     private void processWindow() {
         new Thread(() -> {
-            List<Float> values = new ArrayList<>();
+            List<Float> featureValues = new ArrayList<>();
 
-            for (List<Float> valueList : sensorValues)
-                values.addAll(valueList);
+            for (SensorType sensorType : sensorTypes) {
+                List<List<Float>> segments = SlidingWindow.generateSegments(sensorValues.get(0), sensorType);
 
-            // Feature Extraction
+                for (List<Float> segment : segments) {
+                    featureExtraction.setFeatures(featureFilter.getFeatureArray());
+                    featureValues.addAll(featureExtraction.getFeatureValues(segment));
+                }
+            }
 
             predictionRecordDao.insert(
                     new PredictionRecordEntity(
-                            activityPrediction.predict(values),
+                            activityPrediction.predict(featureValues),
                             predictionId,
                             new Date(),
                             false

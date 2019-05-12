@@ -14,7 +14,7 @@ import java.util.Date;
  * @author ramazan.vapurcu
  * Created on 03/04/19
  */
-@Entity(tableName = "activity_record", foreignKeys = @ForeignKey(entity = ActivityEntity.class, parentColumns = "type", childColumns = "activity_id", onDelete = ForeignKey.CASCADE), indices = @Index(value = {"activity_id"}))
+@Entity(tableName = "activity_record", foreignKeys = @ForeignKey(entity = ActivityEntity.class, parentColumns = "id", childColumns = "activity_id", onDelete = ForeignKey.CASCADE), indices = @Index(value = {"activity_id"}))
 public class ActivityRecordEntity {
     @PrimaryKey(autoGenerate = true)
     private int id;

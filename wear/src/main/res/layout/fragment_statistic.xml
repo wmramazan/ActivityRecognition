@@ -52,7 +52,7 @@
                 android:text="@string/activity_records" />
 
             <TextView
-                android:type="@+type/text_activity_records"
+                android:id="@+id/text_activity_records"
                 style="@style/TextAppearance.Ticwear.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
                 android:text="@string/sensor_records" />
 
             <TextView
-                android:type="@+type/text_sensor_records"
+                android:id="@+id/text_sensor_records"
                 style="@style/TextAppearance.Ticwear.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -104,7 +104,7 @@
                 android:text="@string/database_size" />
 
             <TextView
-                android:type="@+type/text_database_size"
+                android:id="@+id/text_database_size"
                 style="@style/TextAppearance.Ticwear.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

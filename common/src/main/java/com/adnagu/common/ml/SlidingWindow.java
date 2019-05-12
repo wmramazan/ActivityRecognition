@@ -87,7 +87,7 @@ public class SlidingWindow {
             onWindowListener.onWindowStart();
 
             for (SensorType sensorType : sensorTypes) {
-                List<List<Float>> segments = generateSegments(sensorType);
+                List<List<Float>> segments = generateSegments(getWindow(sensorType.ordinal()), sensorType);
 
                 for (List<Float> segment : segments)
                     onWindowListener.onWindowSegment(segment);
@@ -107,7 +107,6 @@ public class SlidingWindow {
 
             sensorRecords.add(sensorRecordEntities);
         }
-
 
         windowLastIndex = sensorRecords.get(0).size();
 
@@ -130,12 +129,10 @@ public class SlidingWindow {
         windowEndIndex = 0;
     }
 
-    private List<List<Float>> generateSegments(SensorType sensorType) {
+    public static List<List<Float>> generateSegments(List<SensorRecordEntity> window, SensorType sensorType) {
         List<List<Float>> segments = new ArrayList<>();
         for (char ignored : sensorType.values)
             segments.add(new ArrayList<>());
-
-        List<SensorRecordEntity> window = getWindow(sensorType.ordinal());
 
         for (SensorRecordEntity sensorRecordEntity : window) {
             List<Float> values = sensorRecordEntity.getValues();

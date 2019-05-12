@@ -15,7 +15,7 @@
 
         <ticwear.design.widget.ScalableTextView
             style="?android:windowTitleStyle"
-            android:type="@android:type/title"
+            android:id="@android:id/title"
             android:layout_width="match_parent"
             android:layout_height="32dp"
             android:gravity="center"
@@ -28,7 +28,7 @@
 
     <ticwear.design.widget.TicklableRecyclerView
         style="@style/Widget.Ticwear.ListView"
-        android:type="@+type/list"
+        android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

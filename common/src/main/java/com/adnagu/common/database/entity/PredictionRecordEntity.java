@@ -15,8 +15,8 @@ import java.util.Date;
  * Created on 4/24/2019
  */
 @Entity(tableName = "prediction_record", foreignKeys = {
-        @ForeignKey(entity = ActivityEntity.class, parentColumns = "type", childColumns = "activity_id", onDelete = ForeignKey.CASCADE),
-        @ForeignKey(entity = PredictionEntity.class, parentColumns = "type", childColumns = "prediction_id", onDelete = ForeignKey.CASCADE)
+        @ForeignKey(entity = ActivityEntity.class, parentColumns = "id", childColumns = "activity_id", onDelete = ForeignKey.CASCADE),
+        @ForeignKey(entity = PredictionEntity.class, parentColumns = "id", childColumns = "prediction_id", onDelete = ForeignKey.CASCADE)
 }, indices = @Index(value = {"activity_id", "prediction_id"}))
 public class PredictionRecordEntity {
     @PrimaryKey

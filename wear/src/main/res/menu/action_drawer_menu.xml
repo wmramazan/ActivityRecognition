@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:type="@+type/menu_delete_last_record"
+    <item android:id="@+id/menu_delete_last_record"
         android:icon="@drawable/ic_delete"
         android:title="@string/delete_last_record"/>
-    <item android:type="@+type/menu_save_arff"
+    <item android:id="@+id/menu_save_arff"
         android:icon="@drawable/ic_save"
         android:title="@string/save_as_arff"/>
-    <item android:type="@+type/menu_reset"
+    <item android:id="@+id/menu_reset"
         android:icon="@drawable/ic_reset"
         android:title="@string/reset_database"/>
 </menu>

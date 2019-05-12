@@ -3,6 +3,7 @@ package com.adnagu.common.database.entity;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -16,8 +17,8 @@ import java.util.List;
  * Created on 10/2/2018
  */
 @Entity(tableName = "sensor_record", foreignKeys = {
-        @ForeignKey(entity = ActivityRecordEntity.class, parentColumns = "type", childColumns = "activity_record_id", onDelete = ForeignKey.CASCADE),
-        @ForeignKey(entity = SensorEntity.class, parentColumns = "type", childColumns = "sensor_id", onDelete = ForeignKey.CASCADE)
+        @ForeignKey(entity = ActivityRecordEntity.class, parentColumns = "id", childColumns = "activity_record_id", onDelete = ForeignKey.CASCADE),
+        @ForeignKey(entity = SensorEntity.class, parentColumns = "id", childColumns = "sensor_id", onDelete = ForeignKey.CASCADE)
 }, indices = @Index(value = {"activity_record_id", "sensor_id"}))
 public class SensorRecordEntity {
     @PrimaryKey(autoGenerate = true)
@@ -44,6 +45,11 @@ public class SensorRecordEntity {
         this.timestamp = timestamp;
         this.sensorId = sensorId;
         this.activityRecordId = activityRecordId;
+    }
+
+    @Ignore
+    public SensorRecordEntity(List<Float> values) {
+        this.values = values;
     }
 
     public int getId() {
