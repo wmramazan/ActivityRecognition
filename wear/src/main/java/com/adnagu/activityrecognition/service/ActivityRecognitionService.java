@@ -67,6 +67,8 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
 
     @Override
     public void onDestroy() {
+        stopRecognition();
+
         super.onDestroy();
     }
 

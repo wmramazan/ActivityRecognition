@@ -66,6 +66,8 @@ public class ActivityRecognitionFragment extends BaseFragment {
 
     public void startRecognition() {
         if (!isPredicting()) {
+            vibrate();
+
             getContext().startService(serviceIntent);
             activityButton.setShowProgress(true);
             activityText.setText(R.string.perform_activity);
@@ -77,6 +79,8 @@ public class ActivityRecognitionFragment extends BaseFragment {
 
     public void stopRecognition() {
         if (isPredicting()) {
+            vibrate();
+
             getContext().stopService(serviceIntent);
             activityButton.setShowProgress(false);
             activityText.setText(R.string.click_to_recognize);
