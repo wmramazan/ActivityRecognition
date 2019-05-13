@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:elevation="0dp"
-            android:src="@drawable/ic_activity_recognition"
+            android:src="@drawable/ic_unknown"
             android:tint="@color/white"
             android:clickable="true"
             android:focusable="true"

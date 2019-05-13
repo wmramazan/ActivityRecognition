@@ -1,12 +1,7 @@
 package com.adnagu.activityrecognition.ui.section;
 
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,21 +9,7 @@ import android.widget.TextView;
 
 import com.adnagu.activityrecognition.R;
 import com.adnagu.activityrecognition.common.BaseFragment;
-import com.adnagu.activityrecognition.service.SensorRecordService;
-import com.adnagu.activityrecognition.utils.Utils;
-import com.adnagu.common.database.AppDatabase;
-import com.adnagu.common.database.dao.ActivityRecordDao;
-import com.adnagu.common.database.dao.SensorRecordDao;
-import com.adnagu.common.database.entity.ActivityRecordEntity;
-import com.adnagu.common.ml.ActivityPrediction;
-import com.adnagu.common.ml.FeatureExtraction;
-import com.adnagu.common.ml.FeatureFilter;
-import com.adnagu.common.ml.SlidingWindow;
-import com.adnagu.common.model.Activity;
-import com.adnagu.common.utils.listener.OnWindowListener;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.adnagu.activityrecognition.service.ActivityRecognitionService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,31 +28,16 @@ public class ActivityRecognitionFragment extends BaseFragment {
 
     Intent serviceIntent;
 
-    ActivityRecordDao activityRecordDao;
-    SensorRecordDao sensorRecordDao;
-
-    ActivityRecordEntity activityRecord;
-
-    ActivityPrediction activityPrediction;
-    SlidingWindow slidingWindow;
-    FeatureExtraction featureExtraction;
-    FeatureFilter featureFilter;
-
-    Handler handler;
-    Vibrator vibrator;
-
-    List<Float> featureValues;
-
-    boolean recording;
+    boolean predicting;
 
     @BindView(R.id.button_activity)
     FloatingActionButton activityButton;
 
-    @OnClick(R.id.button_activity) void toggleRecording() {
-        if (isRecording())
-            stopRecording();
+    @OnClick(R.id.button_activity) void toggleRecognition() {
+        if (isPredicting())
+            stopRecognition();
         else
-            startRecording();
+            startRecognition();
     }
 
     @BindView(R.id.text_activity)
@@ -86,38 +52,7 @@ public class ActivityRecognitionFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_activity_recognition, container, false);
         ButterKnife.bind(this, view);
 
-        serviceIntent = new Intent(getContext(), SensorRecordService.class);
-        serviceIntent.putExtra(Utils.TEST, true);
-
-        handler = new Handler();
-        vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
-
-        AppDatabase appDatabase = AppDatabase.getInstance(getContext());
-        activityRecordDao = appDatabase.activityRecordDao();
-        sensorRecordDao = appDatabase.sensorRecordDao();
-
-        activityPrediction = new ActivityPrediction(getContext());
-        featureExtraction = new FeatureExtraction();
-        featureFilter = new FeatureFilter();
-
-        slidingWindow = new SlidingWindow(sensorRecordDao, new OnWindowListener() {
-            @Override
-            public void onWindowStart() {
-                featureFilter.init();
-            }
-
-            @Override
-            public void onWindowSegment(List<Float> segment) {
-                featureExtraction.setFeatures(featureFilter.getFeatureArray());
-                featureValues.addAll(featureExtraction.getFeatureValues(segment));
-            }
-
-            @Override
-            public void onWindowFinish() {
-                activityPrediction.addInstance(featureValues);
-                featureValues.clear();
-            }
-        });
+        serviceIntent = new Intent(getContext(), ActivityRecognitionService.class);
 
         return view;
     }
@@ -126,22 +61,22 @@ public class ActivityRecognitionFragment extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
 
-        stopRecording();
+        stopRecognition();
     }
 
-    public void startRecording() {
-        if (!isRecording()) {
+    public void startRecognition() {
+        if (!isPredicting()) {
             getContext().startService(serviceIntent);
             activityButton.setShowProgress(true);
             activityText.setText(R.string.perform_activity);
 
             acquireWakeLock();
-            recording = true;
+            predicting = true;
         }
     }
 
-    public void stopRecording() {
-        if (isRecording()) {
+    public void stopRecognition() {
+        if (isPredicting()) {
             getContext().stopService(serviceIntent);
             activityButton.setShowProgress(false);
             activityText.setText(R.string.click_to_recognize);
@@ -149,7 +84,7 @@ public class ActivityRecognitionFragment extends BaseFragment {
             predict();
 
             releaseWakeLock();
-            recording = false;
+            predicting = false;
         }
     }
 
@@ -164,7 +99,7 @@ public class ActivityRecognitionFragment extends BaseFragment {
     }
 
     private void predict() {
-        activityText.setText(R.string.predicting);
+        /*activityText.setText(R.string.predicting);
         activityPrediction.clear();
 
         new Thread(() -> {
@@ -181,18 +116,10 @@ public class ActivityRecognitionFragment extends BaseFragment {
                 activityButton.setImageResource(activity.drawable_res);
             });
             vibrate();
-        }).start();
+        }).start();*/
     }
 
-    public void vibrate() {
-        if (Build.VERSION.SDK_INT >= 26) {
-            vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
-        } else {
-            vibrator.vibrate(200);
-        }
-    }
-
-    public boolean isRecording() {
-        return recording;
+    public boolean isPredicting() {
+        return predicting;
     }
 }

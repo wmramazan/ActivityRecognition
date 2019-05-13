@@ -9,4 +9,5 @@ package com.adnagu.activityrecognition.common;
 public interface BaseView {
     void acquireWakeLock();
     void releaseWakeLock();
+    void vibrate();
 }

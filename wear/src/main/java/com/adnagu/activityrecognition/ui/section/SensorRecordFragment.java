@@ -102,6 +102,7 @@ public class SensorRecordFragment extends BaseFragment {
     public void startRecording() {
         if (!isRecording()) {
             recording = true;
+            vibrate();
 
             getContext().startService(serviceIntent);
             recordButton.setShowProgress(true);
@@ -114,6 +115,7 @@ public class SensorRecordFragment extends BaseFragment {
     public void stopRecording() {
         if (isRecording()) {
             recording = false;
+            vibrate();
 
             getContext().stopService(serviceIntent);
             recordButton.setShowProgress(false);

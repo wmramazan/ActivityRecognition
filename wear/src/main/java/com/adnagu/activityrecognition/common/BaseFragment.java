@@ -31,4 +31,9 @@ public abstract class BaseFragment extends Fragment implements BaseView, Ambient
     public void releaseWakeLock() {
         baseActivity.releaseWakeLock();
     }
+
+    @Override
+    public void vibrate() {
+        baseActivity.vibrate();
+    }
 }

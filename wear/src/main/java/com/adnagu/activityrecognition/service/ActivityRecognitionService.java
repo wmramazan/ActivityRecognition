@@ -16,12 +16,12 @@ import com.adnagu.common.database.AppDatabase;
 import com.adnagu.common.database.dao.PredictionDao;
 import com.adnagu.common.database.dao.PredictionRecordDao;
 import com.adnagu.common.database.entity.PredictionEntity;
-import com.adnagu.common.database.entity.PredictionRecordEntity;
 import com.adnagu.common.database.entity.SensorRecordEntity;
 import com.adnagu.common.ml.ActivityPrediction;
 import com.adnagu.common.ml.FeatureExtraction;
 import com.adnagu.common.ml.FeatureFilter;
 import com.adnagu.common.ml.SlidingWindow;
+import com.adnagu.common.model.Activity;
 import com.adnagu.common.model.SensorType;
 
 import java.util.ArrayList;
@@ -75,6 +75,7 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
         predictionDao = appDatabase.predictionDao();
         predictionRecordDao = appDatabase.predictionRecordDao();
 
+        sensorTypes = SensorType.values();
         sensorValues = new ArrayList<>();
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -84,8 +85,6 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
         activityPrediction = new ActivityPrediction(this);
         featureFilter = new FeatureFilter();
         featureExtraction = new FeatureExtraction();
-
-        sensorTypes = SensorType.values();
 
         windowLength = SlidingWindow.WINDOW_LENGTH * 1000;
         windowDiffLength = windowLength * (100 - SlidingWindow.OVERLAPPING) / 100;
@@ -128,7 +127,9 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (lastTimeMillis != 0) {
+        if (lastTimeMillis == 0) {
+            lastTimeMillis = System.currentTimeMillis();
+        } else {
             if (firstWindow) {
                 if (System.currentTimeMillis() - lastTimeMillis >= windowLength) {
                     processWindow();
@@ -145,8 +146,6 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
                         Utils.toList(event.values)
                 )
         );
-
-        lastTimeMillis = System.currentTimeMillis();
     }
 
     @Override
@@ -155,29 +154,31 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
     }
 
     private void processWindow() {
-        new Thread(() -> {
-            List<Float> featureValues = new ArrayList<>();
+        lastTimeMillis = System.currentTimeMillis();
+        List<Float> featureValues = new ArrayList<>();
 
-            for (SensorType sensorType : sensorTypes) {
-                List<List<Float>> segments = SlidingWindow.generateSegments(sensorValues.get(0), sensorType);
+        for (SensorType sensorType : sensorTypes) {
+            List<List<Float>> segments = SlidingWindow.generateSegments(sensorValues.get(0), sensorType);
 
-                for (List<Float> segment : segments) {
-                    featureExtraction.setFeatures(featureFilter.getFeatureArray());
-                    featureValues.addAll(featureExtraction.getFeatureValues(segment));
-                }
+            for (List<Float> segment : segments) {
+                featureExtraction.setFeatures(featureFilter.getFeatureArray());
+                featureValues.addAll(featureExtraction.getFeatureValues(segment));
             }
+        }
 
-            predictionRecordDao.insert(
+        int prediction = activityPrediction.predict(featureValues);
+        Log.d(DEBUG_TAG, "Prediction: " + Activity.values()[prediction].name());
+
+            /*predictionRecordDao.insert(
                     new PredictionRecordEntity(
-                            activityPrediction.predict(featureValues),
+                            prediction,
                             predictionId,
                             new Date(),
                             false
                     )
-            );
+            );*/
 
-            clearWindow();
-        }).start();
+        clearWindow();
     }
 
     private void clearWindow() {

@@ -1,18 +1,22 @@
 package com.adnagu.activityrecognition.common;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.adnagu.activityrecognition.R;
-
 import androidx.core.content.ContextCompat;
 import androidx.wear.widget.drawer.WearableDrawerLayout;
+
+import com.adnagu.activityrecognition.R;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -31,6 +35,7 @@ public abstract class BaseActivity extends WearableActivity implements BaseView 
     protected BaseFragment fragment;
 
     protected PowerManager.WakeLock wakeLock;
+    protected Vibrator vibrator;
 
     @BindView(R.id.drawer_layout)
     WearableDrawerLayout drawerLayout;
@@ -61,6 +66,7 @@ public abstract class BaseActivity extends WearableActivity implements BaseView 
 
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ActivityRecognition::WakeLock");
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     @Override
@@ -127,5 +133,14 @@ public abstract class BaseActivity extends WearableActivity implements BaseView 
         Log.d(DEBUG_TAG, "releaseWakeLock");
         if (wakeLock.isHeld())
             wakeLock.release();
+    }
+
+    @Override
+    public void vibrate() {
+        if (Build.VERSION.SDK_INT >= 26) {
+            vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            vibrator.vibrate(200);
+        }
     }
 }
