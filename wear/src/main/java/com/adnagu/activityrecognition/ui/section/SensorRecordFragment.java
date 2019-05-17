@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
@@ -50,6 +51,9 @@ public class SensorRecordFragment extends BaseFragment {
 
     @BindView(R.id.text_record)
     TextView recordText;
+
+    @BindView(R.id.layout_activity)
+    LinearLayout activityLayout;
 
     @OnClick(R.id.text_activity_name) void chooseActivity() {
         activityName.setEnabled(false);
@@ -128,12 +132,14 @@ public class SensorRecordFragment extends BaseFragment {
     public void onEnterAmbient() {
         recordText.getPaint().setAntiAlias(false);
         recordButton.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), android.R.color.black)));
+        activityLayout.setBackground(null);
     }
 
     @Override
     public void onExitAmbient() {
         recordText.getPaint().setAntiAlias(true);
         recordButton.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.wear_primary)));
+        activityLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.view_activity));
     }
 
     protected void forceRippleAnimation(View view) {
@@ -160,10 +166,8 @@ public class SensorRecordFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == android.app.Activity.RESULT_OK) {
-            switch (requestCode) {
-                case Utils.RequestCode.CHOOSE_ACTIVITY:
-                    setActivity(data.getIntExtra(Utils.ACTIVITY_ID, 0));
-                    break;
+            if (requestCode == Utils.RequestCode.CHOOSE_ACTIVITY) {
+                setActivity(data.getIntExtra(Utils.ACTIVITY_ID, 0));
             }
         }
     }
