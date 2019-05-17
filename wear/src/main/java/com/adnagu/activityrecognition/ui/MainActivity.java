@@ -1,11 +1,19 @@
 package com.adnagu.activityrecognition.ui;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.wearable.activity.ConfirmationActivity;
 import android.view.MenuItem;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.wear.widget.drawer.WearableActionDrawerView;
+import androidx.wear.widget.drawer.WearableNavigationDrawerView;
 
 import com.adnagu.activityrecognition.R;
 import com.adnagu.activityrecognition.adapter.NavigationAdapter;
@@ -19,10 +27,9 @@ import com.adnagu.common.database.AppDatabase;
 import com.adnagu.common.database.dao.ActivityRecordDao;
 import com.adnagu.common.database.dao.SensorRecordDao;
 import com.adnagu.common.ml.ArffFile;
+import com.adnagu.common.model.Activity;
 import com.adnagu.common.utils.DatabaseUtils;
 
-import androidx.wear.widget.drawer.WearableActionDrawerView;
-import androidx.wear.widget.drawer.WearableNavigationDrawerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import ticwear.design.app.AlertDialog;
@@ -86,6 +93,15 @@ public class MainActivity extends BaseActivity implements
 
         DatabaseUtils.prepareDatabase(this);
         handler = new Handler();
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                activityRecognitionFragment.setActivity(
+                        Activity.values()[intent.getIntExtra(Utils.ACTIVITY_ID, 0)]
+                );
+            }
+        }, new IntentFilter(Utils.FILTER_ACTIVITY));
     }
 
     @Override

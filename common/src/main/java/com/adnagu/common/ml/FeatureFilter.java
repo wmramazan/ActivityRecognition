@@ -3,6 +3,7 @@ package com.adnagu.common.ml;
 import com.adnagu.common.model.Feature;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
  */
 public class FeatureFilter {
 
-    private final String FEATURE_FILTER = "1,2,4,5,8,10,12,14,15,18,21,23,24,27,34,35,37,43,44,47,48,56,57,61,62,66,67,73,74,76,81,92,93,94,95,96,99,103,105,106,109,114,119,122,125,126,127,128,131,134,139,140,141,145,147,151,152,153,154,158,165,170,171,180,183,185,196,205,212,218,229,231";
+    private final String FEATURE_FILTER = "92,93,99,95,57,100,101,56,74,62,75,73,96,69,80,17,66,8,9,23,60,67,44,165,4,173,174,164,22,21,166,43,61,18,179,160,88,10,79,105,31,54,171,114,158,5,34,122,127,124";
     private final String FILTER_SEPARATOR = ",";
 
     private int[] selected_features;
@@ -39,6 +40,8 @@ public class FeatureFilter {
 
         for (int i = 0; i < filter.length; i++)
             selected_features[i] = Integer.valueOf(filter[i]);
+
+        Arrays.sort(selected_features);
 
         init();
     }

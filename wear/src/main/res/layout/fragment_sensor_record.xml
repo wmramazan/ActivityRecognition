@@ -18,66 +18,58 @@
         android:gravity="center"
         app:boxedEdges="all">
 
-        <LinearLayout
-            android:id="@+id/active_content"
+        <ImageView
+            style="@style/WindowIcon.Ticwear"
+            android:src="@drawable/ic_record"
+            android:contentDescription="@string/section_sensor_record"/>
+
+        <ticwear.design.widget.ScalableTextView
+            style="@style/TextAppearance.Ticwear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:text="@string/section_sensor_record"/>
 
-            <ImageView
-                style="@style/WindowIcon.Ticwear"
-                android:src="@drawable/ic_record"
-                android:contentDescription="@string/section_sensor_record"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_margin="@dimen/default_margin"
+            android:background="@color/light_grey" />
 
-            <ticwear.design.widget.ScalableTextView
-                style="@style/TextAppearance.Ticwear"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:background="@drawable/view_activity"
+            android:orientation="horizontal"
+            android:clipToPadding="false"
+            android:clipChildren="false">
+
+            <ticwear.design.widget.FloatingActionButton
+                android:id="@+id/button_record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:elevation="0dp"
+                android:src="@drawable/ic_using_computer"
+                android:tint="@android:color/white"
+                android:clickable="true"
+                android:focusable="true"
+                app:tic_borderWidth="0dp"
+                app:tic_circularDrawableStyle="@style/Widget.Ticwear.CircularProgressDrawable"
+                app:tic_fabSize="mini"/>
+
+            <TextView
+                android:id="@+id/text_activity_name"
+                style="@style/TextAppearance.Ticwear.Caption"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/section_sensor_record"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_margin="@dimen/default_margin"
-                android:background="@color/light_grey" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/default_margin"
-                android:background="@drawable/view_activity"
-                android:orientation="horizontal"
-                android:clipToPadding="false"
-                android:clipChildren="false">
-
-                <ticwear.design.widget.FloatingActionButton
-                    android:id="@+id/button_record"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:elevation="0dp"
-                    android:src="@drawable/ic_using_computer"
-                    android:tint="@android:color/white"
-                    android:clickable="true"
-                    android:focusable="true"
-                    app:tic_borderWidth="0dp"
-                    app:tic_circularDrawableStyle="@style/Widget.Ticwear.CircularProgressDrawable"
-                    app:tic_fabSize="mini"/>
-
-                <TextView
-                    android:id="@+id/text_activity_name"
-                    style="@style/TextAppearance.Ticwear.Caption"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_gravity="center_vertical"
-                    android:ellipsize="end"
-                    android:text="@string/activity_playing_video_game"
-                    android:layout_marginEnd="@dimen/activity_name_margin_right"
-                    app:tic_scaleFactor="0.5"/>
-
-            </LinearLayout>
+                android:layout_gravity="center_vertical"
+                android:ellipsize="end"
+                android:text="@string/activity_playing_video_game"
+                android:layout_marginEnd="@dimen/activity_name_margin_right"
+                app:tic_scaleFactor="0.5"/>
 
         </LinearLayout>
 

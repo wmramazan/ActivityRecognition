@@ -1,15 +1,19 @@
 package com.adnagu.activityrecognition.ui.section;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import com.adnagu.activityrecognition.R;
 import com.adnagu.activityrecognition.common.BaseFragment;
 import com.adnagu.activityrecognition.service.ActivityRecognitionService;
+import com.adnagu.common.model.Activity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -94,12 +98,12 @@ public class ActivityRecognitionFragment extends BaseFragment {
 
     @Override
     public void onEnterAmbient() {
-
+        activityButton.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), android.R.color.black)));
     }
 
     @Override
     public void onExitAmbient() {
-
+        activityButton.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.wear_primary)));
     }
 
     private void predict() {
@@ -121,6 +125,11 @@ public class ActivityRecognitionFragment extends BaseFragment {
             });
             vibrate();
         }).start();*/
+    }
+
+    public void setActivity(Activity activity) {
+        activityText.setText(activity.title_res);
+        activityButton.setImageResource(activity.drawable_res);
     }
 
     public boolean isPredicting() {

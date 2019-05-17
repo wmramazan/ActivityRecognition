@@ -1,6 +1,7 @@
 package com.adnagu.activityrecognition.ui.section;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Bundle;
@@ -8,8 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import com.adnagu.activityrecognition.R;
 import com.adnagu.activityrecognition.common.BaseFragment;
@@ -39,9 +41,6 @@ public class SensorRecordFragment extends BaseFragment {
 
     int selectedActivityIndex;
     boolean recording;
-
-    @BindView(R.id.active_content)
-    LinearLayout active_content;
 
     @BindView(R.id.button_record)
     FloatingActionButton recordButton;
@@ -127,14 +126,14 @@ public class SensorRecordFragment extends BaseFragment {
 
     @Override
     public void onEnterAmbient() {
-        active_content.setVisibility(View.GONE);
         recordText.getPaint().setAntiAlias(false);
+        recordButton.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), android.R.color.black)));
     }
 
     @Override
     public void onExitAmbient() {
-        active_content.setVisibility(View.VISIBLE);
         recordText.getPaint().setAntiAlias(true);
+        recordButton.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.wear_primary)));
     }
 
     protected void forceRippleAnimation(View view) {

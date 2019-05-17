@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.adnagu.activityrecognition.utils.Utils;
 import com.adnagu.common.database.AppDatabase;
@@ -38,14 +39,17 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
 
     private final String DEBUG_TAG = getClass().getName();
 
+    LocalBroadcastManager broadcastManager;
+    Intent intent;
+
     PredictionDao predictionDao;
     PredictionRecordDao predictionRecordDao;
 
     SensorManager sensorManager;
     List<List<SensorRecordEntity>> sensorValues;
-    ActivityPrediction activityPrediction;
     FeatureFilter featureFilter;
     FeatureExtraction featureExtraction;
+    ActivityPrediction activityPrediction;
 
     SensorType[] sensorTypes;
     long lastTimeMillis;
@@ -73,6 +77,9 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
     }
 
     protected void init() {
+        broadcastManager = LocalBroadcastManager.getInstance(getBaseContext());
+        intent = new Intent(Utils.FILTER_ACTIVITY);
+
         AppDatabase appDatabase = AppDatabase.getInstance(this);
         predictionDao = appDatabase.predictionDao();
         predictionRecordDao = appDatabase.predictionRecordDao();
@@ -84,9 +91,9 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
         if (null != sensorManager)
             startRecognition();
 
-        activityPrediction = new ActivityPrediction(this);
         featureFilter = new FeatureFilter();
         featureExtraction = new FeatureExtraction();
+        activityPrediction = new ActivityPrediction(this, featureFilter);
 
         windowLength = SlidingWindow.WINDOW_LENGTH * 1000;
         windowDiffLength = windowLength * (100 - SlidingWindow.OVERLAPPING) / 100;
@@ -118,7 +125,8 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
     }
 
     protected void stopRecognition() {
-        sensorManager.unregisterListener(this);
+        if (sensorManager != null)
+            sensorManager.unregisterListener(this);
     }
 
     @Nullable
@@ -156,36 +164,48 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
     }
 
     private void processWindow() {
+        featureFilter.init();
         lastTimeMillis = System.currentTimeMillis();
         List<Float> featureValues = new ArrayList<>();
 
         for (SensorType sensorType : sensorTypes) {
-            List<List<Float>> segments = SlidingWindow.generateSegments(sensorValues.get(0), sensorType);
+            List<List<Float>> segments = SlidingWindow.generateSegments(sensorValues.get(sensorType.ordinal()), sensorType);
 
             for (List<Float> segment : segments) {
                 featureExtraction.setFeatures(featureFilter.getFeatureArray());
-                featureValues.addAll(featureExtraction.getFeatureValues(segment));
+                List<Float> values = featureExtraction.getFeatureValues(segment);
+                featureValues.addAll(values);
             }
         }
 
         int prediction = activityPrediction.predict(featureValues);
-        Log.d(DEBUG_TAG, "Prediction: " + Activity.values()[prediction].name());
 
-            /*predictionRecordDao.insert(
-                    new PredictionRecordEntity(
-                            prediction,
-                            predictionId,
-                            new Date(),
-                            false
-                    )
-            );*/
+        if (prediction != -1) {
+            Log.d(DEBUG_TAG, "Prediction: " + Activity.values()[prediction].name());
+
+            intent.putExtra(Utils.ACTIVITY_ID, prediction);
+            broadcastManager.sendBroadcast(intent);
+        }
+
+        /*predictionRecordDao.insert(
+                new PredictionRecordEntity(
+                        prediction,
+                        predictionId,
+                        new Date(),
+                        false
+                )
+        );*/
 
         clearWindow();
     }
 
     private void clearWindow() {
-        for (int i = 0; i < sensorTypes.length; i++)
-            sensorValues.set(i, sensorValues.get(i).subList(0, windowIndexAddition));
+        try {
+            for (int i = 0; i < sensorTypes.length; i++)
+                sensorValues.set(i, sensorValues.get(i).subList(windowIndexAddition, sensorValues.get(i).size()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private int getSensorId(int sensorType) {

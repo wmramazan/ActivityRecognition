@@ -35,7 +35,6 @@ public class ActivityPrediction {
 
     public ActivityPrediction(Context context) {
         attributes = new ArrayList<>();
-        predictions = new int[Activity.values().length];
 
         for (SensorType sensorType : SensorType.values())
             for (char value : sensorType.values)
@@ -43,6 +42,27 @@ public class ActivityPrediction {
                     attributes.add(
                             new Attribute(sensorType.prefix + "_" + feature.name() + "_" + value)
                     );
+
+        init(context);
+    }
+
+    public ActivityPrediction(Context context, FeatureFilter filter) {
+        attributes = new ArrayList<>();
+
+        filter.init();
+        for (SensorType sensorType : SensorType.values())
+            for (char value : sensorType.values)
+                for (Feature feature : Feature.values())
+                    if (filter.isValidFeature())
+                        attributes.add(
+                                new Attribute(sensorType.prefix + "_" + feature.name() + "_" + value)
+                        );
+
+        init(context);
+    }
+
+    private void init(Context context) {
+        predictions = new int[Activity.values().length];
 
         List<String> activityList = new ArrayList<>();
         for (Activity activity : Activity.values())
@@ -55,7 +75,7 @@ public class ActivityPrediction {
 
         try {
             classifier = (Classifier) SerializationHelper.read(
-                    context.getResources().openRawResource(R.raw.naive_bayes)
+                    context.getResources().openRawResource(R.raw.smo)
             );
         } catch (Exception e) {
             e.printStackTrace();

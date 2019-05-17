@@ -18,6 +18,8 @@ public class Utils {
     public static final String ACTIVITY_ID = "ACTIVITY_ID";
     public static final String TEST = "TEST";
 
+    public static final String FILTER_ACTIVITY = "ACTIVITY";
+
     public class RequestCode {
         public static final int CHOOSE_ACTIVITY = 1;
     }
