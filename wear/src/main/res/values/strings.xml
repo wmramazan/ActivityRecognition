@@ -5,6 +5,7 @@
     <string name="section_activity_recognition">Activity Recognition</string>
     <string name="section_sensor_record">Sensor Record</string>
     <string name="section_statistic">Statistic</string>
+    <string name="daily_predictions">Daily Predictions</string>
 
     <string name="actions">Actions</string>
 
@@ -39,4 +40,7 @@
 
     <string name="text_long_content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim type est laborum.</string>
     <string name="title_activity_list">ListActivity</string>
+    <string name="previous_day">Previous Day</string>
+    <string name="next_day">Next Day</string>
+    <string name="activity_icon">Activity Icon</string>
 </resources>

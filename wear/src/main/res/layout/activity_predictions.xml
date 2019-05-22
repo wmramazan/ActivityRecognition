@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/wear_primary_darken"
+    tools:ignore="missingPrefix"
+    tools:context=".ui.PredictionsActivity"
+    tools:deviceIds="wear">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.wear.widget.BoxInsetLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/box_inset_layout_padding">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/inner_frame_layout_padding"
+                android:gravity="center"
+                app:boxedEdges="all">
+
+                <ticwear.design.widget.ScalableTextView
+                    style="@style/TextAppearance.Ticwear"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/daily_predictions"/>
+
+                <ticwear.design.widget.ScalableTextView
+                    android:id="@+id/text_prediction_day"
+                    style="@style/TextAppearance.Ticwear.Small"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="05/20/2019"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/image_back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_back"
+                        android:tint="@color/white"
+                        android:layout_alignParentStart="true"
+                        android:contentDescription="@string/previous_day" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="2.5dp"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginEnd="24dp"
+                        android:background="@color/white"
+                        android:layout_centerInParent="true"/>
+
+                    <ImageView
+                        android:id="@+id/image_forward"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_forward"
+                        android:tint="@color/white"
+                        android:layout_alignParentEnd="true"
+                        android:contentDescription="@string/next_day" />
+
+                </RelativeLayout>
+
+                <GridLayout
+                    android:id="@+id/grid_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:useDefaultMargins="true"
+                    android:rowCount="2"
+                    android:columnCount="2"
+                    android:orientation="horizontal"/>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp" />
+
+            </LinearLayout>
+
+        </androidx.wear.widget.BoxInsetLayout>
+
+    </ScrollView>
+
+</androidx.drawerlayout.widget.DrawerLayout>
