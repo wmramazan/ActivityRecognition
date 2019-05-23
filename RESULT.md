@@ -286,6 +286,56 @@ Ranked attributes:
  1.08915     122 gyro_quadraticMean_x
  1.087892    127 gyro_medianBottom_x
  1.082995    124 gyro_variance_x
+ 1.082995    123 gyro_std_x
+ 1.082995    130 gyro_skewness_x
+ 1.082995    129 gyro_popVariance_x
+ 1.082863     30 acc_mean_z
+ 1.082374    140 gyro_medianBottom_y
+ 1.077206      1 acc_min_x
+ 1.076135    113 mag_medianMiddle_a
+ 1.075883    178 gra_medianMiddle_y
+ 1.072163      6 acc_std_x
+ 1.072163      7 acc_variance_x
+ 1.071852     12 acc_popVariance_x
+ 1.071852     13 acc_skewness_x
+ 1.067049    157 gra_min_x
+ 1.066844    151 gyro_medianTop_z
+ 1.063035    106 mag_max_a
+ 1.060145    183 gra_min_z
+ 1.059553    135 gyro_quadraticMean_y
+ 1.058515     86 mag_medianTop_y
+ 1.058039    137 gyro_variance_y
+ 1.058039    136 gyro_std_y
+ 1.058039    142 gyro_popVariance_y
+ 1.058039    143 gyro_skewness_y
+ 1.053684    112 mag_medianTop_a
+ 1.046879     35 acc_medianMiddle_z
+ 1.02666     190 gra_medianTop_z
+ 1.026317    153 gyro_medianBottom_z
+ 1.014454     47 acc_medianTop_a
+ 1.011201    125 gyro_medianTop_x
+ 1.010948     49 acc_medianBottom_a
+ 1.007177     82 mag_mean_y
+ 1.001429    177 gra_medianTop_y
+ 1.000765     87 mag_medianMiddle_y
+ 0.999817    109 mag_quadraticMean_a
+ 0.991896    148 gyro_quadraticMean_z
+ 0.990665      3 acc_range_x
+ 0.990488    150 gyro_variance_z
+ 0.990488    149 gyro_std_z
+ 0.990488    155 gyro_popVariance_z
+ 0.990488    156 gyro_skewness_z
+ 0.987417    108 mag_mean_a
+ 0.982765     52 acc_skewness_a
+ 0.982765     51 acc_popVariance_a
+ 0.982765     45 acc_std_a
+ 0.982765     46 acc_variance_a
+ 0.979581     36 acc_medianBottom_z
+ 0.970334    186 gra_mean_z
+ 0.968743     83 mag_quadraticMean_y
+ 0.96825      70 mag_quadraticMean_x
+ 0.945711    187 gra_quadraticMean_z
+ 0.939843    191 gra_medianMiddle_z
 ```
 
 
@@ -297,13 +347,13 @@ Ranked attributes:
 |:--------------------:|:-------------:|:-----------:|
 |10, 20, 30, 40, 50    |     6 sec     |     50%     |
 
-| Ranking | Number of Sensors | Correctly Classified | Incorrectly Classified |
-|---------|:-----------------:|:--------------------:|:----------------------:|
-| Top 10  |         2         |       61.4572 %      |        38.5428 %       |
-| Top 20  |         2         |       68.5322 %      |        31.4678 %       |
-| Top 30  |         3         |       74.4456 %      |        25.5544 %       |
-| Top 40  |         3         |       81.8374 %      |        18.1626 %       |
-| Top 50  |         4         |       87.2228 %      |        12.7772 %       |
+| Ranking  | Number of Sensors | Correctly Classified | Incorrectly Classified |
+|----------|:-----------------:|:--------------------:|:----------------------:|
+| Top 10   |         2         |       61.4572 %      |        38.5428 %       |
+| Top 20   |         2         |       68.5322 %      |        31.4678 %       |
+| Top 30   |         3         |       74.4456 %      |        25.5544 %       |
+| Top 40   |         3         |       81.8374 %      |        18.1626 %       |
+| Top 50   |         4         |       87.2228 %      |        12.7772 %       |
 
 ---
 
@@ -315,27 +365,27 @@ Ranked attributes:
 
 | Number of Features | Window Length | Overlapping |
 |:------------------:|:-------------:|:-----------:|
-|          50        |     6 sec     |     60%     |
+|          50        |     6 sec     |     50%     |
 
 | Approaches    | Correctly Classified | Incorrectly Classified |
 |---------------|:--------------------:|:----------------------:|
-| SMO           |        88.9124 %     |         11.0876 %      |
-| Random Forest |        67.6874 %     |         32.3126 %      |
-| Naive Bayes   |        52.5871 %     |         47.4129 %      |
-| J48           |        40.0211 %     |         59.9789 %      |
+| Random Forest |        87.5396 %     |         12.4604 %      |
+| SMO           |        86.0612 %     |         13.9388 %      |
+| J48           |        80.2534 %     |         19.7466 %      |
+| Naive Bayes   |        71.4889 %     |         28.5111 %      |
 
 ---
 
-## Confusion Matrix with Top 50 of Features and SMO
+## Confusion Matrix with Top 50 of Features and Random Forest
 
 ```
    a   b   c   d   e   f   g   h   <-- classified as
   60   0   0   0   0   0   0   0 |   a = UsingComputer
-   2 133   0   3   1   3   7   1 |   b = WashingDishes
+   0 146   0   2   1   0   0   1 |   b = WashingDishes
    0   0   0   0   0   0   0   0 |   c = DrivingCar
-   6  12   0 180   2   0   0   0 |   d = EatingMeal
-   1  34   0  12  82   0   0   0 |   e = PlayingVideoGame
-   2   0   0   1   0 147   0   0 |   f = HavingShower
-   1   8   0   1   0   0 148   0 |   g = PlayingGuitar
-   2   1   0   1   0   4   0  92 |   h = BrushingTeeth
+   3   7   0 186   2   0   0   2 |   d = EatingMeal
+   1  42   0  50  36   0   0   0 |   e = PlayingVideoGame
+   0   0   0   1   0 149   0   0 |   f = HavingShower
+   2   1   0   0   0   0 155   0 |   g = PlayingGuitar
+   0   0   0   3   0   0   0  97 |   h = BrushingTeeth
 ```
