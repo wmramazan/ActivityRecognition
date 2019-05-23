@@ -50,7 +50,7 @@ public class StatisticFragment extends BaseFragment {
         tvDatabaseSize.setText(
                 String.format(
                         getString(R.string.database_size_value),
-                        String.valueOf((int) Math.floor(file.length() >> 10))
+                        String.valueOf((int) Math.floor(file.length() >> 20))
                 )
         );
     }

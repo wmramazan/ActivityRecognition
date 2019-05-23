@@ -33,7 +33,7 @@
     <string name="delete_last_record_success">The last record has been deleted.</string>
     <string name="delete_last_record_error">Couldn\'t delete the last record.</string>
 
-    <string name="database_size_value">%1$s KB</string>
+    <string name="database_size_value">%1$s MB</string>
 
     <string name="saving">Saving..</string>
 
