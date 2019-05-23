@@ -102,6 +102,9 @@ public class MainActivity extends BaseActivity implements
                 );
             }
         }, new IntentFilter(Utils.FILTER_ACTIVITY));
+
+        /*Intent intent = new Intent(this, PredictionsActivity.class);
+        startActivity(intent);*/
     }
 
     @Override

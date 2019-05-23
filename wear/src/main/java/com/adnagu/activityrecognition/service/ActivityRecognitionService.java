@@ -17,6 +17,7 @@ import com.adnagu.common.database.AppDatabase;
 import com.adnagu.common.database.dao.PredictionDao;
 import com.adnagu.common.database.dao.PredictionRecordDao;
 import com.adnagu.common.database.entity.PredictionEntity;
+import com.adnagu.common.database.entity.PredictionRecordEntity;
 import com.adnagu.common.database.entity.SensorRecordEntity;
 import com.adnagu.common.ml.ActivityPrediction;
 import com.adnagu.common.ml.FeatureExtraction;
@@ -187,14 +188,14 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
             broadcastManager.sendBroadcast(intent);
         }
 
-        /*predictionRecordDao.insert(
+        predictionRecordDao.insert(
                 new PredictionRecordEntity(
                         prediction,
                         predictionId,
                         new Date(),
                         false
                 )
-        );*/
+        );
 
         clearWindow();
     }
