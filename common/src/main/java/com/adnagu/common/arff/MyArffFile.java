@@ -54,8 +54,19 @@ public class MyArffFile extends ArffFile {
 
     @Override
     public void save(int windowLength, int overlapping) {
-        tag = "_w" + windowLength + "o" + overlapping;
+        if (tag == null)
+            tag = "_w" + windowLength + "o" + overlapping;
         System.out.println("ArffFile" + tag);
         super.save(windowLength, overlapping);
+    }
+
+    public void save(int windowLength, int overlapping, String filter) {
+        tag = "_w" + windowLength + "o" + overlapping + "_filtered";
+        super.save(windowLength, overlapping, filter);
+    }
+
+    public void save(int windowLength, int overlapping, String filter, String filterTag) {
+        tag = "_w" + windowLength + "o" + overlapping + "_" + filterTag;
+        super.save(windowLength, overlapping, filter);
     }
 }
