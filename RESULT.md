@@ -345,7 +345,7 @@ Ranked attributes:
 
 | Number of Features   | Window Length | Overlapping |
 |:--------------------:|:-------------:|:-----------:|
-|10, 20, 30, 40, 50    |     6 sec     |     50%     |
+|10, 20, 30, .. 100       |     6 sec     |     50%     |
 
 | Ranking  | Number of Sensors | Correctly Classified | Incorrectly Classified |
 |----------|:-----------------:|:--------------------:|:----------------------:|
