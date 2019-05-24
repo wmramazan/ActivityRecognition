@@ -27,7 +27,16 @@ public interface PredictionRecordDao {
     @Query("SELECT * FROM prediction_record")
     List<PredictionRecordEntity> getAll();
 
+    @Query("SELECT" +
+            " (" +
+            " SELECT COUNT(*)" +
+            " FROM prediction_record" +
+            " WHERE prediction_record.activity_id = activity.id" +
+            " AND date(prediction_record.date / 1000, 'unixepoch') = date('now')" +
+            " ) FROM activity")
+    int[] getPredictionsOfToday();
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insert(PredictionRecordEntity... predictionRecords);
+    long[] insert(PredictionRecordEntity... predictionRecords);
 
 }

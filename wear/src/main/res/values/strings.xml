@@ -21,6 +21,11 @@
     <string name="sensor_records">Sensor Records</string>
     <string name="database_size">Database Size</string>
 
+    <string name="clear_predictions">Clear Predictions</string>
+    <string name="clear_predictions_warning">All prediction records will be deleted. Are you sure to clear predictions?</string>
+    <string name="clear_predictions_success">%1$s records have been deleted.</string>
+    <string name="clear_predictions_error">Couldn\'t clear predictions.</string>
+
     <string name="reset_database">Reset Database</string>
     <string name="reset_database_warning">All sensor records will be deleted. Are you sure to reset database?</string>
     <string name="reset_database_success">%1$s records have been deleted.</string>

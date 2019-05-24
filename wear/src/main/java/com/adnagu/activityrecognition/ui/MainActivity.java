@@ -102,9 +102,6 @@ public class MainActivity extends BaseActivity implements
                 );
             }
         }, new IntentFilter(Utils.FILTER_ACTIVITY));
-
-        /*Intent intent = new Intent(this, PredictionsActivity.class);
-        startActivity(intent);*/
     }
 
     @Override
@@ -117,6 +114,10 @@ public class MainActivity extends BaseActivity implements
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
+            case R.id.menu_predictions:
+                Intent intent = new Intent(this, PredictionsActivity.class);
+                startActivity(intent);
+                break;
             case R.id.menu_reset:
                 showDialog(new AlertDialog.Builder(this)
                         .setTitle(R.string.reset_database)

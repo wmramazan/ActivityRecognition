@@ -75,7 +75,7 @@ public class ActivityPrediction {
 
         try {
             classifier = (Classifier) SerializationHelper.read(
-                    context.getResources().openRawResource(R.raw.smo)
+                    context.getResources().openRawResource(R.raw.random_forest)
             );
         } catch (Exception e) {
             e.printStackTrace();

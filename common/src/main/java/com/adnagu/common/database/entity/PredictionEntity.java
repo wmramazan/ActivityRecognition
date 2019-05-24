@@ -14,17 +14,20 @@ import java.util.Date;
  */
 @Entity(tableName = "prediction")
 public class PredictionEntity {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
-    @ColumnInfo(name = "date")
-    private Date date;
+    @ColumnInfo(name = "start_date")
+    private Date startDate;
+
+    @ColumnInfo(name = "end_date")
+    private Date endDate;
 
     @ColumnInfo(name = "correctness")
     private int correctness;
 
-    public PredictionEntity(Date date, int correctness) {
-        this.date = date;
+    public PredictionEntity(Date startDate, int correctness) {
+        this.startDate = startDate;
         this.correctness = correctness;
     }
 
@@ -36,12 +39,20 @@ public class PredictionEntity {
         this.id = id;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     public int getCorrectness() {

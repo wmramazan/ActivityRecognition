@@ -32,7 +32,7 @@ public class ActivityIcon extends LinearLayout {
     private void init() {
         setOrientation(HORIZONTAL);
         setBackground(ContextCompat.getDrawable(getContext(), R.drawable.view_activity));
-        inflate(getContext(), R.layout.component_activity_prediction, this);
+        inflate(getContext(), R.layout.component_activity_icon, this);
 
         icon = findViewById(R.id.activity_icon);
         if (resourceId != 0)

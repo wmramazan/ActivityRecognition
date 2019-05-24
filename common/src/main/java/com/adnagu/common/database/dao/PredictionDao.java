@@ -30,4 +30,7 @@ public interface PredictionDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     long[] insert(PredictionEntity... prediction);
 
+    @Query("DELETE FROM prediction")
+    int deleteAll();
+
 }

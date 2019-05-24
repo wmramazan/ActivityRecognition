@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_predictions"
+        android:icon="@drawable/ic_activity_recognition"
+        android:title="@string/daily_predictions"/>
     <item android:id="@+id/menu_delete_last_record"
         android:icon="@drawable/ic_delete"
         android:title="@string/delete_last_record"/>

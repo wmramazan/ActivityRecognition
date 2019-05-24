@@ -19,7 +19,7 @@ import java.util.Date;
         @ForeignKey(entity = PredictionEntity.class, parentColumns = "id", childColumns = "prediction_id", onDelete = ForeignKey.CASCADE)
 }, indices = @Index(value = {"activity_id", "prediction_id"}))
 public class PredictionRecordEntity {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
     @ColumnInfo(name = "activity_id")
