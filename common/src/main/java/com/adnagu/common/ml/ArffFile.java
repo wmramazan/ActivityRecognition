@@ -49,7 +49,6 @@ public class ArffFile {
     private FeatureExtraction featureExtraction;
     private SlidingWindow slidingWindow;
 
-    private String filter;
     private String activityName;
     private State state;
 
@@ -88,7 +87,7 @@ public class ArffFile {
             sensorRecordDao = appDatabase.sensorRecordDao();
         }
 
-        featureFilter = filter == null ? new FeatureFilter() : new FeatureFilter(filter);
+        featureFilter = new FeatureFilter();
         featureExtraction = new FeatureExtraction();
         slidingWindow = new SlidingWindow(sensorRecordDao, new OnWindowListener() {
             @Override
@@ -152,6 +151,7 @@ public class ArffFile {
     }
 
     private void writeAttributes() {
+        featureFilter.init();
         for (SensorType sensorType : SensorType.values())
             for (char value : sensorType.values)
                 for (Feature feature : Feature.values())
@@ -257,8 +257,8 @@ public class ArffFile {
     }
 
     public void save(int windowLength, int overlapping, String filter) {
+        featureFilter.setFilter(filter, FeatureFilter.FILTER_SEPARATOR);
         save(windowLength, overlapping);
-        this.filter = filter;
     }
 
     /**
