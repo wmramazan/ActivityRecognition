@@ -128,6 +128,8 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
     protected void stopRecognition() {
         if (sensorManager != null)
             sensorManager.unregisterListener(this);
+
+        predictionDao.setEndDate(predictionId, new Date());
     }
 
     @Nullable
@@ -165,6 +167,8 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
     }
 
     private void processWindow() {
+        // TODO: 5/24/2019 Handle idle activity.
+
         featureFilter.init();
         lastTimeMillis = System.currentTimeMillis();
         List<Float> featureValues = new ArrayList<>();

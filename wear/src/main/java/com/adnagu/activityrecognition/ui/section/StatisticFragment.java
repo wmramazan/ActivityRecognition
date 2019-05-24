@@ -10,6 +10,7 @@ import com.adnagu.activityrecognition.R;
 import com.adnagu.activityrecognition.common.BaseFragment;
 import com.adnagu.common.database.AppDatabase;
 import com.adnagu.common.database.dao.ActivityRecordDao;
+import com.adnagu.common.database.dao.PredictionDao;
 import com.adnagu.common.database.dao.SensorRecordDao;
 import com.adnagu.common.utils.DatabaseUtils;
 
@@ -32,6 +33,7 @@ public class StatisticFragment extends BaseFragment {
     AppDatabase appDatabase;
     ActivityRecordDao activityRecordDao;
     SensorRecordDao sensorRecordDao;
+    PredictionDao predictionDao;
 
     @BindView(R.id.text_activity_records)
     TextView tvActivityRecords;
@@ -39,12 +41,16 @@ public class StatisticFragment extends BaseFragment {
     @BindView(R.id.text_sensor_records)
     TextView tvSensorRecords;
 
+    @BindView(R.id.text_predictions)
+    TextView tvPredictions;
+
     @BindView(R.id.text_database_size)
     TextView tvDatabaseSize;
 
     @OnClick(R.id.text_sensor_records) public void setDatabaseInformation() {
         tvActivityRecords.setText(String.valueOf(activityRecordDao.getCount()));
         tvSensorRecords.setText(String.valueOf(sensorRecordDao.getCount()));
+        tvPredictions.setText(String.valueOf(predictionDao.getCount()));
 
         File file = getContext().getDatabasePath(DatabaseUtils.DATABASE_NAME);
         tvDatabaseSize.setText(
@@ -67,6 +73,7 @@ public class StatisticFragment extends BaseFragment {
         appDatabase = AppDatabase.getInstance(getContext());
         activityRecordDao = appDatabase.activityRecordDao();
         sensorRecordDao = appDatabase.sensorRecordDao();
+        predictionDao = appDatabase.predictionDao();
 
         setDatabaseInformation();
 

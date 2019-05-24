@@ -7,6 +7,7 @@ import androidx.room.Query;
 
 import com.adnagu.common.database.entity.PredictionEntity;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,6 +18,9 @@ import java.util.List;
  */
 @Dao
 public interface PredictionDao {
+
+    @Query("SELECT COUNT(*) FROM prediction")
+    int getCount();
 
     @Query("SELECT id FROM prediction")
     boolean hasAny();
@@ -29,6 +33,9 @@ public interface PredictionDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     long[] insert(PredictionEntity... prediction);
+
+    @Query("UPDATE prediction SET end_date = :date WHERE id = :predictionId")
+    void setEndDate(int predictionId, Date date);
 
     @Query("DELETE FROM prediction")
     int deleteAll();
