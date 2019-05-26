@@ -97,9 +97,13 @@ public class MainActivity extends BaseActivity implements
         LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                activityRecognitionFragment.setActivity(
-                        Activity.values()[intent.getIntExtra(Utils.ACTIVITY_ID, 0)]
-                );
+                int activityId = intent.getIntExtra(Utils.ACTIVITY_ID, -1);
+                if (activityId == -1)
+                    activityRecognitionFragment.setIdleActivity();
+                else
+                    activityRecognitionFragment.setActivity(
+                            Activity.values()[activityId]
+                    );
             }
         }, new IntentFilter(Utils.FILTER_ACTIVITY));
     }

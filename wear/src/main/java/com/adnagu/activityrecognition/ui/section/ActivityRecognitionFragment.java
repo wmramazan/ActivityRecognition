@@ -71,6 +71,7 @@ public class ActivityRecognitionFragment extends BaseFragment {
     public void startRecognition() {
         if (!isPredicting()) {
             vibrate();
+            setIdleActivity();
 
             getContext().startService(serviceIntent);
             activityButton.setShowProgress(true);
@@ -84,6 +85,7 @@ public class ActivityRecognitionFragment extends BaseFragment {
     public void stopRecognition() {
         if (isPredicting()) {
             vibrate();
+            setStart();
 
             getContext().stopService(serviceIntent);
             activityButton.setShowProgress(false);
@@ -125,6 +127,16 @@ public class ActivityRecognitionFragment extends BaseFragment {
             });
             vibrate();
         }).start();*/
+    }
+
+    public void setStart() {
+        activityText.setText(R.string.click_to_recognize);
+        activityButton.setImageResource(R.drawable.ic_start);
+    }
+
+    public void setIdleActivity() {
+        activityText.setText(R.string.activity_idle);
+        activityButton.setImageResource(R.drawable.ic_idle);
     }
 
     public void setActivity(Activity activity) {

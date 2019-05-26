@@ -18,6 +18,9 @@ import java.util.List;
 @Dao
 public interface PredictionRecordDao {
 
+    @Query("SELECT COUNT(*) FROM prediction_record")
+    int getCount();
+
     @Query("SELECT id FROM prediction_record")
     boolean hasAny();
 

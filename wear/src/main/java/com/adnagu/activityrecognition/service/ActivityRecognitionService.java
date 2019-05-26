@@ -26,6 +26,9 @@ import com.adnagu.common.ml.SlidingWindow;
 import com.adnagu.common.model.Activity;
 import com.adnagu.common.model.SensorType;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +42,7 @@ import java.util.List;
 public class ActivityRecognitionService extends Service implements SensorEventListener {
 
     private final String DEBUG_TAG = getClass().getName();
+    private final double THRESHOLD_IDLE_ACTIVITY = .2;
 
     LocalBroadcastManager broadcastManager;
     Intent intent;
@@ -51,6 +55,7 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
     FeatureFilter featureFilter;
     FeatureExtraction featureExtraction;
     ActivityPrediction activityPrediction;
+    StandardDeviation std;
 
     SensorType[] sensorTypes;
     long lastTimeMillis;
@@ -62,6 +67,7 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
     int predictionId;
 
     boolean firstWindow;
+    boolean idleActivity;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -95,6 +101,7 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
         featureFilter = new FeatureFilter();
         featureExtraction = new FeatureExtraction();
         activityPrediction = new ActivityPrediction(this, featureFilter);
+        std = new StandardDeviation(true);
 
         windowLength = SlidingWindow.WINDOW_LENGTH * 1000;
         windowDiffLength = windowLength * (100 - SlidingWindow.OVERLAPPING) / 100;
@@ -173,8 +180,15 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
         lastTimeMillis = System.currentTimeMillis();
         List<Float> featureValues = new ArrayList<>();
 
+        idleActivity = false;
+
         for (SensorType sensorType : sensorTypes) {
             List<List<Float>> segments = SlidingWindow.generateSegments(sensorValues.get(sensorType.ordinal()), sensorType);
+
+            if (sensorType == SensorType.Accelerometer && isIdleActivity(segments)) {
+                idleActivity = true;
+                break;
+            }
 
             for (List<Float> segment : segments) {
                 featureExtraction.setFeatures(featureFilter.getFeatureArray());
@@ -183,25 +197,43 @@ public class ActivityRecognitionService extends Service implements SensorEventLi
             }
         }
 
-        int prediction = activityPrediction.predict(featureValues);
+        int prediction = idleActivity ? -1 : activityPrediction.predict(featureValues);
 
         if (prediction != -1) {
             Log.d(DEBUG_TAG, "Prediction: " + Activity.values()[prediction].name());
 
-            intent.putExtra(Utils.ACTIVITY_ID, prediction);
-            broadcastManager.sendBroadcast(intent);
+            predictionRecordDao.insert(
+                    new PredictionRecordEntity(
+                            prediction,
+                            predictionId,
+                            new Date(),
+                            false
+                    )
+            );
         }
 
-        predictionRecordDao.insert(
-                new PredictionRecordEntity(
-                        prediction,
-                        predictionId,
-                        new Date(),
-                        false
-                )
-        );
+        intent.putExtra(Utils.ACTIVITY_ID, prediction);
+        broadcastManager.sendBroadcast(intent);
 
         clearWindow();
+    }
+
+    private boolean isIdleActivity(List<List<Float>> segments) {
+        double total = 0;
+        for (int i = 0; i < 3; i++) {
+            total += evaluateStd(segments.get(i));
+        }
+
+        return  total / 3 < THRESHOLD_IDLE_ACTIVITY;
+    }
+
+    private double evaluateStd(List<Float> segment) {
+        double[] array = new double[segment.size()];
+
+        for (int i = 0; i < array.length; i++)
+            array[i] = segment.get(i);
+
+        return std.evaluate(array);
     }
 
     private void clearWindow() {

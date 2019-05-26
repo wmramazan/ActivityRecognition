@@ -10,4 +10,5 @@
     <string name="activity_having_shower">Having Shower</string>
     <string name="activity_playing_guitar">Playing Guitar</string>
     <string name="activity_brushing_teeth">Brushing Teeth</string>
+    <string name="activity_idle">Idle Activity</string>
 </resources>
