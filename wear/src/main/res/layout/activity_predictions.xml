@@ -83,6 +83,15 @@
                     android:columnCount="2"
                     android:orientation="horizontal"/>
 
+                <ticwear.design.widget.ScalableTextView
+                    android:id="@+id/text_no_predictions"
+                    style="@style/TextAppearance.Ticwear.Small"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/no_predictions"
+                    android:visibility="gone"/>
+
                 <ticwear.design.widget.PrimaryButton
                     android:id="@+id/button_delete_all"
                     android:layout_width="wrap_content"

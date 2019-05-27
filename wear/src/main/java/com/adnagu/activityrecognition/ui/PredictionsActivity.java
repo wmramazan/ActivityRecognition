@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
+import android.view.View;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
@@ -16,6 +17,8 @@ import com.adnagu.common.database.AppDatabase;
 import com.adnagu.common.database.dao.PredictionDao;
 import com.adnagu.common.database.dao.PredictionRecordDao;
 import com.adnagu.common.model.Activity;
+
+import org.apache.commons.lang3.time.DateUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -38,20 +41,28 @@ public class PredictionsActivity extends WearableActivity {
     PredictionDao predictionDao;
     PredictionRecordDao predictionRecordDao;
 
+    Date date;
+    SimpleDateFormat formatter;
+
     @BindView(R.id.text_prediction_day)
     TextView predictionDay;
 
     @BindView(R.id.grid_layout)
     GridLayout gridLayout;
 
+    @BindView(R.id.text_no_predictions)
+    TextView noPredictions;
+
     @OnClick(R.id.image_back)
     public void goToPreviousDay() {
-
+        date = DateUtils.addDays(date, -1);
+        getPredictions();
     }
 
     @OnClick(R.id.image_forward)
     public void goToNextDay() {
-
+        date = DateUtils.addDays(date, 1);
+        getPredictions();
     }
 
     @OnClick(R.id.button_delete_all)
@@ -100,16 +111,24 @@ public class PredictionsActivity extends WearableActivity {
         predictionDao = appDatabase.predictionDao();
         predictionRecordDao = appDatabase.predictionRecordDao();
 
-        int[] predictions = predictionRecordDao.getPredictionsOfToday();
+        date = new Date();
+        formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
 
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
-        predictionDay.setText(formatter.format(new Date()));
+        getPredictions();
+    }
+
+    public void getPredictions() {
+        predictionDay.setText(formatter.format(date));
+        int[] predictions = predictionRecordDao.getPredictions(date);
 
         int total = 0;
         for (int prediction : predictions)
             total += prediction;
 
-        if (total != 0) {
+        if (total == 0) {
+            noPredictions.setVisibility(View.VISIBLE);
+        } else {
+            noPredictions.setVisibility(View.GONE);
             float value = (float) 100 / total;
 
             float[] percentages = new float[predictions.length];

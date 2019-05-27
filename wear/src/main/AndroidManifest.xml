@@ -41,6 +41,7 @@
         </activity>
 
         <activity android:name=".ui.PredictionsActivity" />
+        <activity android:name=".ui.CircularPredictionsActivity" />
 
         <service
             android:name=".service.SensorRecordService"

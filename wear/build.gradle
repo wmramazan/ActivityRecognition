@@ -47,5 +47,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
+    implementation 'com.github.bmarrdev:android-DecoView-charting:v1.2'
+
     implementation project(':common')
 }

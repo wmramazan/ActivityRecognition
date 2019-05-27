@@ -106,6 +106,9 @@ public class MainActivity extends BaseActivity implements
                     );
             }
         }, new IntentFilter(Utils.FILTER_ACTIVITY));
+
+        Intent intent = new Intent(this, CircularPredictionsActivity.class);
+        startActivity(intent);
     }
 
     @Override

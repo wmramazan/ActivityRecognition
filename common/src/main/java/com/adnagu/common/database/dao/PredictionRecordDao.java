@@ -7,6 +7,7 @@ import androidx.room.Query;
 
 import com.adnagu.common.database.entity.PredictionRecordEntity;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,6 +30,15 @@ public interface PredictionRecordDao {
 
     @Query("SELECT * FROM prediction_record")
     List<PredictionRecordEntity> getAll();
+
+    @Query("SELECT" +
+            " (" +
+            " SELECT COUNT(*)" +
+            " FROM prediction_record" +
+            " WHERE prediction_record.activity_id = activity.id" +
+            " AND date(:date / 1000, 'unixepoch') = date('now')" +
+            " ) FROM activity")
+    int[] getPredictions(Date date);
 
     @Query("SELECT" +
             " (" +
