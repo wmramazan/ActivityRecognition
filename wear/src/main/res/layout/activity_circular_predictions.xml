@@ -4,7 +4,16 @@
     android:layout_height="match_parent">
 
     <com.hookedonplay.decoviewlib.DecoView
+        android:id="@+id/deco_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <GridLayout
+        android:id="@+id/grid_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:rowCount="2"
+        android:columnCount="2" />
 
 </RelativeLayout>

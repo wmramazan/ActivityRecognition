@@ -92,14 +92,31 @@
                     android:text="@string/no_predictions"
                     android:visibility="gone"/>
 
-                <ticwear.design.widget.PrimaryButton
-                    android:id="@+id/button_delete_all"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:layout_marginTop="8dp"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_delete"
-                    android:tint="@color/white"/>
+                    android:orientation="horizontal">
+
+                    <ticwear.design.widget.PrimaryButton
+                        android:id="@+id/button_chart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_chart"
+                        android:tint="@color/white"/>
+
+                    <ticwear.design.widget.PrimaryButton
+                        android:id="@+id/button_delete_all"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_delete"
+                        android:tint="@color/white"/>
+
+                </LinearLayout>
 
                 <Space
                     android:layout_width="match_parent"

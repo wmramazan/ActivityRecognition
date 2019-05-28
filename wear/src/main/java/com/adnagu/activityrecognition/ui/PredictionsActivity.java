@@ -2,6 +2,7 @@ package com.adnagu.activityrecognition.ui;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.view.View;
@@ -21,7 +22,9 @@ import com.adnagu.common.model.Activity;
 import org.apache.commons.lang3.time.DateUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -29,6 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ticwear.design.app.AlertDialog;
 import ticwear.design.utils.WindowUtils;
+import ticwear.design.widget.PrimaryButton;
 
 /**
  * PredictionsActivity
@@ -44,6 +48,9 @@ public class PredictionsActivity extends WearableActivity {
     Date date;
     SimpleDateFormat formatter;
 
+    int[] activityIds;
+    float[] percentages;
+
     @BindView(R.id.text_prediction_day)
     TextView predictionDay;
 
@@ -53,6 +60,9 @@ public class PredictionsActivity extends WearableActivity {
     @BindView(R.id.text_no_predictions)
     TextView noPredictions;
 
+    @BindView(R.id.button_chart)
+    PrimaryButton chartButton;
+
     @OnClick(R.id.image_back)
     public void goToPreviousDay() {
         date = DateUtils.addDays(date, -1);
@@ -61,8 +71,18 @@ public class PredictionsActivity extends WearableActivity {
 
     @OnClick(R.id.image_forward)
     public void goToNextDay() {
-        date = DateUtils.addDays(date, 1);
-        getPredictions();
+        if (!DateUtils.isSameDay(date, new Date())) {
+            date = DateUtils.addDays(date, 1);
+            getPredictions();
+        }
+    }
+
+    @OnClick(R.id.button_chart)
+    public void showChart() {
+        Intent intent = new Intent(this, CircularPredictionsActivity.class);
+        intent.putExtra(Utils.ITEM_ACTIVITY_IDS, activityIds);
+        intent.putExtra(Utils.ITEM_PERCENTAGES, percentages);
+        startActivity(intent);
     }
 
     @OnClick(R.id.button_delete_all)
@@ -118,6 +138,8 @@ public class PredictionsActivity extends WearableActivity {
     }
 
     public void getPredictions() {
+        gridLayout.removeAllViews();
+
         predictionDay.setText(formatter.format(date));
         int[] predictions = predictionRecordDao.getPredictions(date);
 
@@ -127,24 +149,34 @@ public class PredictionsActivity extends WearableActivity {
 
         if (total == 0) {
             noPredictions.setVisibility(View.VISIBLE);
+            chartButton.setVisibility(View.GONE);
         } else {
             noPredictions.setVisibility(View.GONE);
+            chartButton.setVisibility(View.VISIBLE);
+
             float value = (float) 100 / total;
 
-            float[] percentages = new float[predictions.length];
+            percentages = new float[predictions.length];
             for (int i = 0; i < predictions.length; i++)
                 percentages[i] = (value * predictions[i]);
 
             Activity[] activities = Activity.values();
+            List<Integer> activityIdList = new ArrayList<>();
             for (Activity activity : activities) {
                 int index = activity.ordinal();
 
                 if (percentages[index] != 0) {
+                    activityIdList.add(index);
+
                     ActivityIcon icon = new ActivityIcon(this, activity.drawable_res);
                     icon.setText(String.format(Locale.getDefault(), "%.2f", percentages[index]) + "%");
                     gridLayout.addView(icon);
                 }
             }
+
+            activityIds = new int[activityIdList.size()];
+            for (int i = 0; i < activityIds.length; i++)
+                activityIds[i] = activityIdList.get(i);
         }
     }
 }

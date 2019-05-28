@@ -20,6 +20,9 @@ public class Utils {
 
     public static final String FILTER_ACTIVITY = "ACTIVITY";
 
+    public static final String ITEM_ACTIVITY_IDS = "ACTIVITY_IDS";
+    public static final String ITEM_PERCENTAGES = "PERCENTAGES";
+
     public class RequestCode {
         public static final int CHOOSE_ACTIVITY = 1;
     }

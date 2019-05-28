@@ -12,4 +12,9 @@
 
     <color name="ic_launcher_background">@color/wear_primary_darken</color>
 
+    <color name="first_activity">#D50000</color>
+    <color name="second_activity">#FF6D00</color>
+    <color name="third_activity">#536DFE</color>
+    <color name="fourth_activity">#00C853</color>
+
 </resources>
