@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">ActivityRecognition</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
     
     <string name="window_length">Window Length (sec)</string>
     <string name="overlapping">Overlapping (%)</string>
@@ -14,4 +11,7 @@
     <string name="value_limit">0</string>
 
     <string name="saving">Saving..</string>
+    <string name="arff">ARFF</string>
+    <string name="smartwatch">Smartwatch</string>
+    <string name="no_connected_smartwatch">No connected smartwatch</string>
 </resources>

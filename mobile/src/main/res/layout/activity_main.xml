@@ -1,101 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:id="@+id/image_arff"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_file"
+        android:tint="@android:color/black"
+        android:layout_margin="@dimen/spacing_base"
+        android:contentDescription="@string/arff"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/spacing_base"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/spacing_small"
-            android:text="@string/title_home" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/window_length"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/value_window_length"
-                android:hint="@string/window_length"
-                android:inputType="numberDecimal"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/overlapping"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/value_overlapping"
-                android:hint="@string/overlapping"
-                android:inputType="numberDecimal"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/limit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/value_limit"
-                android:hint="@string/limit"
-                android:inputType="numberDecimal"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <Button
-            android:id="@+id/button_save_as"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/save_as_arff"/>
-
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_tiny"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:max="100"/>
-
-        <TextView
-            android:id="@+id/progress_message"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center" />
-
-    </LinearLayout>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:background="?android:attr/windowBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/navigation" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="256dp"
+            android:layout_height="256dp"
+            android:src="@drawable/ic_watch"
+            android:tint="@color/gray"
+            android:contentDescription="@string/smartwatch" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_connected_smartwatch"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:textSize="24sp"
+            android:gravity="center"/>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

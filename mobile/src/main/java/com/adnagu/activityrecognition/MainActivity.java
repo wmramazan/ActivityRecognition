@@ -1,117 +1,62 @@
 package com.adnagu.activityrecognition;
 
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.MenuItem;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
-import com.adnagu.common.database.AppDatabase;
-import com.adnagu.common.ml.ArffFile;
-import com.adnagu.common.utils.DatabaseUtils;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import butterknife.BindView;
+
+import com.google.android.gms.wearable.DataClient;
+import com.google.android.gms.wearable.DataEvent;
+import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.DataMapItem;
+import com.google.android.gms.wearable.Wearable;
+
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DataClient.OnDataChangedListener {
 
-    @BindView(R.id.title)
-    TextView title;
-
-    @BindView(R.id.window_length)
-    EditText windowLength;
-
-    @BindView(R.id.overlapping)
-    EditText overlapping;
-
-    @BindView(R.id.limit)
-    EditText limit;
-
-    @BindView(R.id.navigation)
-    BottomNavigationView navigation;
-
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
-
-    @BindView(R.id.progress_message)
-    TextView progressMessage;
-
-    boolean progressing;
-
-    @OnClick(R.id.button_save_as)
-    public void saveAsArff() {
-        if (!isProgressing()) {
-            setProgressMessage(getString(R.string.saving));
-            progressing = true;
-
-            Handler handler = new Handler();
-            new Thread(() -> {
-                ArffFile arffFile = new ArffFile(this, progress -> handler.post(() -> setProgressBar(progress)));
-                arffFile.save(
-                        Integer.valueOf(windowLength.getText().toString()),
-                        Integer.valueOf(overlapping.getText().toString()),
-                        Integer.valueOf(limit.getText().toString())
-                );
-                setProgressMessage("Completed.");
-                progressing = false;
-            }).start();
-        }
+    @OnClick(R.id.image_arff)
+    public void goToArffActivity() {
+        Intent intent = new Intent(this, ArffActivity.class);
+        startActivity(intent);
     }
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    title.setText(R.string.title_home);
-                    return true;
-                case R.id.navigation_dashboard:
-                    title.setText(R.string.title_dashboard);
-                    return true;
-                case R.id.navigation_notifications:
-                    title.setText(R.string.title_notifications);
-                    return true;
-            }
-            return false;
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
-        DatabaseUtils.prepareDatabase(this);
-
-        setProgressMessage(String.valueOf(
-                AppDatabase.getInstance(this).sensorRecordDao().getCount()
-        ));
-
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
-    public void setProgressBar(int progress) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            progressBar.setProgress(progress, true);
-        } else {
-            progressBar.setProgress(progress);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Wearable.getDataClient(this).addListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Wearable.getDataClient(this).removeListener(this);
+    }
+
+    @Override
+    public void onDataChanged(@NonNull DataEventBuffer dataEvents) {
+        for (DataEvent event : dataEvents) {
+            if (event.getType() == DataEvent.TYPE_CHANGED) {
+                // DataItem changed
+                DataItem item = event.getDataItem();
+                if (item.getUri().getPath().compareTo("/predictions") == 0) {
+                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                    //updateCount(dataMap.getInt(COUNT_KEY));
+                }
+            } else if (event.getType() == DataEvent.TYPE_DELETED) {
+                // DataItem deleted
+            }
         }
-    }
-
-    public void setProgressMessage(CharSequence message) {
-        progressMessage.setText(message);
-    }
-
-    public boolean isProgressing() {
-        return progressing;
     }
 }
