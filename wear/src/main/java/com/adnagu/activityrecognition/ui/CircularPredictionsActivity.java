@@ -87,7 +87,7 @@ public class CircularPredictionsActivity extends WearableActivity {
         }
 
         for (int i = 0; i < numberOfSeries; i++) {
-            decoView.addEvent(new DecoEvent.Builder(percentages[i])
+            decoView.addEvent(new DecoEvent.Builder(percentages[activities[activityIds[i]].ordinal()])
                     .setIndex(seriesIndices[i])
                     .setDelay(0)
                     .build());

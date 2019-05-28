@@ -38,7 +38,8 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
-    implementation 'com.ruesga.timeline-chart-view:timeline-chart-view:1.0.2'
+    implementation 'org.apache.commons:commons-lang3:3.9'
+    implementation 'com.github.lecho:hellocharts-android:v1.5.8'
 
     wearApp project(':wear')
     implementation project(':common')

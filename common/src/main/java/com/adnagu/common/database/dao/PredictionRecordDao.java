@@ -45,6 +45,15 @@ public interface PredictionRecordDao {
             " SELECT COUNT(*)" +
             " FROM prediction_record" +
             " WHERE prediction_record.activity_id = activity.id" +
+            " AND date(:date / 1000, 'unixepoch') = date('now')" +
+            " ) FROM activity")
+    List<Integer> getPredictionsForService(Date date);
+
+    @Query("SELECT" +
+            " (" +
+            " SELECT COUNT(*)" +
+            " FROM prediction_record" +
+            " WHERE prediction_record.activity_id = activity.id" +
             " AND date(prediction_record.date / 1000, 'unixepoch') = date('now')" +
             " ) FROM activity")
     int[] getPredictionsOfToday();

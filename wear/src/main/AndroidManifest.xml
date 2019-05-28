@@ -53,6 +53,16 @@
             android:enabled="true"
             android:exported="false" />
 
+        <service
+            android:name=".service.MessageService"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/predictions" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".ui.ListActivity"
             android:label="@string/title_activity_list" />

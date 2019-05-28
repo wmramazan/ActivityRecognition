@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ArffActivity" />
+        <activity android:name=".ArffActivity" android:label="@string/save_as_arff" />
     </application>
 
 </manifest>

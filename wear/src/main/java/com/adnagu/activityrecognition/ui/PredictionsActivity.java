@@ -132,7 +132,7 @@ public class PredictionsActivity extends WearableActivity {
         predictionRecordDao = appDatabase.predictionRecordDao();
 
         date = new Date();
-        formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+        formatter = new SimpleDateFormat(Utils.DATE_FORMAT, Locale.getDefault());
 
         getPredictions();
     }
