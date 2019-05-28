@@ -32,7 +32,8 @@
         android:id="@+id/view_chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/spacing_base"/>
+        android:layout_margin="@dimen/spacing_base"
+        android:paddingBottom="48dp"/>
 
     <LinearLayout
         android:id="@+id/layout_date"

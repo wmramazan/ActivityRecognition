@@ -18,7 +18,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.TimeZone;
 
 public class MessageService extends WearableListenerService {
 
@@ -36,7 +35,7 @@ public class MessageService extends WearableListenerService {
             AppDatabase appDatabase = AppDatabase.getInstance(this);
             PredictionRecordDao predictionRecordDao = appDatabase.predictionRecordDao();
             SimpleDateFormat formatter = new SimpleDateFormat(Utils.DATE_FORMAT, Locale.getDefault());
-            formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+            //formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
             try {
                 Log.d(TAG, formatter.parse(message).toString());
                 putDataMapReq.getDataMap().putIntegerArrayList(
