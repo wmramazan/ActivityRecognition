@@ -26,7 +26,6 @@ import com.adnagu.common.ml.SlidingWindow;
 import com.adnagu.common.model.Activity;
 import com.adnagu.common.model.SensorType;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 
 import java.util.ArrayList;

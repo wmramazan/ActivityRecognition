@@ -5,14 +5,15 @@ import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.adnagu.activityrecognition.R;
 import com.adnagu.activityrecognition.adapter.ActivityAdapter;
 import com.adnagu.activityrecognition.utils.RecyclerItemClickListener;
 import com.adnagu.activityrecognition.utils.Utils;
 import com.adnagu.common.model.Activity;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
